@@ -1,0 +1,12 @@
+app to pick from a list of recipes to meal plan for the week
+request to set plan for week picks n numbre of recipes and sets one for each day, giving user option to move them around, leave blank days etc.
+
+recipes to have list of ingredients which can be aggregated to shopping list
+each recipe comes with a list of ingrediants with a seperate list of amounts needed that can be aggegated (so rice 50g rwice can be a rice 100g in shopping list)
+
+recipes to have nutrition info (calories and macros)
+
+shopping list could add items to basket in website shopping trolley
+scrape supermarket website to add items to shopping trolley
+would need an optout tick in case ingredient already stocked (a spice or a staple)
+
