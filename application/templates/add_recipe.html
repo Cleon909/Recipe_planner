@@ -1,0 +1,92 @@
+{% extends 'layout.html'%}
+
+{% block body %}
+<div style="padding-left:40px">
+    {% if form %}
+        <h1>Add a Recipe</h1>
+        <form method = 'POST'>
+        {{ form.hidden_tag() }}
+        <br>
+        <h2> Add Recipe details</h2>
+        <br>
+        {{ form.name.label }} {{ form.name }}
+        <br>
+        <p></p>
+        {{ form.recipe_description.label }} {{ form.recipe_description }}
+        <br>
+        <p></p>
+        {{ form.cuisine.label }} {{ form.cuisine }}
+        <br>
+        <p></p>
+        {{ form.no_of_ingredients.label }} {{ form.no_of_ingredients }}
+        <br>
+        <p></p>
+        {{ form.ingredient1.label }} {{ form.ingredient_alt1.label }} {{ form.amount1.label }} {{ form.unit1.label }} {{ form.ingredient_prep1.label }} <br>
+        {{ form.ingredient1 }}  {{ form.ingredient_alt1 }}  {{ form.amount1 }}  {{ form.unit1 }}  {{ form.ingredient_prep1 }} <br>
+        {{ form.ingredient2 }}  {{ form.ingredient_alt2 }}  {{ form.amount2 }}  {{ form.unit2 }}  {{ form.ingredient_prep2 }} <br>
+        {{ form.ingredient3 }}  {{ form.ingredient_alt3 }}  {{ form.amount3 }}  {{ form.unit3 }}  {{ form.ingredient_prep3 }} <br>
+        {{ form.ingredient4 }}  {{ form.ingredient_alt4 }}  {{ form.amount4 }}  {{ form.unit4 }}  {{ form.ingredient_prep4 }} <br>
+        {{ form.ingredient5 }}  {{ form.ingredient_alt5 }}  {{ form.amount5 }}  {{ form.unit5 }}  {{ form.ingredient_prep5 }} <br>
+        {{ form.ingredient6 }}  {{ form.ingredient_alt6 }}  {{ form.amount6 }}  {{ form.unit6 }}  {{ form.ingredient_prep6 }} <br>
+        {{ form.ingredient7 }}  {{ form.ingredient_alt7 }}  {{ form.amount7 }}  {{ form.unit7 }}  {{ form.ingredient_prep7 }} <br>
+        {{ form.ingredient8 }}  {{ form.ingredient_alt8 }}  {{ form.amount8 }}  {{ form.unit8 }}  {{ form.ingredient_prep8 }} <br>
+        {{ form.ingredient9 }}  {{ form.ingredient_alt9 }}  {{ form.amount9 }}  {{ form.unit9 }}  {{ form.ingredient_prep9 }} <br>
+        {{ form.ingredient10 }}  {{ form.ingredient_alt10 }}  {{ form.amount10 }}  {{ form.unit10 }}  {{ form.ingredient_prep10 }} <br>
+        {{ form.ingredient11 }}  {{ form.ingredient_alt11 }}  {{ form.amount11 }}  {{ form.unit11 }}  {{ form.ingredient_prep11 }} <br>
+        {{ form.ingredient12 }}  {{ form.ingredient_alt12 }}  {{ form.amount12 }}  {{ form.unit12 }}  {{ form.ingredient_prep12 }} <br>
+        {{ form.ingredient13 }}  {{ form.ingredient_alt13 }}  {{ form.amount13 }}  {{ form.unit13 }}  {{ form.ingredient_prep13 }} <br>
+        {{ form.ingredient14 }}  {{ form.ingredient_alt14 }}  {{ form.amount14 }}  {{ form.unit14 }}  {{ form.ingredient_prep14 }} <br>
+        {{ form.ingredient15 }}  {{ form.ingredient_alt15 }}  {{ form.amount15 }}  {{ form.unit15 }}  {{ form.ingredient_prep15 }} <br>
+        {{ form.ingredient16 }}  {{ form.ingredient_alt16 }}  {{ form.amount16 }}  {{ form.unit16 }}  {{ form.ingredient_prep16 }} <br>
+        {{ form.ingredient17 }}  {{ form.ingredient_alt17 }}  {{ form.amount17 }}  {{ form.unit17 }}  {{ form.ingredient_prep17 }} <br>
+        {{ form.ingredient18 }}  {{ form.ingredient_alt18 }}  {{ form.amount18 }}  {{ form.unit18 }}  {{ form.ingredient_prep18 }} <br>
+        {{ form.ingredient19 }}  {{ form.ingredient_alt19 }}  {{ form.amount19 }}  {{ form.unit19 }}  {{ form.ingredient_prep19 }} <br>
+        {{ form.ingredient20 }}  {{ form.ingredient_alt20 }}  {{ form.amount20 }}  {{ form.unit20 }}  {{ form.ingredient_prep20 }} <br>
+        {{ form.ingredient21 }}  {{ form.ingredient_alt21 }}  {{ form.amount21 }}  {{ form.unit21 }}  {{ form.ingredient_prep21 }} <br>
+        {{ form.ingredient22 }}  {{ form.ingredient_alt22 }}  {{ form.amount22 }}  {{ form.unit22 }}  {{ form.ingredient_prep22 }} <br>
+        {{ form.ingredient23 }}  {{ form.ingredient_alt23 }}  {{ form.amount23 }}  {{ form.unit23 }}  {{ form.ingredient_prep23 }} <br>
+        {{ form.ingredient24 }}  {{ form.ingredient_alt24 }}  {{ form.amount24 }}  {{ form.unit24 }}  {{ form.ingredient_prep24 }} <br>
+        {{ form.ingredient25 }}  {{ form.ingredient_alt25 }}  {{ form.amount25 }}  {{ form.unit25 }}  {{ form.ingredient_prep25 }} <br>
+        {{ form.ingredient26 }}  {{ form.ingredient_alt26 }}  {{ form.amount26 }}  {{ form.unit26 }}  {{ form.ingredient_prep26 }} <br>
+        {{ form.ingredient27 }}  {{ form.ingredient_alt27 }}  {{ form.amount27 }}  {{ form.unit27 }}  {{ form.ingredient_prep27 }} <br>
+        {{ form.ingredient28 }}  {{ form.ingredient_alt28 }}  {{ form.amount28 }}  {{ form.unit28 }}  {{ form.ingredient_prep28 }} <br>
+        {{ form.ingredient29 }}  {{ form.ingredient_alt29 }}  {{ form.amount29 }}  {{ form.unit29 }}  {{ form.ingredient_prep29 }} <br>
+        {{ form.ingredient30 }}  {{ form.ingredient_alt30 }}  {{ form.amount30 }}  {{ form.unit30 }}  {{ form.ingredient_prep30 }} <br>
+        <br>
+        <p></p>
+  
+        {{ form.method1.label }} {{ form.method1 }} <br>
+        {{ form.method1.label }} {{ form.method2 }} <br>
+        {{ form.method1.label }} {{ form.method3 }} <br>
+        {{ form.method1.label }} {{ form.method4 }} <br>
+        {{ form.method1.label }} {{ form.method5 }} <br>
+        {{ form.method1.label }} {{ form.method6 }} <br>
+        {{ form.method1.label }} {{ form.method7 }} <br>
+        {{ form.method1.label }} {{ form.method8 }} <br>
+        {{ form.method1.label }} {{ form.method9 }} <br>
+        {{ form.method1.label }} {{ form.method10 }} <br>
+        {{ form.method1.label }} {{ form.method11 }} <br>
+        {{ form.method1.label }} {{ form.method12 }} <br>
+        {{ form.method1.label }} {{ form.method13 }} <br>
+        {{ form.method1.label }} {{ form.method14 }} <br>
+        {{ form.method1.label }} {{ form.method15 }} <br>
+        <br>
+        <p></p>
+        {{ form.submit }}
+        </form>
+    {% endif %}
+    {% if recipe %}
+        <h2>Recipe created</h2>
+        <p><b>name:</b> {{recipe.title}} <b>Description:</b> {{ recipe.recipe_description }} <b>Cuisine:</b> {{ recipe.cusine }}</p><br>
+        <p>Ingedients:</p>
+        {% for item in list_of_ingredients %}
+            {{ item }}
+            <p></p>
+        {% endfor %}
+    {% endif %}
+    {% if duplicate %}
+        <h2>Recipe not created</h2>
+        <p><b>Recipe name was a duplicate please alter the recipe name or check recipe not already in database.</b></p>
+    {% endif %}
+</div>
+{% endblock body %}

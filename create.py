@@ -1,0 +1,28 @@
+from application import db
+from application.models import Quantity, Method, Recipes, Cuisine, Ingredients
+
+db.drop_all()
+db.create_all()
+
+cuisine1 = Cuisine('Curry')
+db.session.add(cuisine1)
+db.session.commit()
+cuisine2 = Cuisine('Salad')
+db.session.add(cuisine2)
+db.session.commit()
+recipe1 = Recipes('Pea and Cauliflower Curry', 'Quick and easy curry, no calorie details', 1)
+db.session.add(recipe1)
+db.session.commit()
+ing = Ingredients('sunflower oil')
+db.session.add(ing)
+ing1 = Ingredients('Chillies')
+db.session.add(ing)
+ing2 = Ingredients('Ginger')
+db.session.add(ing)
+ing3 = Ingredients('sunflower oil')
+db.session.add(ing)
+quant = Quantity(1,1,'crushed', 100.0, 'ml')
+db.session.add(quant)
+meth = Method(1,1, 'Crush Chilles')
+db.session.add(meth)
+db.session.commit()
