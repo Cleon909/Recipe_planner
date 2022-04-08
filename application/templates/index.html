@@ -29,6 +29,15 @@
             {% for m in method_list %}
             {{ m }}<br>
             {% endfor %}
+            <p>Ingredients</p>
+            {% for q in ingredient_list %}
+            <div class = "field">
+                {{ q[0] }}
+                {{ q[1] }}
+                {{ q[2] }}
+                {{ q[3] }}
+            </div>
+            {% endfor %}
         {% endif %}
         </div>
     </div>
