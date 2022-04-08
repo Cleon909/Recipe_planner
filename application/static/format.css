@@ -1,0 +1,22 @@
+/* style sheet for recipe-app */
+
+#titles {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.list {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.list1 {
+    display: flex;
+    justify-content: left;
+}
+
+.field {
+    display: flex;
+    width: 500px;
+    justify-content: space-between;
+}
