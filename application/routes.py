@@ -2,15 +2,27 @@ from asyncio.windows_events import NULL
 from flask import render_template, url_for, redirect, request
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method
-from application.forms import AddRecipeForm
+from application.forms import AddRecipeForm, IndexForm
 from sqlalchemy.exc import IntegrityError
 
 @app.route('/', methods = ['GET', 'POST'])
-@app.route('/', methods = ['GET', 'POST'])
+@app.route('/home', methods = ['GET', 'POST'])
 def index():
-    return "what"
-    # code here for search need to add form and html
+    form = IndexForm()
+    form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
+    total_number = Recipes.query.count()
 
+    if request.method == 'POST':
+        recipe_result = Recipes.query.filter_by(id=form.recipe.data).first()
+        cuisine = Cuisine.query.filter_by(id=recipe_result.cuisine_id).first().cuisine_name
+        method_list = [m.step for m in Method.query.filter_by(recipe_id = recipe_result.id)]
+        
+      
+
+        return render_template('index.html', form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list)
+    else:
+        return render_template('index.html', form=form, total_number=total_number)
+  
 
 
 
