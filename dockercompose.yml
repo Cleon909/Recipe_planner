@@ -15,6 +15,6 @@ services:
       - target: 3306
       - published: 3006
     volumes:
-    - C:\Users\Mike\Desktop\code\Recipe_planner\db
+    - /c/Users/Mike/Desktop/code/Recipe_planner/db
 
       

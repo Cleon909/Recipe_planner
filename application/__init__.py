@@ -1,11 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import pymysql
 
 app = Flask(__name__)
 
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymsql://root:recipe@db/appdb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:recipe@db/appdb'
 app.config['SECRET_KEY'] = 'sdfgoikh'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 
