@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  webapp:
+    image: corcoran909/rapp
+    ports:
+    - target: 5000
+      published: 5000
+    deploy:
+      replicas: 1
+  db:
+    image: corcoran909/mysql
+    deploy:
+      replicas: 1
+    ports:
+      - target: 3306
+      - published: 3006
+    volumes:
+    - C:\Users\Mike\Desktop\code\Recipe_planner\db
+
+      

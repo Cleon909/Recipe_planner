@@ -76,12 +76,8 @@
     {% endif %}
     {% if recipe %}
         <h2>Recipe created</h2>
-        <p><b>name:</b> <p>{{ recipe.recipe_name}}</p> <b>Description:</b> <p>{{  recipe.recipe_description }}</p> <b>Cuisine:</b> <p>{{ cusine }}</p><br>
-        <p>Ingedients:</p>
-        {% for item in list_of_ingredients %}
-            <p>{{  item }}
-            <p></p>
-        {% endfor %}
+        {{ recipe.recipe_name}}
+        <p></p>
     {% endif %}
     {% if duplicate %}
         <h2>Recipe not created</h2>
