@@ -33,7 +33,7 @@ def index():
 @app.route('/add_meta', methods = ['GET', 'POST'])
 def add_meta():
     form = AddMetaForm()
-    if request.mthod == 'POST':
+    if request.method == 'POST':
         ingredient = form.ingredient.data
         cuisine = form.cuisine.data
         ing = Ingredients(ingredient)
