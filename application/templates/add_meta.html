@@ -4,6 +4,7 @@
 
 {{ form.hidden_tag() }}
 {% if form %}
+<form method = 'POST'>
 <div class="field">
     {{ form.cuisine.label }} {{ form.cuisine }}
 </div>
@@ -11,11 +12,18 @@
     {{ form.ingredient.label }} {{ form.ingredient }}
 </div>
 <div class="field">
-    {{ form.submit.label }} {{ form.submit }}
+    {{ form.submit }}
+</div>
+</form>
+{% endif %}
+{% if ingredient != "" %}
+<div class="field">
+    <p>ingredient added:</p>{{ ingredient }}
 </div>
 {% endif %}
-{% if recipe or cuisine %}
-<p>ingredient added:</p>{{ ingredient }}
-<p>cuisine added</p> {{ cuisine }}
+{% if cuisine != "" %}
+<div class="field">
+    <p>cuisine added</p> {{ cuisine }}
+</div>
 {% endif %}
 {% endblock %}

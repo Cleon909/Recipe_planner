@@ -36,13 +36,15 @@ def add_meta():
     if request.method == 'POST':
         ingredient = form.ingredient.data
         cuisine = form.cuisine.data
-        ing = Ingredients(ingredient)
-        db.session.add(ing)
-        db.session.commit()
-        cus = Cuisine(cuisine)
-        db.session.add(cus)
-        db.session.commit()
-        return render_template('add_meta.html', ingredient = ingredient, cuisine=cuisine)
+        if ingredient != "":
+            ing = Ingredients(ingredient)
+            db.session.add(ing)
+            db.session.commit()
+        if cuisine != "":
+            cus = Cuisine(cuisine)
+            db.session.add(cus)
+            db.session.commit()
+        return render_template('add_meta.html', ingredient = ingredient, cuisine=cuisine, form=form)
     else:
         return render_template('add_meta.html', form=form)
 
