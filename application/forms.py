@@ -3,9 +3,14 @@ from wtforms import StringField, SelectField, SubmitField, DecimalField, FormFie
 from wtforms.validators import DataRequired, Length, ValidationError, NumberRange
 # from application.models import Ingredients, Cuisine, Recipes, Quantity, Method
 
+class AddMetaForm(FlaskForm):
+    cuisine = StringField('Enter Cuisine to add', validators = [Length(max = 50 )])
+    ingredient = StringField('Enter Ignredient to add', validators = [Length(max = 50)])
+
 class IndexForm(FlaskForm):
     recipe = SelectField('pick recipe to show', choices = [])
     submit = SubmitField('Press to show recipe')
+
 class AddRecipeForm(FlaskForm):
     name = StringField('Name of Recipe', validators = [DataRequired(), Length(max = 200)])
     recipe_description = StringField('Details of recipe(i.e. cooking time, calories, macros etc', validators = [(Length(max = 500))])

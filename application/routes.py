@@ -1,7 +1,7 @@
 from flask import render_template, url_for, redirect, request
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method
-from application.forms import AddRecipeForm, IndexForm
+from application.forms import AddRecipeForm, IndexForm, AddMetaForm
 from sqlalchemy.exc import IntegrityError
 
 @app.route('/', methods = ['GET', 'POST'])
@@ -30,9 +30,21 @@ def index():
     else:
         return render_template('index.html', form=form, total_number=total_number)
   
-
-
-
+@app.route('/add_meta', methods = ['GET', 'POST'])
+def add_meta():
+    form = AddMetaForm()
+    if request.mthod == 'POST':
+        ingredient = form.ingredient.data
+        cuisine = form.cuisine.data
+        ing = Ingredients(ingredient)
+        db.session.add(ing)
+        db.session.commit()
+        cus = Cuisine(cuisine)
+        db.session.add(cus)
+        db.session.commit()
+        return render_template('add_meta.html', ingredient = ingredient, cuisine=cuisine)
+    else:
+        return render_template('add_meta.html', form=form)
 
 
 @app.route('/add_recipe', methods = ['GET', 'POST'])
