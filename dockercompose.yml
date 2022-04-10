@@ -15,6 +15,11 @@ services:
       - target: 3306
       - published: 3006
     volumes:
-    - /c/Users/Mike/Desktop/code/Recipe_planner/db
+    - type: volume
+      source: mysql-database
+      target: /var/lib/mysql
+      
 
+volumes:
+  mysql-database:
       
