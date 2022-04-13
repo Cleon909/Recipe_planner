@@ -55,5 +55,10 @@ class Method(db.Model):
         self.step_num = step_num
         self.step = step
 
+class Schedule(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    day_of_the_week = db.Column(db.Integer, nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
+
 
 

@@ -11,6 +11,13 @@ class IndexForm(FlaskForm):
     recipe = SelectField('pick recipe to show', choices = [])
     submit = SubmitField('Press to show recipe')
 
+
+
+
+
+
+
+
 class AddRecipeForm(FlaskForm):
     name = StringField('Name of Recipe', validators = [DataRequired(), Length(max = 200)])
     recipe_description = StringField('Details of recipe(i.e. cooking time, calories, macros etc', validators = [(Length(max = 500))])
