@@ -19,12 +19,22 @@
             <a href="{{ url_for('index') }}"  style='color:white'>Home</a>
             <a href="{{ url_for('add_recipe') }}">Add a Recipe</a>
             <a href="{{ url_for('add_meta') }}">Add meta data</a>
+            <a href="{{ url_for('search_recipes') }}">Search for a Recipe</a>
   
         </div>
     </div>
-    <div class="container">        
-        {% block body %}
-        {% endblock body %}
+    <div class="container">
+        <div id="left">
+            <p>Monday {{ week[0].recipe_name }}</p> 
+            <p>Tuesday {{ week[1].recipe_name }}</p>
+            <p>Wednesday {{ week[2].recipe_name }}</p>
+            <p>Thursday {{ week[3].recipe_name }}</p>
+            <p>Friday {{ week[4].recipe_name }}</p>
+        </div>
+        <div id="center">        
+            {% block body %}
+            {% endblock body %}
+        </div>
     </div>
 </body>
 </html>

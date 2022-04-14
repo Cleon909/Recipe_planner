@@ -1,13 +1,20 @@
 from flask import render_template, url_for, redirect, request
 from application import app, db
-from application.models import Ingredients, Cuisine, Recipes, Quantity, Method
-from application.forms import AddRecipeForm, IndexForm, AddMetaForm
+from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule
+from application.forms import AddRecipeForm, AddMetaForm, SearchForm
 from sqlalchemy.exc import IntegrityError
+
+week = []
+week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
+week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
+week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
+week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 5).first().recipe_id).first())
 
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/home', methods = ['GET', 'POST'])
 def index():
-    form = IndexForm()
+    form = SearchForm()
     form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
     total_number = Recipes.query.count()
 
@@ -26,9 +33,34 @@ def index():
             ingredient_list[n].append(q.ingredient_prep)
             n += 1
         print (ingredient_list)
-        return render_template('index.html', form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
+        return render_template('index.html',  week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
     else:
-        return render_template('index.html', form=form, total_number=total_number)
+        return render_template('index.html',  week=week, form=form, total_number=total_number) 
+    
+@app.route('/search_recipes', methods = ['GET', 'POST'])
+def search_recipes():    
+    form = SearchForm()
+    form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
+    total_number = Recipes.query.count()
+
+    if request.method == 'POST':
+        recipe_result = Recipes.query.filter_by(id=form.recipe.data).first()
+        cuisine = Cuisine.query.filter_by(id=recipe_result.cuisine_id).first().cuisine_name
+        method_list = [m.step for m in Method.query.filter_by(recipe_id = recipe_result.id)]
+        quantities = Quantity.query.filter_by(recipe_id = recipe_result.id).all()
+        ingredient_list = []
+        n = 0
+        for q in quantities:
+            ingredient_list.append([])
+            ingredient_list[n].append(Ingredients.query.filter_by(id = q.ingredient_id).first().ingredient_name)
+            ingredient_list[n].append(q.amount)
+            ingredient_list[n].append(q.unit)
+            ingredient_list[n].append(q.ingredient_prep)
+            n += 1
+        print (ingredient_list)
+        return render_template('index.html',  week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
+    else:
+        return render_template('index.html',  week=week, form=form, total_number=total_number)
   
 @app.route('/add_meta', methods = ['GET', 'POST'])
 def add_meta():
@@ -44,9 +76,9 @@ def add_meta():
             cus = Cuisine(cuisine)
             db.session.add(cus)
             db.session.commit()
-        return render_template('add_meta.html', ingredient = ingredient, cuisine=cuisine, form=form)
+        return render_template('add_meta.html',  week=week, ingredient = ingredient, cuisine=cuisine, form=form)
     else:
-        return render_template('add_meta.html', form=form)
+        return render_template('add_meta.html', form=form, week=week)
 
 
 @app.route('/add_recipe', methods = ['GET', 'POST'])
@@ -877,6 +909,6 @@ def add_recipe():
                 db.session.add(step)
                 db.session.commit()
     
-        return render_template('add_recipe.html', recipe = recipe)
+        return render_template('add_recipe.html', week=week, recipe = recipe)
     else:
-        return render_template('add_recipe.html', form=form)
+        return render_template('add_recipe.html', week=week,form=form)

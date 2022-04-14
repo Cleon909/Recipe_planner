@@ -1,0 +1,45 @@
+{% extends 'layout.html'%}
+
+{% block body %}
+<div style="padding-left:20px">
+    <h1>Search Page</h1>
+    <div style="display:flex; justify-content: start;">
+        <div>
+            <h2>Pick a Recipe</h2>
+            <div class = 'form'>
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    {{ form.recipe.label }} {{ form.recipe }}
+                    <br>
+                    <p></p>
+                    <div align="right">{{ form.submit }}</div>
+                </form>
+            </div>
+        </div>
+            <div style='margin-left:300px'>
+                <p></p>
+                <p><b>Total Number of Recipes:</b> {{ total_number }}<p> 
+            </div>
+    </div>
+    <div>
+        {% if recipe_result %}
+        <h1> Recipe</h1>
+            <p><b>Name:</b> {{ recipe_result.recipe_name }}, <b>Recipe Description:</b> {{ recipe_result.recipe_description }}, <b>Cuisine:</b> {{ cuisine }}</p>
+            <p>How To make</p>
+            {% for m in method_list %}
+            {{ m }}<br>
+            {% endfor %}
+            <p>Ingredients</p>
+            {% for q in ingredient_list %}
+            <div class = "field">
+                {{ q[0] }}
+                {{ q[1] }}
+                {{ q[2] }}
+                {{ q[3] }}
+            </div>
+            {% endfor %}
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock body %}

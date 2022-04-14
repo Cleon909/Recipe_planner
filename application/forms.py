@@ -7,7 +7,7 @@ class AddMetaForm(FlaskForm):
     cuisine = StringField('Enter Cuisine to add', validators = [Length(max = 50 )])
     ingredient = StringField('Enter Ingredient to add', validators = [Length(max = 50)])
     submit = SubmitField('Press to add')
-class IndexForm(FlaskForm):
+class SearchForm(FlaskForm):
     recipe = SelectField('pick recipe to show', choices = [])
     submit = SubmitField('Press to show recipe')
 
