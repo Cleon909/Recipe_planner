@@ -2,14 +2,25 @@ from flask import render_template, url_for, redirect, request
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule
 from application.forms import AddRecipeForm, AddMetaForm, SearchForm
-from sqlalchemy.exc import IntegrityError
+from datetime import date, datetime
+import calendar
 
+
+# variables for the layout html template.
 week = []
 week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
 week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
 week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
 week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
 week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 5).first().recipe_id).first())
+
+day = date.today()
+day = calendar.day_name[day.weekday()]
+
+recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+# variables for the layout html template.
+
+
 
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/home', methods = ['GET', 'POST'])
@@ -33,9 +44,9 @@ def index():
             ingredient_list[n].append(q.ingredient_prep)
             n += 1
         print (ingredient_list)
-        return render_template('index.html',  week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
+        return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
     else:
-        return render_template('index.html',  week=week, form=form, total_number=total_number) 
+        return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day,week=week, form=form, total_number=total_number) 
     
 @app.route('/search_recipes', methods = ['GET', 'POST'])
 def search_recipes():    
@@ -58,9 +69,9 @@ def search_recipes():
             ingredient_list[n].append(q.ingredient_prep)
             n += 1
         print (ingredient_list)
-        return render_template('index.html',  week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
+        return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
     else:
-        return render_template('index.html',  week=week, form=form, total_number=total_number)
+        return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number)
   
 @app.route('/add_meta', methods = ['GET', 'POST'])
 def add_meta():
@@ -76,9 +87,9 @@ def add_meta():
             cus = Cuisine(cuisine)
             db.session.add(cus)
             db.session.commit()
-        return render_template('add_meta.html',  week=week, ingredient = ingredient, cuisine=cuisine, form=form)
+        return render_template('add_meta.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, ingredient = ingredient, cuisine=cuisine, form=form)
     else:
-        return render_template('add_meta.html', form=form, week=week)
+        return render_template('add_meta.html', day=day, recipe_of_the_day=recipe_of_the_day, form=form, week=week)
 
 
 @app.route('/add_recipe', methods = ['GET', 'POST'])
@@ -909,6 +920,6 @@ def add_recipe():
                 db.session.add(step)
                 db.session.commit()
     
-        return render_template('add_recipe.html', week=week, recipe = recipe)
+        return render_template('add_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, recipe = recipe)
     else:
-        return render_template('add_recipe.html', week=week,form=form)
+        return render_template('add_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week,form=form)
