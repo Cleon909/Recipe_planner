@@ -17,9 +17,10 @@
             <h1 style="color:white; font-size:50px; margin-left: 10px"> Recipe Planner App</h1></div>
         <div id = "links" style="text-align: center; display: flex; justify-content: space-around; color:white; padding-bottom: 10px; padding-left: 20px">
             <a href="{{ url_for('index') }}"  style='color:white'>Home</a>
+            <a href="{{ url_for('create_weekly_schedule') }}"> Create Schedule</a> 
             <a href="{{ url_for('add_recipe') }}">Add a Recipe</a>
-            <a href="{{ url_for('add_meta') }}">Add meta data</a>
             <a href="{{ url_for('search_recipes') }}">Search for a Recipe</a>
+            <a href="{{ url_for('add_meta') }}">Add meta data</a>
   
         </div>
     </div>

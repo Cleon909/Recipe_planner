@@ -1,18 +1,19 @@
 from flask import render_template, url_for, redirect, request
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule
-from application.forms import AddRecipeForm, AddMetaForm, SearchForm
+from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, CreateScheduleForm
 from datetime import date, datetime
 import calendar
+import random
 
 
 # variables for the layout html template.
 week = []
+week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
 week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
 week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
 week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
 week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
-week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 5).first().recipe_id).first())
 
 day = date.today()
 day = calendar.day_name[day.weekday()]
@@ -47,7 +48,82 @@ def index():
         return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
     else:
         return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day,week=week, form=form, total_number=total_number) 
-    
+
+
+@app.route('/create_weekly_schedule', methods = ['GET', 'POST'])
+def create_weekly_schedule():
+    form = SelectScheduleForm()
+    form1 = CreateScheduleForm()
+
+    choices = [(cuisine.id, cuisine.cuisine_name) for cuisine in Cuisine.query.order_by('cuisine_name')]
+    choices.insert(0, ("", ""))
+    form.first_cuisine.choices = choices
+    form.second_cuisine.choices = choices
+    form.third_cuisine.choices = choices
+    form.fourth_cuisine.choices = choices
+    form.fifth_cuisine.choices = choices
+
+    choices1 = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
+    form1.monday_recipe.choice = choices1
+    form1.tuesday_recipe.choice = choices1
+    form1.wednesday_recipe.choice = choices1
+    form1.thursday_recipe.choice = choices1
+    form1.friday_recipe.choice = choices1
+
+    if request.method == 'POST': 
+
+        first_cuisine_id = form.first_cuisine.data
+        second_cuisine_id = form.second_cuisine.data 
+        third_cuisine_id = form.third_cuisine.data
+        fourth_cuisine_id = form.fourth_cuisine.data
+        fifth_cuisine_id = form.fifth_cuisine.data 
+
+    # code below create a list of all recipes in the cuisine selected
+        if first_cuisine_id == "":
+            first_recipe_list = Recipes.query.all()
+        else:
+            first_recipe_list = Recipes.query.filter_by(cuisine_id = first_cuisine_id).all()
+        
+        if second_cuisine_id == "":
+            second_recipe_list = Recipes.query.all()
+        else:
+            second_recipe_list = Recipes.query.filter_by(cuisine_id = second_cuisine_id).all()
+        
+        if third_cuisine_id == "":
+            third_recipe_list = Recipes.query.all()
+        else:
+            third_recipe_list = Recipes.query.filter_by(cuisine_id = third_cuisine_id).all()
+
+        if fourth_cuisine_id == "":
+            fourth_recipe_list = Recipes.query.all()
+        else:
+            fourth_recipe_list = Recipes.query.filter_by(cuisine_id = fourth_cuisine_id).all()
+
+        if fifth_cuisine_id == "":
+            fifth_recipe_list = Recipes.query.all()
+        else:
+            fifth_recipe_list = Recipes.query.filter_by(cuisine_id = fifth_cuisine_id).all()
+
+        # shuffles lists of recipes and add randomised first in the list to the weekly schedule 
+        random.shuffle(first_recipe_list)
+        random.shuffle(second_recipe_list)
+        random.shuffle(third_recipe_list)
+        random.shuffle(fourth_recipe_list)
+        random.shuffle(fifth_recipe_list)
+
+        weekly_schedule = []
+        weekly_schedule.append(first_recipe_list[0])
+        weekly_schedule.append(second_recipe_list[0])
+        weekly_schedule.append(third_recipe_list[0])
+        weekly_schedule.append(fourth_recipe_list[0])
+        weekly_schedule.append(fifth_recipe_list[0])
+        random.shuffle(weekly_schedule)
+        return render_template ('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, weekly_schedule=weekly_schedule, form=form1) #more stuff to put here to create form
+    else:
+        return render_template ('create_weekly_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+
+
+
 @app.route('/search_recipes', methods = ['GET', 'POST'])
 def search_recipes():    
     form = SearchForm()

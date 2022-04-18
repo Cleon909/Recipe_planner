@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField, DecimalField, FormField
-from wtforms.validators import DataRequired, Length, ValidationError, NumberRange
+from wtforms import StringField, SelectField, SubmitField, DecimalField, FormField, BooleanField
+from wtforms.validators import DataRequired, Length, ValidationError
 # from application.models import Ingredients, Cuisine, Recipes, Quantity, Method
 
 class AddMetaForm(FlaskForm):
@@ -11,8 +11,28 @@ class SearchForm(FlaskForm):
     recipe = SelectField('pick recipe to show', choices = [])
     submit = SubmitField('Press to show recipe')
 
+class SelectScheduleForm(FlaskForm):
+    first_cuisine = SelectField('Choose Cuisine to be included', choices = [])
+    second_cuisine = SelectField('Choose Cuisine to be included',choices = [])
+    third_cuisine = SelectField('Choose Cuisine to be included', choices = [])
+    fourth_cuisine = SelectField('Choose Cuisine to be included', choices = [])
+    fifth_cuisine = SelectField('Choose Cuisine to be included', choices = [])
+    submit_cuisine = SubmitField('Generate Recipe SChedule')
+    
+class CreateScheduleForm(FlaskForm):
+    monday_cb = BooleanField('Keep Recipe?')
+    tuesday_cb = BooleanField('Keep Recipe?')
+    wednesday_cb = BooleanField('Keep Recipe?')
+    thursday_cb = BooleanField('Keep Recipe?')
+    friday_cb = BooleanField('Keep Recipe?')
 
-
+    monday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])
+    tuesday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])
+    wednesday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])
+    thursday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])
+    friday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])
+    submit_recipes = SubmitField('Add recipes to schedule')
+    
 
 
 
