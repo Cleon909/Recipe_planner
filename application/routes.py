@@ -1,7 +1,7 @@
-from flask import render_template, url_for, redirect, request
+from flask import render_template, url_for, redirect, request, session
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule
-from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, CreateScheduleForm
+from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm
 from datetime import date, datetime
 import calendar
 import random
@@ -53,8 +53,6 @@ def index():
 @app.route('/create_weekly_schedule', methods = ['GET', 'POST'])
 def create_weekly_schedule():
     form = SelectScheduleForm()
-    form1 = CreateScheduleForm()
-
     choices = [(cuisine.id, cuisine.cuisine_name) for cuisine in Cuisine.query.order_by('cuisine_name')]
     choices.insert(0, ("", ""))
     form.first_cuisine.choices = choices
@@ -62,13 +60,6 @@ def create_weekly_schedule():
     form.third_cuisine.choices = choices
     form.fourth_cuisine.choices = choices
     form.fifth_cuisine.choices = choices
-
-    choices1 = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
-    form1.monday_recipe.choice = choices1
-    form1.tuesday_recipe.choice = choices1
-    form1.wednesday_recipe.choice = choices1
-    form1.thursday_recipe.choice = choices1
-    form1.friday_recipe.choice = choices1
 
     if request.method == 'POST': 
 
@@ -118,11 +109,63 @@ def create_weekly_schedule():
         weekly_schedule.append(fourth_recipe_list[0])
         weekly_schedule.append(fifth_recipe_list[0])
         random.shuffle(weekly_schedule)
-        return render_template ('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, weekly_schedule=weekly_schedule, form=form1) #more stuff to put here to create form
+        schedule_day = 0
+        for recipe in weekly_schedule:
+            sched = Schedule.query.filter_by(day_of_the_week = schedule_day).first()
+            sched.recipe_id = recipe.id
+            db.session_add(sched)
+            db.session_commit()
+            schedule_day += 1 
+        return redirect(url_for('finalise_schedule'))
     else:
-        return render_template ('create_weekly_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+        return render_template('create_weekly_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
-
+@app.route('/finalise_schedule', methods=['POST','GET'])
+def finalise_schedule():
+    done = True
+    form = FinaliseScheduleForm()
+    choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
+    form.monday_recipe.choice = choices
+    form.tuesday_recipe.choice = choices
+    form.wednesday_recipe.choice = choices
+    form.thursday_recipe.choice = choices
+    form.friday_recipe.choice = choices
+    weekly_schedule = session.get('weekly_schedule')
+    if request.method == 'POST':
+        if form.monday_cb.data != True:
+            sched = Schedule.query.filter_by(day_of_the_week = 0).first()
+            sched.recipe_id = form.monday_recipe.data
+            db.session_add(sched)
+            db.session_commit()
+        if form.tuesday_cb.data != True:
+            sched = Schedule.query.filter_by(day_of_the_week = 1).first()
+            sched.recipe_id = form.tuesday_recipe.data
+            db.session_add(sched)
+            db.session_commit()
+        if form.wednesday_cb.data != True:
+            sched = Schedule.query.filter_by(day_of_the_week = 2).first()
+            sched.recipe_id = form.wednesday_recipe.data
+            db.session_add(sched)
+            db.session_commit()
+        if form.thursday_cb.data != True:
+            sched = Schedule.query.filter_by(day_of_the_week = 3).first()
+            sched.recipe_id = form.thursday_recipe.data
+            db.session_add(sched)
+            db.session_commit()
+        if form.friday_cb.data != True:
+            sched = Schedule.query.filter_by(day_of_the_week = 4).first()
+            sched.recipe_id = form.friday_recipe.data
+            db.session_add(sched)
+            db.session_commit()
+        return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, done=done)
+    else:
+        weekly_schedule = Schedule.query.sort_by('day_of_the_week')
+        mon = Recipes.query.filter_by(id = weekly_schedule[0].recipe_id).first().recipe_name
+        tue = Recipes.query.filter_by(id = weekly_schedule[1].recipe_id).first().recipe_name
+        wed = Recipes.query.filter_by(id = weekly_schedule[2].recipe_id).first().recipe_name
+        thu = Recipes.query.filter_by(id = weekly_schedule[3].recipe_id).first().recipe_name
+        fri = Recipes.query.filter_by(id = weekly_schedule[4].recipe_id).first().recipe_name
+        return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form, mon=mon, tue=tue, wed=wed, thu=thu, fri=fri)
 
 @app.route('/search_recipes', methods = ['GET', 'POST'])
 def search_recipes():    

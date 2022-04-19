@@ -17,9 +17,9 @@ class SelectScheduleForm(FlaskForm):
     third_cuisine = SelectField('Choose Cuisine to be included', choices = [])
     fourth_cuisine = SelectField('Choose Cuisine to be included', choices = [])
     fifth_cuisine = SelectField('Choose Cuisine to be included', choices = [])
-    submit_cuisine = SubmitField('Generate Recipe SChedule')
+    submit_cuisine = SubmitField('Generate Recipe Schedule')
     
-class CreateScheduleForm(FlaskForm):
+class FinaliseScheduleForm(FlaskForm):
     monday_cb = BooleanField('Keep Recipe?')
     tuesday_cb = BooleanField('Keep Recipe?')
     wednesday_cb = BooleanField('Keep Recipe?')
