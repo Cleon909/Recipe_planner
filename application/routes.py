@@ -113,8 +113,8 @@ def create_weekly_schedule():
         for recipe in weekly_schedule:
             sched = Schedule.query.filter_by(day_of_the_week = schedule_day).first()
             sched.recipe_id = recipe.id
-            db.session_add(sched)
-            db.session_commit()
+            db.session.add(sched)
+            db.session.commit()
             schedule_day += 1 
         return redirect(url_for('finalise_schedule'))
     else:
@@ -125,41 +125,41 @@ def finalise_schedule():
     done = True
     form = FinaliseScheduleForm()
     choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
-    form.monday_recipe.choice = choices
-    form.tuesday_recipe.choice = choices
-    form.wednesday_recipe.choice = choices
-    form.thursday_recipe.choice = choices
-    form.friday_recipe.choice = choices
+    form.monday_recipe.choices = choices
+    form.tuesday_recipe.choices = choices
+    form.wednesday_recipe.choices = choices
+    form.thursday_recipe.choices = choices
+    form.friday_recipe.choices = choices
     weekly_schedule = session.get('weekly_schedule')
     if request.method == 'POST':
-        if form.monday_cb.data != True:
+        if form.monday_cb.data == True:
             sched = Schedule.query.filter_by(day_of_the_week = 0).first()
             sched.recipe_id = form.monday_recipe.data
-            db.session_add(sched)
-            db.session_commit()
-        if form.tuesday_cb.data != True:
+            db.session.add(sched)
+            db.session.commit()
+        if form.tuesday_cb.data == True:
             sched = Schedule.query.filter_by(day_of_the_week = 1).first()
             sched.recipe_id = form.tuesday_recipe.data
-            db.session_add(sched)
-            db.session_commit()
-        if form.wednesday_cb.data != True:
+            db.session.add(sched)
+            db.session.commit()
+        if form.wednesday_cb.data == True:
             sched = Schedule.query.filter_by(day_of_the_week = 2).first()
             sched.recipe_id = form.wednesday_recipe.data
-            db.session_add(sched)
-            db.session_commit()
-        if form.thursday_cb.data != True:
+            db.session.add(sched)
+            db.session.commit()
+        if form.thursday_cb.data == True:
             sched = Schedule.query.filter_by(day_of_the_week = 3).first()
             sched.recipe_id = form.thursday_recipe.data
-            db.session_add(sched)
-            db.session_commit()
-        if form.friday_cb.data != True:
+            db.session.add(sched)
+            db.session.commit()
+        if form.friday_cb.data == True:
             sched = Schedule.query.filter_by(day_of_the_week = 4).first()
             sched.recipe_id = form.friday_recipe.data
-            db.session_add(sched)
-            db.session_commit()
+            db.session.add(sched)
+            db.session.commit()
         return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, done=done)
     else:
-        weekly_schedule = Schedule.query.sort_by('day_of_the_week')
+        weekly_schedule = Schedule.query.order_by('day_of_the_week')
         mon = Recipes.query.filter_by(id = weekly_schedule[0].recipe_id).first().recipe_name
         tue = Recipes.query.filter_by(id = weekly_schedule[1].recipe_id).first().recipe_name
         wed = Recipes.query.filter_by(id = weekly_schedule[2].recipe_id).first().recipe_name

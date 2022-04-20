@@ -1,11 +1,12 @@
 {% extends 'layout.html'%}
 
 {% block body %}
-{{ form.first_cuisine.label }} {{ form.first_cuisine }}
-{{ form.first_cuisine.label }} {{ form.second_cuisine }}
-{{ form.first_cuisine.label }} {{ form.third_cuisine }}
-{{ form.first_cuisine.label }} {{ form.fourth_cuisine }}
-{{ form.first_cuisine.label }} {{ form.fifth_cuisine }}
-{{ form.submit_cuisine }}
-
+<form method = 'POST'>
+<div class="list1">{{ form.first_cuisine.label }} {{ form.first_cuisine }}</div>
+<div class="list1">{{ form.first_cuisine.label }} {{ form.second_cuisine }}</div>
+<div class="list1">{{ form.first_cuisine.label }} {{ form.third_cuisine }}</div>
+<div class="list1">{{ form.first_cuisine.label }} {{ form.fourth_cuisine }}</div>
+<div class="list1">{{ form.first_cuisine.label }} {{ form.fifth_cuisine }}</div>
+<div class="list1">{{ form.submit_cuisine }}</div>
+</form>
 {% endblock body %}

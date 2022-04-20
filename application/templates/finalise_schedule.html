@@ -1,25 +1,27 @@
 {% extends 'layout.html'%}
 
 {% block body %}
+<form method="'POST">
 {% if mon %}
 <div class = 'field'>
-    {{ mon }} <p>keep?</p> {{ monday_cb }} {{ form.monday_recipe.label }} {{ form.monday_recipe }}
+    {{ mon }} {{ form.monday_cb.label }} {{ form.monday_cb }} {{ form.monday_recipe.label }} {{ form.monday_recipe }}
 </div>
 <div class='field'>
-    {{ tue }} <p>keep?</p> {{ tuesday_cb }} {{ form.tuesday_recipe.label }} {{ form.tuesday_recipe }}
+    {{ tue }} {{ form.tuesday_cb.label }} {{ form.tuesday_cb }} {{ form.tuesday_recipe.label }} {{ form.tuesday_recipe }}
 </div>
 <div class='field'>
-    {{ wed }} <p>keep?</p> {{ wednesday_cb }} {{ form.wednesday_recipe.label }} {{ form.wednesday_recipe }}
+    {{ wed }} {{ form.wednesday_cb.label }} {{ form.wednesday_cb }} {{ form.wednesday_recipe.label }} {{ form.wednesday_recipe }}
 </div>
 <div class='field'>
-    {{ thu }} <p>keep?</p> {{ thursday_cb }} {{ form.thursday_recipe.label }} {{ form.thursday_recipe }}
+    {{ thu }} {{ form.thursday_cb.label }} {{ form.thursday_cb }} {{ form.thursday_recipe.label }} {{ form.thursday_recipe }}
 </div>
 <div class='field'>
-    {{ fri }} <p>keep?</p> {{ friday_cb }} {{ form.friday_recipe.label }} {{ form.friday_recipe }}
+    {{ fri }} {{ form.friday_cb.label }} {{ form.friday_cb }} {{ form.friday_recipe.label }} {{ form.friday_recipe }}
 </div>
 {{form.submit_recipes}}
 {% endif %}
 {% if done %}
 <h3>Schedule created</h3>
 {% endif %}
+</form>
 {% endblock body %}

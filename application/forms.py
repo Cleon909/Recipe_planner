@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, DecimalField, FormField, BooleanField
 from wtforms.validators import DataRequired, Length, ValidationError
-# from application.models import Ingredients, Cuisine, Recipes, Quantity, Method
 
 class AddMetaForm(FlaskForm):
     cuisine = StringField('Enter Cuisine to add', validators = [Length(max = 50 )])
@@ -20,11 +19,11 @@ class SelectScheduleForm(FlaskForm):
     submit_cuisine = SubmitField('Generate Recipe Schedule')
     
 class FinaliseScheduleForm(FlaskForm):
-    monday_cb = BooleanField('Keep Recipe?')
-    tuesday_cb = BooleanField('Keep Recipe?')
-    wednesday_cb = BooleanField('Keep Recipe?')
-    thursday_cb = BooleanField('Keep Recipe?')
-    friday_cb = BooleanField('Keep Recipe?')
+    monday_cb = BooleanField('Change Recipe?', default=False)
+    tuesday_cb = BooleanField('Change Recipe?', default=False)
+    wednesday_cb = BooleanField('Change Recipe?', default=False)
+    thursday_cb = BooleanField('Change Recipe?', default=False)
+    friday_cb = BooleanField('Change Recipe?', default=False)
 
     monday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])
     tuesday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])
