@@ -19,11 +19,11 @@ class SelectScheduleForm(FlaskForm):
     submit_cuisine = SubmitField('Generate Recipe Schedule')
     
 class FinaliseScheduleForm(FlaskForm):
-    monday_cb = BooleanField('Change Recipe?', default=False)
-    tuesday_cb = BooleanField('Change Recipe?', default=False)
-    wednesday_cb = BooleanField('Change Recipe?', default=False)
-    thursday_cb = BooleanField('Change Recipe?', default=False)
-    friday_cb = BooleanField('Change Recipe?', default=False)
+    monday_cb = BooleanField('Change Recipe?')
+    tuesday_cb = BooleanField('Change Recipe?')
+    wednesday_cb = BooleanField('Change Recipe?')
+    thursday_cb = BooleanField('Change Recipe?')
+    friday_cb = BooleanField('Change Recipe?')
 
     monday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])
     tuesday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])

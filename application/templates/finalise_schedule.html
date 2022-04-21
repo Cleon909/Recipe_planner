@@ -1,7 +1,7 @@
 {% extends 'layout.html'%}
 
 {% block body %}
-<form method="'POST">
+<form method="POST">
 {% if mon %}
 <div class = 'field'>
     {{ mon }} {{ form.monday_cb.label }} {{ form.monday_cb }} {{ form.monday_recipe.label }} {{ form.monday_recipe }}

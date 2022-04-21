@@ -26,6 +26,19 @@ recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_o
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/home', methods = ['GET', 'POST'])
 def index():
+        # variables for the layout html template.
+    week = []
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+
+    day = date.today()
+    day = calendar.day_name[day.weekday()]
+
+    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    # variables for the layout html template.
     form = SearchForm()
     form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
     total_number = Recipes.query.count()
@@ -44,7 +57,6 @@ def index():
             ingredient_list[n].append(q.unit)
             ingredient_list[n].append(q.ingredient_prep)
             n += 1
-        print (ingredient_list)
         return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
     else:
         return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day,week=week, form=form, total_number=total_number) 
@@ -52,6 +64,19 @@ def index():
 
 @app.route('/create_weekly_schedule', methods = ['GET', 'POST'])
 def create_weekly_schedule():
+    # variables for the layout html template.
+    week = []
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+
+    day = date.today()
+    day = calendar.day_name[day.weekday()]
+
+    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    # variables for the layout html template.
     form = SelectScheduleForm()
     choices = [(cuisine.id, cuisine.cuisine_name) for cuisine in Cuisine.query.order_by('cuisine_name')]
     choices.insert(0, ("", ""))
@@ -122,15 +147,28 @@ def create_weekly_schedule():
 
 @app.route('/finalise_schedule', methods=['POST','GET'])
 def finalise_schedule():
+    # variables for the layout html template.
+    week = []
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+
+    day = date.today()
+    day = calendar.day_name[day.weekday()]
+
+    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    # variables for the layout html template.
     done = True
     form = FinaliseScheduleForm()
     choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
+    choices.insert(0, ("", ""))
     form.monday_recipe.choices = choices
     form.tuesday_recipe.choices = choices
     form.wednesday_recipe.choices = choices
     form.thursday_recipe.choices = choices
     form.friday_recipe.choices = choices
-    weekly_schedule = session.get('weekly_schedule')
     if request.method == 'POST':
         if form.monday_cb.data == True:
             sched = Schedule.query.filter_by(day_of_the_week = 0).first()
@@ -168,7 +206,20 @@ def finalise_schedule():
         return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form, mon=mon, tue=tue, wed=wed, thu=thu, fri=fri)
 
 @app.route('/search_recipes', methods = ['GET', 'POST'])
-def search_recipes():    
+def search_recipes():
+    # variables for the layout html template.
+    week = []
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+
+    day = date.today()
+    day = calendar.day_name[day.weekday()]
+
+    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    # variables for the layout html template.    
     form = SearchForm()
     form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
     total_number = Recipes.query.count()
@@ -187,13 +238,25 @@ def search_recipes():
             ingredient_list[n].append(q.unit)
             ingredient_list[n].append(q.ingredient_prep)
             n += 1
-        print (ingredient_list)
         return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
     else:
         return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number)
   
 @app.route('/add_meta', methods = ['GET', 'POST'])
 def add_meta():
+    # variables for the layout html template.
+    week = []
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+
+    day = date.today()
+    day = calendar.day_name[day.weekday()]
+
+    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    # variables for the layout html template.
     form = AddMetaForm()
     if request.method == 'POST':
         ingredient = form.ingredient.data
@@ -213,6 +276,19 @@ def add_meta():
 
 @app.route('/add_recipe', methods = ['GET', 'POST'])
 def add_recipe():
+    # variables for the layout html template.
+    week = []
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+
+    day = date.today()
+    day = calendar.day_name[day.weekday()]
+
+    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    # variables for the layout html template.
     duplicate = True
     form = AddRecipeForm()
     form.cuisine.choices = [(c.id, c.cuisine_name) for c in Cuisine.query.order_by('cuisine_name')]
