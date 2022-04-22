@@ -53,6 +53,16 @@ CREATE TABLE IF NOT EXISTS measure (
     PRIMARY KEY (id),
 )   ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS shoppinglist (
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    ingredient_id INTEGER NOT NULL,
+    amount = FLOAT NOT NULL,
+    measure_id INTEGER NOT NULL,
+    FOREIGN KEY (ingredient_id) REFERENCES ingredients(id),
+    FOREIGN KEY (measure_id) REFERENCES measure(id),
+    PRIMARY KEY (id),
+)   ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 INSERT INTO measure VALUES (1, "ml"), (2, "g"), (3, "tsp"), (4, "tbsp"), (5, "whole"), (6, "large"), (7, "medium"), (8, "small"), (9, "cloves"), (10, "cm"), (11, "handful"), (12, "cup");
 INSERT INTO ingredients VALUES (1, 'sunflower oil'), (2, 'cumin seeds'), (3, 'brown mustard seeds'), (4, 'asafetida'), (5, 'cauliflower'), (6, 'turmeric'), (7, 'ground coriander'), (8, 'salt'), (9, 'sugar'), (10, 'frozen peas'), (11, 'medium tomato'), (12, 'fresh coriander'), (13, 'fresh green chillies'), (14, 'root ginger');
 INSERT INTO cuisine VALUES (1, 'curry'), (2, 'Salad');

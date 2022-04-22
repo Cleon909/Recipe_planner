@@ -70,9 +70,20 @@ class Measure(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     measure = db.Column(db.String(20), nullable=False)
     quantity = db.relationship("Quantity", backref="quantitybr3")
+    shopping_list = db.relationship("ShoppingList", backref="shoppinglist")
 
     def __init__(self, measure):
         self.measure = measure
 
+class ShoppingList(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.id'), nullable=False)
+    amount = db.Column(db.Float, nullable=False)
+    measure_id = db.Column(db.Integer, db.ForeignKey('measure.id'), nullable = False)
+
+    def __init__(self, ingredient_id, amount, measure_id):
+        self.ingredient_id = ingredient_id
+        self.amount = amount
+        self.measure_id = measure_id
 
 

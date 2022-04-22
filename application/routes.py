@@ -39,30 +39,22 @@ def index():
 
     recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.
-    form = SearchForm()
-    form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
     total_number = Recipes.query.count()
-
-    if request.method == 'POST':
-        recipe_result = Recipes.query.filter_by(id=form.recipe.data).first()
-        cuisine = Cuisine.query.filter_by(id=recipe_result.cuisine_id).first().cuisine_name
-        method_list = [m.step for m in Method.query.filter_by(recipe_id = recipe_result.id)]
-        quantities = Quantity.query.filter_by(recipe_id = recipe_result.id).all()
-        for q in quantities:
-            print(q.id)
-        ingredient_list = []
-
-        n = 0
-        for q in quantities:
-            ingredient_list.append([])
-            ingredient_list[n].append(Ingredients.query.filter_by(id = q.ingredient_id).first().ingredient_name)
-            ingredient_list[n].append(q.amount)
-            ingredient_list[n].append(Measure.query.filter_by(id = q.measure).first().measure)
-            ingredient_list[n].append(q.ingredient_prep)
-            n += 1
-        return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
-    else:
-        return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day,week=week, form=form, total_number=total_number) 
+    daily_recipe = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first()
+    cuisine = Cuisine.query.filter_by(id=daily_recipe.cuisine_id).first().cuisine_name
+    method_list = [m.step for m in Method.query.filter_by(recipe_id = daily_recipe.id)]
+    quantities = Quantity.query.filter_by(recipe_id = daily_recipe.id).all()
+    ingredient_list = []
+    n = 0
+    for q in quantities:
+        ingredient_list.append([])
+        ingredient_list[n].append(Ingredients.query.filter_by(id = q.ingredient_id).first().ingredient_name)
+        ingredient_list[n].append(q.amount)
+        ingredient_list[n].append(Measure.query.filter_by(id = q.measure).first().measure)
+        ingredient_list[n].append(q.ingredient_prep)
+        n += 1
+    return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, daily_recipe=daily_recipe, total_number=total_number, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
+     
 
 
 @app.route('/create_weekly_schedule', methods = ['GET', 'POST'])
