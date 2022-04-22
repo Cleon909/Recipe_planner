@@ -5,6 +5,7 @@ from wtforms.validators import DataRequired, Length, ValidationError
 class AddMetaForm(FlaskForm):
     cuisine = StringField('Enter Cuisine to add', validators = [Length(max = 50 )])
     ingredient = StringField('Enter Ingredient to add', validators = [Length(max = 50)])
+    measure = StringField('Enter a measurement unit to add', validators = [Length(max = 10)])
     submit = SubmitField('Press to add')
 class SearchForm(FlaskForm):
     recipe = SelectField('pick recipe to show', choices = [])

@@ -12,6 +12,9 @@
     {{ form.ingredient.label }} {{ form.ingredient }}
 </div>
 <div class="field">
+    {{ form.measure.label }} {{ form.measure }}
+</div>
+<div class="field">
     {{ form.submit }}
 </div>
 </form>
@@ -24,6 +27,11 @@
 {% if cuisine != "" %}
 <div class="field">
     <p>cuisine added</p> {{ cuisine }}
+</div>
+{% endif %}
+{% if measure != "" %}
+<div class="field">
+    <p>measurement added added</p> {{ measure }}
 </div>
 {% endif %}
 {% endblock %}

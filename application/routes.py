@@ -264,6 +264,7 @@ def add_meta():
     if request.method == 'POST':
         ingredient = form.ingredient.data
         cuisine = form.cuisine.data
+        measure = form.measure.data
         if ingredient != "":
             ing = Ingredients(ingredient)
             db.session.add(ing)
@@ -272,7 +273,11 @@ def add_meta():
             cus = Cuisine(cuisine)
             db.session.add(cus)
             db.session.commit()
-        return render_template('add_meta.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, ingredient = ingredient, cuisine=cuisine, form=form)
+        if measure != "":
+            meas = Measure(measure)
+            db.session.add(meas)
+            db.session.commit()
+        return render_template('add_meta.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, ingredient = ingredient, cuisine=cuisine, form=form, measure=measure)
     else:
         return render_template('add_meta.html', day=day, recipe_of_the_day=recipe_of_the_day, form=form, week=week)
 
