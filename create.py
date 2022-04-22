@@ -1,5 +1,5 @@
 from application import db
-from application.models import Quantity, Method, Recipes, Cuisine, Ingredients, Schedule
+from application.models import Quantity, Method, Recipes, Cuisine, Ingredients, Schedule, Measure
 
 db.drop_all()
 db.create_all()
@@ -30,7 +30,7 @@ rec = Recipes('Pea and Cauliflower Curry', 'quick and easy curry, no calorie det
 db.session.add(rec)
 db.session.commit()
 
-quantities = [ (1, 1,"",100.0, 'ml'),(1, 2,"", 1.0, 'tsp'), (1, 3,"", 1.0, 'tsp'), (1, 4,"", 0.5, 'tsp'), (1, 5,'cut into 1cm pieces', 1.0, 'medium'), (1, 6,"", 1.0, 'tsp'), (1, 7,"", 1.0, 'tbp'), (1, 8,"", 1.5, 'tsp'), (1, 9,"", 1.0, 'tsp'), (1, 10,"", 400.0, 'grams'), (1, 11,"", 1.0, 'medium'), (1, 12, 'roughly chopped', 1.0, 'handful'), (1, 13,"", 4.0, 'whole'),(1, 14, 'peeled and roughly chopped', 4.0, 'cm')]
+quantities = [ (1, 1,"",100.0,1),(1, 2,"", 1.0, 3), (1, 3,"", 1.0, 3), (1, 4,"", 0.5, 3), (1, 5,'cut into 1cm pieces', 1.0, 7), (1, 6,"", 1.0, 3) , (1, 7,"", 1.0, 4), (1, 8,"", 1.5, 3), (1, 9,"", 1.0, 3), (1, 10,"", 400.0, 2), (1, 11,"", 1.0, 7), (1, 12, 'roughly chopped', 1.0, 11), (1, 13,"", 4.0, 5),(1, 14, 'peeled and roughly chopped', 4.0, 10)]
 for q in quantities:
     quant = Quantity(*q)
     db.session.add(quant)
@@ -46,4 +46,10 @@ schedules =[(1,1), (2,1), (3,1), (4,1), (0,1)]
 for s in schedules:
     sched = Schedule(*s)
     db.session.add(sched)
+    db.session.commit()
+
+measure = ["ml", "g", "tsp", "tbsp", "whole", "large", "medium", "small", "cloves", "cm", "handful", "cup"]
+for m in measure:
+    measure = Measure(m)
+    db.session.add(measure)
     db.session.commit()

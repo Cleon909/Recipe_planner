@@ -36,14 +36,16 @@ class Quantity(db.Model):
     ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.id'), nullable=False)
     ingredient_prep = db.Column(db.String(100))
     amount = db.Column(db.Float, nullable=False)
-    unit = db.Column(db.String(10), nullable=False)
+    measure = db.Column(db.Integer, db.ForeignKey('measure.id'))
 
-    def __init__(self, recipe_id, ingredient_id, ingredient_prep, amount, unit):
+
+    def __init__(self, recipe_id, ingredient_id, ingredient_prep, amount, measure):
         self.recipe_id = recipe_id
-        self. ingredient_id = ingredient_id
-        self. ingredient_prep = ingredient_prep
-        self. amount = amount
-        self.unit = unit
+        self.ingredient_id = ingredient_id
+        self.ingredient_prep = ingredient_prep
+        self.amount = amount
+        self.measure = measure
+
 class Method(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
@@ -63,6 +65,14 @@ class Schedule(db.Model):
     def __init__(self, day_of_the_week, recipe_id):
         self.recipe_id = recipe_id
         self.day_of_the_week = day_of_the_week
+
+class Measure(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    measure = db.Column(db.String(20), nullable=False)
+    quantity = db.relationship("Quantity", backref="quantitybr3")
+
+    def __init__(self, measure):
+        self.measure = measure
 
 
 
