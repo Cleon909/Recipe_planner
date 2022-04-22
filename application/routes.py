@@ -1,26 +1,10 @@
 from flask import render_template, url_for, redirect, request
 from application import app, db
-from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure
+from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList
 from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm
 from datetime import date, datetime
 import calendar
 import random
-
-
-# variables for the layout html template.
-week = []
-week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
-week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
-week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
-week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
-week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
-
-day = date.today()
-day = calendar.day_name[day.weekday()]
-
-recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
-# variables for the layout html template.
-
 
 
 @app.route('/', methods = ['GET', 'POST'])
@@ -44,6 +28,7 @@ def index():
     cuisine = Cuisine.query.filter_by(id=daily_recipe.cuisine_id).first().cuisine_name
     method_list = [m.step for m in Method.query.filter_by(recipe_id = daily_recipe.id)]
     quantities = Quantity.query.filter_by(recipe_id = daily_recipe.id).all()
+    print(quantities)
     ingredient_list = []
     n = 0
     for q in quantities:
@@ -136,6 +121,10 @@ def create_weekly_schedule():
             db.session.add(sched)
             db.session.commit()
             schedule_day += 1 
+        # get a list of all the ingredient, quantities and units in the weekly schedule
+        
+
+        
         return redirect(url_for('finalise_schedule'))
     else:
         return render_template('create_weekly_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
@@ -155,6 +144,7 @@ def finalise_schedule():
 
     recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.
+
     done = True
     form = FinaliseScheduleForm()
     choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
@@ -190,7 +180,47 @@ def finalise_schedule():
             sched.recipe_id = form.friday_recipe.data
             db.session.add(sched)
             db.session.commit()
-        return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, done=done)
+        
+        monday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id)).all()
+        tuesday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id)).all()
+        wednesday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id)).all()
+        thursday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id)).all()
+        friday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id)).all()
+        ingredient_list = []
+        for m in monday_recipe_ingredients:
+            ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
+        for m in tuesday_recipe_ingredients:
+            ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
+        for m in wednesday_recipe_ingredients:
+            ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
+        for m in thursday_recipe_ingredients:
+            ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
+        for m in friday_recipe_ingredients:
+            ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
+        # ingredient list should now be a list of all ingredients seperated into a list of three elements (ingredient_name, amount, unit) however some are likely to be duplicates. The below code is iterating over the list to add up any duplciates to pass one value to aggregated_ingredient_list
+        aggregated_ingredient_list = []
+        # this code looks for unique values and adds them to aggregated_ingredient_list
+        ingredient_names = [ingredient[0] for ingredient in ingredient_list]
+        for ingredient in ingredient_names:
+            if ingredient_names.count(ingredient) == 1:
+                aggregated_ingredient_list.append(ingredient_list[aggregated_ingredient_list.index(ingredient)])
+        else:
+            for ing in ingredient_list:
+                for item in ingredient_list:
+                    if ingredient_list.index(ing) == ingredient_list.index(item):
+                        pass
+                    elif ing[0] == item[0]:
+                         ing[1] += item[1]
+            aggregated_ingredient_list.append(ing)
+            print(aggregated_ingredient_list)
+        db.session.query(ShoppingList).delete()
+        db.session.commit()
+        for element in aggregated_ingredient_list:
+            shop = ShoppingList(*element)
+            db.session.add(shop)
+            db.session.commit()
+
+        return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, done=done, aggregated_ingredient_list=aggregated_ingredient_list)
     else:
         weekly_schedule = Schedule.query.order_by('day_of_the_week')
         mon = Recipes.query.filter_by(id = weekly_schedule[0].recipe_id).first().recipe_name

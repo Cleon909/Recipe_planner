@@ -55,11 +55,11 @@ CREATE TABLE IF NOT EXISTS measure (
 
 CREATE TABLE IF NOT EXISTS shoppinglist (
     id INTEGER NOT NULL AUTO_INCREMENT,
-    ingredient_id INTEGER NOT NULL,
+    ingredient_id VARCHAR(100) NOT NULL,
     amount = FLOAT NOT NULL,
-    measure_id INTEGER NOT NULL,
-    FOREIGN KEY (ingredient_id) REFERENCES ingredients(id),
-    FOREIGN KEY (measure_id) REFERENCES measure(id),
+    measure_id VARCHAR(10) NOT NULL,
+    FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_name),
+    FOREIGN KEY (measure_id) REFERENCES measure(measure),
     PRIMARY KEY (id),
 )   ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

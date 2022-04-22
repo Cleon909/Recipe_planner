@@ -21,7 +21,11 @@
 {{form.submit_recipes}}
 {% endif %}
 {% if done %}
-<h3>Schedule created</h3>
+<h1>Schedule created</h1>
+<h2>Shopping List</h2>
+{% for item in aggregated_shopping_list %}
+{{ item[0], item[1], item[2] }}<br>
+{% endfor %}
 {% endif %}
 </form>
 {% endblock body %}

@@ -77,9 +77,9 @@ class Measure(db.Model):
 
 class ShoppingList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.id'), nullable=False)
+    ingredient_id = db.Column(db.String(100), db.ForeignKey('ingredients.ingredient_name'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
-    measure_id = db.Column(db.Integer, db.ForeignKey('measure.id'), nullable = False)
+    measure_id = db.Column(db.String(10), db.ForeignKey('measure.measure'), nullable = False)
 
     def __init__(self, ingredient_id, amount, measure_id):
         self.ingredient_id = ingredient_id
