@@ -233,9 +233,9 @@ def search_recipes():
             ingredient_list[n].append(Measure.query.filter_by(id = q.measure).first().measure)
             ingredient_list[n].append(q.ingredient_prep)
             n += 1
-        return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
+        return render_template('search.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
     else:
-        return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number)
+        return render_template('search.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number)
   
 @app.route('/add_meta', methods = ['GET', 'POST'])
 def add_meta():

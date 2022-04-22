@@ -12,9 +12,11 @@
         <h1> Recipe</h1>
         <p><b>Name:</b> {{ daily_recipe.recipe_name }}, <b>Recipe Description:</b> {{ daily_recipe.recipe_description }}, <b>Cuisine:</b> {{ cuisine }}</p>
         <p>How To make</p>
+        <ul>
         {% for m in method_list %}
-        {{ m }}<br>
+        <li>{{ m }}</li><br>
         {% endfor %}
+        </ul>
         <p>Ingredients</p>
         {% for q in ingredient_list %}
         <div class = "field">
