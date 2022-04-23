@@ -27,27 +27,33 @@ def index():
         recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.
 
-    total_number = Recipes.query.count()
-    # make dummy recipe fot weekends
     if datetime.today().weekday() == 5 or datetime.today().weekday() == 6:
-        daily_recipe = Recipes.query.filter_by(id = 1).first()
+        weekend = True
     else:
-        daily_recipe = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first()
+        weekend = False
 
-    cuisine = Cuisine.query.filter_by(id=daily_recipe.cuisine_id).first().cuisine_name
-    method_list = [m.step for m in Method.query.filter_by(recipe_id = daily_recipe.id)]
-    quantities = Quantity.query.filter_by(recipe_id = daily_recipe.id).all()
-    print(quantities)
-    ingredient_list = []
-    n = 0
-    for q in quantities:
-        ingredient_list.append([])
-        ingredient_list[n].append(Ingredients.query.filter_by(id = q.ingredient_id).first().ingredient_name)
-        ingredient_list[n].append(q.amount)
-        ingredient_list[n].append(Measure.query.filter_by(id = q.measure).first().measure)
-        ingredient_list[n].append(q.ingredient_prep)
-        n += 1
-    return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, daily_recipe=daily_recipe, total_number=total_number, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
+    total_number = Recipes.query.count()
+    if datetime.today().weekday() in [0,1,2,3,4]:
+        daily_recipe = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first()
+        cuisine = Cuisine.query.filter_by(id=daily_recipe.cuisine_id).first().cuisine_name
+        method_list = [m.step for m in Method.query.filter_by(recipe_id = daily_recipe.id)]
+        quantities = Quantity.query.filter_by(recipe_id = daily_recipe.id).all()
+        ingredient_list = []
+        n = 0
+        for q in quantities:
+            ingredient_list.append([])
+            ingredient_list[n].append(Ingredients.query.filter_by(id = q.ingredient_id).first().ingredient_name)
+            ingredient_list[n].append(q.amount)
+            ingredient_list[n].append(Measure.query.filter_by(id = q.measure).first().measure)
+            ingredient_list[n].append(q.ingredient_prep)
+            n += 1
+    else:
+        daily_recipe = False
+        cuisine = False
+        method_list = False
+        quantities = False
+        ingredient_list = False
+    return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, daily_recipe=daily_recipe, total_number=total_number, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list, weekend=weekend)
      
 
 
@@ -235,24 +241,6 @@ def finalise_schedule():
         for i in aggregated_ingredient_list:
             print(f"{i.ingredient_id} {i.amount} {i.measure_id}")
         
-        # for ingredient in ingredient_names:
-        #     if ingredient_names.count(ingredient) == 1:
-        #         aggregated_ingredient_list.append(ingredient_list[aggregated_ingredient_list.index(ingredient)])
-        # else:
-        #     for ing in ingredient_list:
-        #         for item in ingredient_list:
-        #             if ingredient_list.index(ing) == ingredient_list.index(item):
-        #                 pass
-        #             elif ing[0] == item[0]:
-        #                  ing[1] += item[1]
-        #     aggregated_ingredient_list.append(ing)
-        #     print(aggregated_ingredient_list)
-        # db.session.query(ShoppingList).delete()
-        # db.session.commit()
-        # for element in aggregated_ingredient_list:
-        #     shop = ShoppingList(*element)
-        #     db.session.add(shop)
-        #     db.session.commit()
 
         return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, aggregated_ingredient_list=aggregated_ingredient_list)
     else:

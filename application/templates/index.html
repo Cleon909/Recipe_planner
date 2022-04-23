@@ -8,26 +8,31 @@
             <p><b>Total Number of Recipes:</b> {{ total_number }}<p> 
         </div>
     </div>
-    <div>
-        <h1> Recipe</h1>
-        <p><b>Name:</b> {{ daily_recipe.recipe_name }}, <b>Recipe Description:</b> {{ daily_recipe.recipe_description }}, <b>Cuisine:</b> {{ cuisine }}</p>
-        <p>How To make</p>
-        <ul>
-        {% for m in method_list %}
-        <li>{{ m }}</li><br>
-        {% endfor %}
-        </ul>
-        <p>Ingredients</p>
-        {% for q in ingredient_list %}
-        <div class = "field">
-            {{ q[0] }}
-            {{ q[1] }}
-            {{ q[2] }}
-            {{ q[3] }}
+    {% if weekend == False: %}
+        <div>
+            <h1> Recipe</h1>
+            <p><b>Name:</b> {{ daily_recipe.recipe_name }}, <b>Recipe Description:</b> {{ daily_recipe.recipe_description }}, <b>Cuisine:</b> {{ cuisine }}</p>
+            <p>How To make</p>
+            <ul>
+            {% for m in method_list %}
+            <li>{{ m }}</li><br>
+            {% endfor %}
+            </ul>
+            <p>Ingredients</p>
+            {% for q in ingredient_list %}
+            <div class = "field">
+                {{ q[0] }}
+                {{ q[1] }}
+                {{ q[2] }}
+                {{ q[3] }}
+            </div>
+            {% endfor %}
+            </div>
         </div>
-        {% endfor %}
-        </div>
-    </div>
+    {% endif %}
+    {% if weekend == True %}
+    <h1> It's the weekend, drink and be merry. (or pick a recipe from the <a href="{{ url_for('search_recipes') }}" style="color:black">search page)</a></h1>
+    {% endif %}
 </div>
 {% endblock body %}
 
