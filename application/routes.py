@@ -21,10 +21,19 @@ def index():
     day = date.today()
     day = calendar.day_name[day.weekday()]
 
-    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
+        recipe_of_the_day = "It's the weekend, do your own thing"
+    else:
+        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.
+
     total_number = Recipes.query.count()
-    daily_recipe = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first()
+    # make dummy recipe fot weekends
+    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6:
+        daily_recipe = Recipes.query.filter_by(id = 1).first()
+    else:
+        daily_recipe = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first()
+
     cuisine = Cuisine.query.filter_by(id=daily_recipe.cuisine_id).first().cuisine_name
     method_list = [m.step for m in Method.query.filter_by(recipe_id = daily_recipe.id)]
     quantities = Quantity.query.filter_by(recipe_id = daily_recipe.id).all()
@@ -55,7 +64,10 @@ def create_weekly_schedule():
     day = date.today()
     day = calendar.day_name[day.weekday()]
 
-    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
+        recipe_of_the_day = "It's the weekend, do your own thing"
+    else:
+        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.
     form = SelectScheduleForm()
     choices = [(cuisine.id, cuisine.cuisine_name) for cuisine in Cuisine.query.order_by('cuisine_name')]
@@ -142,10 +154,12 @@ def finalise_schedule():
     day = date.today()
     day = calendar.day_name[day.weekday()]
 
-    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
+        recipe_of_the_day = "It's the weekend, do your own thing"
+    else:
+        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.
 
-    done = True
     form = FinaliseScheduleForm()
     choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
     choices.insert(0, ("", ""))
@@ -198,29 +212,49 @@ def finalise_schedule():
         for m in friday_recipe_ingredients:
             ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
         # ingredient list should now be a list of all ingredients seperated into a list of three elements (ingredient_name, amount, unit) however some are likely to be duplicates. The below code is iterating over the list to add up any duplciates to pass one value to aggregated_ingredient_list
-        aggregated_ingredient_list = []
-        # this code looks for unique values and adds them to aggregated_ingredient_list
-        ingredient_names = [ingredient[0] for ingredient in ingredient_list]
-        for ingredient in ingredient_names:
-            if ingredient_names.count(ingredient) == 1:
-                aggregated_ingredient_list.append(ingredient_list[aggregated_ingredient_list.index(ingredient)])
-        else:
-            for ing in ingredient_list:
-                for item in ingredient_list:
-                    if ingredient_list.index(ing) == ingredient_list.index(item):
-                        pass
-                    elif ing[0] == item[0]:
-                         ing[1] += item[1]
-            aggregated_ingredient_list.append(ing)
-            print(aggregated_ingredient_list)
+        
+        #clears shopping list table
         db.session.query(ShoppingList).delete()
         db.session.commit()
-        for element in aggregated_ingredient_list:
-            shop = ShoppingList(*element)
-            db.session.add(shop)
-            db.session.commit()
 
-        return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, done=done, aggregated_ingredient_list=aggregated_ingredient_list)
+        # this code looks for unique values and adds them to aggregated_ingredient_list
+        ingredient_names = [ingredient[0] for ingredient in ingredient_list]
+        unique_ingredients = set(ingredient_names)
+        aggregated_ingredient_list = []
+        for ingr in unique_ingredients:
+            a = [0,0,0]
+            for ing in ingredient_list:
+                if ingr == ing[0]:
+                    a[0] = ing[0]
+                    a[1] += ing[1]
+                    a[2] = ing[2]
+            shop_item = ShoppingList(a[0], a[1], a[2])
+            db.session.add(shop_item)
+            db.session.commit()
+            aggregated_ingredient_list.append(shop_item)
+        for i in aggregated_ingredient_list:
+            print(f"{i.ingredient_id} {i.amount} {i.measure_id}")
+        
+        # for ingredient in ingredient_names:
+        #     if ingredient_names.count(ingredient) == 1:
+        #         aggregated_ingredient_list.append(ingredient_list[aggregated_ingredient_list.index(ingredient)])
+        # else:
+        #     for ing in ingredient_list:
+        #         for item in ingredient_list:
+        #             if ingredient_list.index(ing) == ingredient_list.index(item):
+        #                 pass
+        #             elif ing[0] == item[0]:
+        #                  ing[1] += item[1]
+        #     aggregated_ingredient_list.append(ing)
+        #     print(aggregated_ingredient_list)
+        # db.session.query(ShoppingList).delete()
+        # db.session.commit()
+        # for element in aggregated_ingredient_list:
+        #     shop = ShoppingList(*element)
+        #     db.session.add(shop)
+        #     db.session.commit()
+
+        return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, aggregated_ingredient_list=aggregated_ingredient_list)
     else:
         weekly_schedule = Schedule.query.order_by('day_of_the_week')
         mon = Recipes.query.filter_by(id = weekly_schedule[0].recipe_id).first().recipe_name
@@ -243,7 +277,10 @@ def search_recipes():
     day = date.today()
     day = calendar.day_name[day.weekday()]
 
-    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
+        recipe_of_the_day = "It's the weekend, do your own thing"
+    else:
+        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.    
     form = SearchForm()
     form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
@@ -280,7 +317,10 @@ def add_meta():
     day = date.today()
     day = calendar.day_name[day.weekday()]
 
-    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
+        recipe_of_the_day = "It's the weekend, do your own thing"
+    else:
+        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.
     form = AddMetaForm()
     if request.method == 'POST':
@@ -315,7 +355,10 @@ def add_recipe():
     week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
     day = date.today()
     day = calendar.day_name[day.weekday()]
-    recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
+        recipe_of_the_day = "It's the weekend, do your own thing"
+    else:
+        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.
 
     duplicate = True

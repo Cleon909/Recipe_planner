@@ -20,12 +20,16 @@
 </div>
 {{form.submit_recipes}}
 {% endif %}
-{% if done %}
-<h1>Schedule created</h1>
-<h2>Shopping List</h2>
-{% for item in aggregated_shopping_list %}
-{{ item[0], item[1], item[2] }}<br>
-{% endfor %}
+{% if aggregated_ingredient_list %}
+    <h1>Schedule created</h1>
+    <h2>Shopping List</h2>
+    {% for item in aggregated_ingredient_list %}
+        <div class = "field">
+            {{ item.ingredient_id }}  
+            {{ item.amount }} 
+            {{ item.measure_id }}
+        </div>
+    {% endfor %}
 {% endif %}
 </form>
 {% endblock body %}
