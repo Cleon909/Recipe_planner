@@ -5,9 +5,34 @@
     justify-content: space-evenly;
 }
 
+#links {
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    color:white;
+    padding-bottom: 10px;
+    padding-left: 20px;
+}
+
+#innercntr {
+    display: flex;
+    
+}
+
+#hdr {
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+}
+
 .list {
     display: flex;
     justify-content: space-evenly;
+}
+
+#center {
+    padding-left: 20px;
+
 }
 
 .list1 {
@@ -23,10 +48,14 @@
 
 .container {
     display: flex;
+    width : 100%;
 
 }
 
 #left {
-    max-width: 30%;
+    max-width: 40%;
     border: 1px solid red;
+    padding: 10pt;
+    background-color: azure;
 }
+

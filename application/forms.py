@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, DecimalField, FormField, BooleanField
 from wtforms.validators import DataRequired, Length, ValidationError
+from application.models import ShoppingList
+
 
 class AddMetaForm(FlaskForm):
     cuisine = StringField('Enter Cuisine to add', validators = [Length(max = 50 )])
@@ -32,11 +34,18 @@ class FinaliseScheduleForm(FlaskForm):
     thursday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])
     friday_recipe = SelectField('Pick a Recipe if you don\'t want the auto generated one', choices = [])
     submit_recipes = SubmitField('Add recipes to schedule')
+
+class AmendShoppingListForm(FlaskForm):
+    shopping_list = ShoppingList.query.all()
+    ingredient_id = SelectField(choices = [])
+    amount = DecimalField()
+    remove = BooleanField("remove ingredient from shopping list?", default = False)
+    submit = SubmitField("predd to add updated ingredients to basket")
+    form_fields={}
+    for ingredient in shopping_list:
+        field_id = 'shared_{}'.format(ingredient.amount)
+        form_fields[field_id] = DecimalField("Amount", default = ingredient.amount)
     
-
-
-
-
 
 class AddRecipeForm(FlaskForm):
     name = StringField('Name of Recipe', validators = [DataRequired(), Length(max = 200)])

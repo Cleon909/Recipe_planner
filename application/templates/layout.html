@@ -9,29 +9,34 @@
     <link href="../static/format.css" rel="stylesheet">
 </head>
 <style>
-    a {color:white}
+    a {color:rgb(0, 0, 0)}
 </style>
 <body style="font-family: Source Sans Pro, sans-serif">
-    <div class="header" style="background-color:#282624; width:100%; margin: 0 auto">
+    <div class="header" style="background-color:#74d855; width:100%; margin: 0 auto">
         <div style="display:flex">
-            <h1 style="color:white; font-size:50px; margin-left: 10px"> Recipe Planner App</h1></div>
-        <div id = "links" style="text-align: center; display: flex; justify-content: space-around; color:white; padding-bottom: 10px; padding-left: 20px">
-            <a href="{{ url_for('index') }}"  style='color:white'>Home</a>
+            <h1 style="color:rgb(0, 0, 0); font-size:50px; margin-left: 10px"> Recipe Planner App</h1></div>
+        <div id = "links">
+            <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('create_weekly_schedule') }}"> Create Schedule</a> 
             <a href="{{ url_for('add_recipe') }}">Add a Recipe</a>
             <a href="{{ url_for('search_recipes') }}">Search for a Recipe</a>
             <a href="{{ url_for('add_meta') }}">Add meta data</a>
-  
         </div>
     </div>
     <div class="container">
         <div id="left">
-            <p>The recipe of today({{ day }}) is:  {{ recipe_of_the_day }}</p>
-            <p>Monday {{ week[0].recipe_name }}</p> 
-            <p>Tuesday {{ week[1].recipe_name }}</p>
-            <p>Wednesday {{ week[2].recipe_name }}</p>
-            <p>Thursday {{ week[3].recipe_name }}</p>
-            <p>Friday {{ week[4].recipe_name }}</p>
+            <p><b>Today's Recipe:</b></p>
+            {{ recipe_of_the_day }}
+            <p><b>Monday:</b></p> 
+            {{ week[0].recipe_name }} 
+            <p><b>Tuesday:</b></p> 
+            {{ week[1].recipe_name }}
+            <p><b>Wednesday:</b></p> 
+            {{ week[2].recipe_name }}
+            <p><b>Thursday:</b></p> 
+            {{ week[3].recipe_name }}
+            <p><b>Friday:</b></p> 
+            {{ week[4].recipe_name }}
         </div>
         <div id="center">        
             {% block body %}

@@ -1,7 +1,7 @@
 from flask import render_template, url_for, redirect, request
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList
-from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm
+from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendShoppingListForm
 from datetime import date, datetime
 import calendar
 import random
@@ -251,6 +251,33 @@ def finalise_schedule():
         thu = Recipes.query.filter_by(id = weekly_schedule[3].recipe_id).first().recipe_name
         fri = Recipes.query.filter_by(id = weekly_schedule[4].recipe_id).first().recipe_name
         return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form, mon=mon, tue=tue, wed=wed, thu=thu, fri=fri)
+
+@app.route('/amend_shopping_list', methods = ['GET', 'POST'])
+def amend_shopping_list():
+    shopping_list = ShoppingList.query.all()
+    form = AmendShoppingListForm()
+    form.ingredient_id.choices = [(i.id, i.ingredient_id) for i in shopping_list]
+    
+
+    # variables for the layout html template.
+    week = []
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+    day = date.today()
+    day = calendar.day_name[day.weekday()]
+    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
+        recipe_of_the_day = "It's the weekend, do your own thing"
+    else:
+        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    # variables for the layout html template.    
+
+    if request.method == "POST":
+        return render_template('amend_shopping_list.html',shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+    else:
+        return render_template('amend_shopping_list.html', shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
 @app.route('/search_recipes', methods = ['GET', 'POST'])
 def search_recipes():
