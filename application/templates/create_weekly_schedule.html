@@ -2,11 +2,13 @@
 
 {% block body %}
 <form method = 'POST'>
-<div class="list1">{{ form.first_cuisine.label }} {{ form.first_cuisine }}</div>
-<div class="list1">{{ form.first_cuisine.label }} {{ form.second_cuisine }}</div>
-<div class="list1">{{ form.first_cuisine.label }} {{ form.third_cuisine }}</div>
-<div class="list1">{{ form.first_cuisine.label }} {{ form.fourth_cuisine }}</div>
-<div class="list1">{{ form.first_cuisine.label }} {{ form.fifth_cuisine }}</div>
-<div class="list1">{{ form.submit_cuisine }}</div>
+<h3>Select the cuisines that you would like to include in this week's schedule. If any of the options are left blank it will choose from the full list of recipes.</h3>
+<h3>You will have the option of changing the recipes on the next page</h3>
+<div class="list1"><b>{{ form.first_cuisine.label }}</b> {{ form.first_cuisine }}</div>
+<div class="list1"><b>{{ form.first_cuisine.label }}</b> {{ form.second_cuisine }}</div>
+<div class="list1"><b>{{ form.first_cuisine.label }}</b> {{ form.third_cuisine }}</div>
+<div class="list1"><b>{{ form.first_cuisine.label }}</b> {{ form.fourth_cuisine }}</div>
+<div class="list1"><b>{{ form.first_cuisine.label }}</b> {{ form.fifth_cuisine }}</div>
+<div>{{ form.submit_cuisine }}</div>
 </form>
 {% endblock body %}

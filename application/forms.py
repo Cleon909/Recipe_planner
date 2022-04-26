@@ -14,11 +14,11 @@ class SearchForm(FlaskForm):
     submit = SubmitField('Press to show recipe')
 
 class SelectScheduleForm(FlaskForm):
-    first_cuisine = SelectField('Choose Cuisine to be included', choices = [])
-    second_cuisine = SelectField('Choose Cuisine to be included',choices = [])
-    third_cuisine = SelectField('Choose Cuisine to be included', choices = [])
-    fourth_cuisine = SelectField('Choose Cuisine to be included', choices = [])
-    fifth_cuisine = SelectField('Choose Cuisine to be included', choices = [])
+    first_cuisine = SelectField('Cuisine to be included', choices = [])
+    second_cuisine = SelectField('Cuisine to be included',choices = [])
+    third_cuisine = SelectField('Cuisine to be included', choices = [])
+    fourth_cuisine = SelectField('Cuisine to be included', choices = [])
+    fifth_cuisine = SelectField('Cuisine to be included', choices = [])
     submit_cuisine = SubmitField('Generate Recipe Schedule')
     
 class FinaliseScheduleForm(FlaskForm):

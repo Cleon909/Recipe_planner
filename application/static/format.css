@@ -16,7 +16,8 @@
 
 #innercntr {
     display: flex;
-    
+    justify-content: space-between;
+
 }
 
 #hdr {
@@ -37,9 +38,19 @@
 
 .list1 {
     display: flex;
-    justify-content: left;
+    justify-content: space-between;
+    max-width: 30%;
+    padding: 5px;
 }
 
+#submit_cuisine {
+    padding: 5px;
+    font-size: 20px;
+    border-radius: 10px;
+    border-width: 3px;margin-top: 15px;
+
+
+}
 .field {
     display: flex;
     width: 500px;
@@ -59,3 +70,6 @@
     background-color: azure;
 }
 
+#main {
+    padding-right: 10px;
+}
