@@ -3,19 +3,19 @@
 {% block body %}
 <form method="POST">
 {% if mon %}
-<div class = 'field'>
+<div class = 'field4'>
     {{ mon }} {{ form.monday_cb.label }} {{ form.monday_cb }} {{ form.monday_recipe.label }} {{ form.monday_recipe }}
 </div>
-<div class='field'>
+<div class='field4'>
     {{ tue }} {{ form.tuesday_cb.label }} {{ form.tuesday_cb }} {{ form.tuesday_recipe.label }} {{ form.tuesday_recipe }}
 </div>
-<div class='field'>
+<div class='field4'>
     {{ wed }} {{ form.wednesday_cb.label }} {{ form.wednesday_cb }} {{ form.wednesday_recipe.label }} {{ form.wednesday_recipe }}
 </div>
-<div class='field'>
+<div class='field4'>
     {{ thu }} {{ form.thursday_cb.label }} {{ form.thursday_cb }} {{ form.thursday_recipe.label }} {{ form.thursday_recipe }}
 </div>
-<div class='field'>
+<div class='field4'>
     {{ fri }} {{ form.friday_cb.label }} {{ form.friday_cb }} {{ form.friday_recipe.label }} {{ form.friday_recipe }}
 </div>
 {{form.submit_recipes}}
