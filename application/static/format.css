@@ -57,6 +57,31 @@
     justify-content: space-between;
 }
 
+.field2 {
+    display: flex;
+    width: auto;
+    justify-content: flex-start;
+    align-items: flex-end;
+}
+
+.field3 {
+    display: flex;
+    width: 600px;
+    justify-content: space-between;
+    align-items: flex-end;
+    font-weight: bold;
+    margin-bottom: 5px;
+
+}
+
+#meta_measure {
+    margin-right: -30px;
+}
+
+#meta_ingredient {
+    margin-right: -10px;
+}
+
 .container {
     display: flex;
     width : 100%;
@@ -73,3 +98,27 @@
 #main {
     padding-right: 10px;
 }
+
+#ingredient {
+    margin-right: 10px;
+}
+
+#ingredient_alt {
+    margin-right: 40px;
+}
+
+#amount {
+    margin-right: 10px;
+}
+
+#measure {
+    margin-right: 30px;
+}
+
+#ingredient1, #ingredient2, #ingredient3, #ingredient4, #ingredient5, #ingredient6, #ingredient7, #ingredient8, #ingredient9, #ingredient10, #ingredient11, #ingredient12, #ingredient13, #ingredient14, #ingredient15, #ingredient16, #ingredient17, #ingredient18, #ingredient19, #ingredient20, #ingredient21, #ingredient22, #ingredient23, #ingredient24, #ingredient25, #ingredient26, #ingredient27, #ingredient28, #ingredient29, #ingredient30  {
+    padding: 1px;
+}
+
+#measure1, #measure2, #measure3, #measure4, #measure5, #measure6, #measure7, #measure8, #measure9, #measure10, #measure11, #measure12, #measure13, #measure14, #measure15, #measure16, #measure17, #measure18, #measure19, #measure20, #measure21, #measure22, #measure23, #measure24, #measure25, #measure26, #measure27, #measure28, #measure29, #measure30 {
+    padding: 1px;
+} 

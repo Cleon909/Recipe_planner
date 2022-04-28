@@ -4,34 +4,33 @@
 
 {{ form.hidden_tag() }}
 {% if form %}
+<h2>This page allows the creation of cuisine and unit tags, as well as entering ingredients without having to add a recipe</h2>
 <form method = 'POST'>
-<div class="field">
+<div class="field3">
     {{ form.cuisine.label }} {{ form.cuisine }}
 </div>
-<div class="field">
-    {{ form.ingredient.label }} {{ form.ingredient }}
+<div class="field3">
+    {{ form.ingredient.label }} <div id="meta_ingredient">{{ form.ingredient }}</div>
 </div>
-<div class="field">
-    {{ form.measure.label }} {{ form.measure }}
+<div class="field3">
+    {{ form.measure.label }} <div id="meta_measure">{{ form.measure }}</div>
 </div>
-<div class="field">
     {{ form.submit }}
-</div>
 </form>
 {% endif %}
-{% if ingredient != "" %}
+{% if ingredient and ingredient != "" %}
 <div class="field">
-    <p>ingredient added:</p>{{ ingredient }}
+    <h2>ingredient added:</h2><h2>{{ ingredient }}</h2>
 </div>
 {% endif %}
-{% if cuisine != "" %}
+{% if cuisine and cuisine != "" %}
 <div class="field">
-    <p>cuisine added</p> {{ cuisine }}
+    <h2>cuisine added</h2> <h2>{{ cuisine }}</h2>
 </div>
 {% endif %}
-{% if measure != "" %}
+{% if measure and measure != "" %}
 <div class="field">
-    <p>measurement added</p> {{ measure }}
+    <h2>measurement added</h2> <h2>{{ measure }}</h2>
 </div>
 {% endif %}
 {% endblock %}

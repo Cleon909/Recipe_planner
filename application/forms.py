@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, SubmitField, DecimalField, FormField, BooleanField
+from wtforms import StringField, SelectField, SubmitField, DecimalField, FormField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length, ValidationError
 from application.models import ShoppingList
 
@@ -49,7 +49,7 @@ class AmendShoppingListForm(FlaskForm):
 
 class AddRecipeForm(FlaskForm):
     name = StringField('Name of Recipe', validators = [DataRequired(), Length(max = 200)])
-    recipe_description = StringField('Details of recipe(i.e. cooking time, calories, macros etc', validators = [(Length(max = 500))])
+    recipe_description = TextAreaField('Details of recipe(i.e. cooking time, calories, macros etc', render_kw={'rows':4}, validators = [(Length(max = 500))])
     cuisine = SelectField('Type of Cuisine', choices = [])
     submit = SubmitField('Press to add recipe')
     ingredient1 = SelectField('Choose Ingredients', choices = [])
@@ -113,7 +113,7 @@ class AddRecipeForm(FlaskForm):
     ingredient30 = SelectField('Choose Ingredients', choices = [])
     ingredient_alt30 = StringField('If ingredient not in list type here', validators = [Length(max = 50)], default = "")
     amount1 = DecimalField('Amount')
-    measure1 = SelectField('Unit of Measurement', choices = [])
+    measure1 = SelectField('Unit', choices = [])
     amount2 = DecimalField('Amount')
     measure2 = SelectField('Unit of Measurement', choices = [])
     amount3 = DecimalField('Amount')

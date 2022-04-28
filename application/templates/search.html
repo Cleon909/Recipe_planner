@@ -23,21 +23,30 @@
     </div>
     <div>
         {% if recipe_result %}
-        <h1> Recipe</h1>
-            <p><b>Name:</b> {{ recipe_result.recipe_name }}, <b>Recipe Description:</b> {{ recipe_result.recipe_description }}, <b>Cuisine:</b> {{ cuisine }}</p>
-            <p>How To make</p>
-            {% for m in method_list %}
-            {{ m }}<br>
-            {% endfor %}
-            <p>Ingredients</p>
-            {% for q in ingredient_list %}
-            <div class = "field">
-                {{ q[0] }}
-                {{ q[1] }}
-                {{ q[2] }}
-                {{ q[3] }}
+        <div id="innercntr">
+            <div id="main">
+                <div class='field2'>
+                    <h1>{{ recipe_result.recipe_name }}</h1> <p>({{ cuisine }})</p>
+                </div>
+                <b>{{ recipe_result.recipe_description }}</b> 
+                <h2>How To make</h2>
+                <ul>
+                    {% for m in method_list %}
+                    <li>{{ m }}</li><br>
+                    {% endfor %}
+                </ul>
             </div>
-            {% endfor %}
+            <div id="right">
+                    <h2>Ingredients</h2>
+                    {% for q in ingredient_list %}
+                    <div class = "field">
+                        {{ q[0] }}
+                        {{ q[1] }}
+                        {{ q[2] }}
+                        {{ q[3] }}
+                    </div>
+                    {% endfor %}
+            </div>
         {% endif %}
         </div>
     </div>

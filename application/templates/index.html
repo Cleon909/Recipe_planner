@@ -7,10 +7,11 @@
     {% if weekend == False: %}
     <div id="innercntr">
     <div id="main">
-        <h1>{{ daily_recipe.recipe_name }}</h1> 
-        <p></p>{{ cuisine }}</p>
+        <div class='field2'>
+            <h1>{{ daily_recipe.recipe_name }}</h1> <p>({{ cuisine }})</p>
+        </div>
         <b>{{ daily_recipe.recipe_description }}</b> 
-        <p>How To make</p>
+        <h2>How To make</h2>
         <ul>
             {% for m in method_list %}
             <li>{{ m }}</li><br>
