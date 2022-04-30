@@ -139,9 +139,7 @@ def create_weekly_schedule():
             db.session.add(sched)
             db.session.commit()
             schedule_day += 1 
-        # get a list of all the ingredient, quantities and units in the weekly schedule
-        
-
+    
         
         return redirect(url_for('finalise_schedule'))
     else:
@@ -254,9 +252,9 @@ def finalise_schedule():
 
 @app.route('/amend_shopping_list', methods = ['GET', 'POST'])
 def amend_shopping_list():
-    shopping_list = ShoppingList.query.all()
+    shop_list = ShoppingList.query.all()
     form = AmendShoppingListForm()
-    form.ingredient_id.choices = [(i.id, i.ingredient_id) for i in shopping_list]
+    form.ingredient_id.choices = [(i.id, i.ingredient_id) for i in shop_list]
     
 
     # variables for the layout html template.
@@ -275,9 +273,9 @@ def amend_shopping_list():
     # variables for the layout html template.    
 
     if request.method == "POST":
-        return render_template('amend_shopping_list.html',shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+        return render_template('amend_shopping_list.html',shopping_list=shop_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
     else:
-        return render_template('amend_shopping_list.html', shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+        return render_template('amend_shopping_list.html', shopping_list=shop_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
 @app.route('/search_recipes', methods = ['GET', 'POST'])
 def search_recipes():

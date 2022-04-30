@@ -70,7 +70,7 @@ class Measure(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     measure = db.Column(db.String(20), nullable=False)
     quantity = db.relationship("Quantity", backref="quantitybr3")
-    shopping_list = db.relationship("ShoppingList", backref="shoppinglist")
+    shoppinglist = db.relationship("ShoppingList", backref="shoppinglist")
 
     def __init__(self, measure):
         self.measure = measure

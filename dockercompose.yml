@@ -1,14 +1,14 @@
 version: "3.8"
 services:
   webapp:
-    image: rapp
+    image: corcoran909/rapp
     ports:
     - target: 5000
       published: 5000
     deploy:
       replicas: 1
   db:
-    image: dbase
+    image: corcoran909/dbase
     deploy: 
       replicas: 1
     ports:

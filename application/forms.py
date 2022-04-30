@@ -36,15 +36,15 @@ class FinaliseScheduleForm(FlaskForm):
     submit_recipes = SubmitField('Add recipes to schedule')
 
 class AmendShoppingListForm(FlaskForm):
-    shopping_list = ShoppingList.query.all()
+    # shopping_list = ShoppingList.query.all()
     ingredient_id = SelectField(choices = [])
     amount = DecimalField()
     remove = BooleanField("remove ingredient from shopping list?", default = False)
     submit = SubmitField("predd to add updated ingredients to basket")
-    form_fields={}
-    for ingredient in shopping_list:
-        field_id = 'shared_{}'.format(ingredient.amount)
-        form_fields[field_id] = DecimalField("Amount", default = ingredient.amount)
+    # form_fields={}
+    # for ingredient in shopping_list:
+    #     field_id = 'shared_{}'.format(ingredient.amount)
+    #     form_fields[field_id] = DecimalField("Amount", default = ingredient.amount)
     
 
 class AddRecipeForm(FlaskForm):

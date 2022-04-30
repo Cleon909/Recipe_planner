@@ -10,6 +10,12 @@ CREATE TABLE IF NOT EXISTS cuisine (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS measure (
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    measure VARCHAR(20) NOT NULL UNIQUE,
+    PRIMARY KEY (id)
+)   ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS recipes (
     id INTEGER NOT NULL AUTO_INCREMENT,
     recipe_name VARCHAR(100) NOT NULL,
@@ -25,9 +31,11 @@ CREATE TABLE IF NOT EXISTS quantity (
     ingredient_id INTEGER NOT NULL,
     ingredient_prep VARCHAR(100),
     amount FLOAT NOT NULL,
+    measure INTEGER NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(id),
-    FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
+    FOREIGN KEY (ingredient_id) REFERENCES ingredients(id),
+    FOREIGN KEY (measure) REFERENCES measure(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS method (
@@ -47,20 +55,14 @@ CREATE TABLE IF NOT EXISTS schedule (
     FOREIGN KEY (recipe_id) REFERENCES recipes(id)
 )   ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS measure (
-    id INTEGER NOT NULL AUTO_INCREMENT,
-    measure VARCHAR(20) NOT NULL,
-    PRIMARY KEY (id),
-)   ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
 CREATE TABLE IF NOT EXISTS shoppinglist (
     id INTEGER NOT NULL AUTO_INCREMENT,
     ingredient_id VARCHAR(100) NOT NULL,
-    amount = FLOAT NOT NULL,
+    amount FLOAT NOT NULL,
     measure_id VARCHAR(10) NOT NULL,
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_name),
     FOREIGN KEY (measure_id) REFERENCES measure(measure),
-    PRIMARY KEY (id),
+    PRIMARY KEY (id)
 )   ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO measure VALUES (1, "ml"), (2, "g"), (3, "tsp"), (4, "tbsp"), (5, "whole"), (6, "large"), (7, "medium"), (8, "small"), (9, "cloves"), (10, "cm"), (11, "handful"), (12, "cup");
