@@ -1,7 +1,7 @@
 from flask import render_template, url_for, redirect, request
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList
-from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendShoppingListForm
+from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm
 from datetime import date, datetime
 import calendar
 import random
@@ -139,8 +139,7 @@ def create_weekly_schedule():
             db.session.add(sched)
             db.session.commit()
             schedule_day += 1 
-    
-        
+        # get a list of all the ingredient, quantities and units in the weekly schedule
         return redirect(url_for('finalise_schedule'))
     else:
         return render_template('create_weekly_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
@@ -236,10 +235,6 @@ def finalise_schedule():
             db.session.add(shop_item)
             db.session.commit()
             aggregated_ingredient_list.append(shop_item)
-        for i in aggregated_ingredient_list:
-            print(f"{i.ingredient_id} {i.amount} {i.measure_id}")
-        
-
         return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, aggregated_ingredient_list=aggregated_ingredient_list)
     else:
         weekly_schedule = Schedule.query.order_by('day_of_the_week')
@@ -252,11 +247,6 @@ def finalise_schedule():
 
 @app.route('/amend_shopping_list', methods = ['GET', 'POST'])
 def amend_shopping_list():
-    shop_list = ShoppingList.query.all()
-    form = AmendShoppingListForm()
-    form.ingredient_id.choices = [(i.id, i.ingredient_id) for i in shop_list]
-    
-
     # variables for the layout html template.
     week = []
     week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
@@ -271,11 +261,15 @@ def amend_shopping_list():
     else:
         recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.    
+    shopping_list = ShoppingList.query.all()
+    amount_list = [{i.ingredient_id : i.amount} for i in shopping_list]
+    form = AmendAmountForm(ingredients = amount_list)
 
     if request.method == "POST":
-        return render_template('amend_shopping_list.html',shopping_list=shop_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+        return render_template('amend_shopping_list.html',shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
     else:
-        return render_template('amend_shopping_list.html', shopping_list=shop_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+        return render_template('amend_shopping_list.html', shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+
 
 @app.route('/search_recipes', methods = ['GET', 'POST'])
 def search_recipes():
