@@ -4,13 +4,24 @@
     <h2>
         Amend shopping list if needed
     </h2>
-    {% for ingredient in shopping_list %}
-    <div class="field">
-        {{ form.ingredient_id(default=ingredient.ingredient_id) }}
-        {{ form.amount(default=ingredient.amount) }}
-        {{ ingredient.measure_id }}
+    <div id="container">
+        <div id="main">
+            {% for ingredient in shopping_list %}
+            <div class="field">
+                {{ ingredient.ingredient_id}} 
+                {{ ingredient.amount }}
+                {{ ingredient.measure_id }}
+            </div>
+        </div>
+        {% endfor %}
+        <div id="right">
+            {% from "_formhelpers.html" import render_field %}
+            {% for amount_form in form.ingredients %}
+            {{ amount_form.hidden_tag() }}
+            {{ render_field(amount_form) }}
+            {% endfor %}
+        </div>
+        {{ form.submit }}
     </div>
-    {% endfor %}
-    {{ form.submit }}
 </form>
 {% endblock body %}
