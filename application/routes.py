@@ -5,6 +5,7 @@ from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectSche
 from datetime import date, datetime
 import calendar
 import random
+from sqlalchemy import func
 
 
 @app.route('/', methods = ['GET', 'POST'])
@@ -235,7 +236,8 @@ def finalise_schedule():
             db.session.add(shop_item)
             db.session.commit()
             aggregated_ingredient_list.append(shop_item)
-        return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, aggregated_ingredient_list=aggregated_ingredient_list)
+        return redirect(url_for('amend_shopping_list')) 
+        # render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, aggregated_ingredient_list=aggregated_ingredient_list)
     else:
         weekly_schedule = Schedule.query.order_by('day_of_the_week')
         mon = Recipes.query.filter_by(id = weekly_schedule[0].recipe_id).first().recipe_name
@@ -266,6 +268,21 @@ def amend_shopping_list():
     form = AmendAmountForm(ingredients = amount_list)
 
     if request.method == "POST":
+        s = db.session.query(func.min(ShoppingList.id)).first()
+        n = s[0]
+        print(n)
+        for ingr in form.ingredients.data:
+            print(ingr)
+            sl = ShoppingList.query.filter_by(id = n).first()
+            if ingr["amount"] == None:
+                pass
+            elif ingr["amount"] == 0:
+                db.session.delete(sl)
+                db.session.commit()
+            else:
+                 sl.amount = ingr["amount"]
+                 db.session.commit()
+            n += 1   
         return render_template('amend_shopping_list.html',shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
     else:
         return render_template('amend_shopping_list.html', shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)

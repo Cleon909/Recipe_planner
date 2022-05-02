@@ -40,7 +40,6 @@ class AmountForm(FlaskForm):
 class AmendAmountForm(FlaskForm):
     ingredients = FieldList(FormField(AmountForm))
     submit = SubmitField("press to add updated ingredients to basket")
-    shopping_list = ShoppingList.query.all()
    
 
 class AddRecipeForm(FlaskForm):
