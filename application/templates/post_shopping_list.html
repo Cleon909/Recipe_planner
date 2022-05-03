@@ -1,0 +1,18 @@
+{% extends 'layout.html'%}
+{% block body %}
+<form method="POST">
+    <h2>
+        Shopping List to be added to basket
+    </h2>
+    <div>
+        {% for ingredient in shopping_list %}
+        <div class="field">
+            {{ ingredient.ingredient_id}} 
+            {{ ingredient.amount }}
+            {{ ingredient.measure_id }}
+        </div>
+        {% endfor %}
+    </div>
+    {{ form.submit }}
+</form>
+{% endblock body %}

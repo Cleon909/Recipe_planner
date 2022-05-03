@@ -39,8 +39,11 @@ class AmountForm(FlaskForm):
     amount = DecimalField("enter new amount or enter 0 to delete ingredient from shopping list")
 class AmendAmountForm(FlaskForm):
     ingredients = FieldList(FormField(AmountForm))
-    submit = SubmitField("press to add updated ingredients to basket")
+    submit = SubmitField("press to amend shopping list")
    
+class PostShoppingListForm(FlaskForm):
+    submit = SubmitField("press to add shopping list to basket")
+
 
 class AddRecipeForm(FlaskForm):
     name = StringField('Name of Recipe', validators = [DataRequired(), Length(max = 200)])
