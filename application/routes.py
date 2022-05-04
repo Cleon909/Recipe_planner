@@ -6,6 +6,7 @@ from datetime import date, datetime
 import calendar
 import random
 from sqlalchemy import func
+import smtplib
 
 
 @app.route('/', methods = ['GET', 'POST'])
@@ -307,8 +308,29 @@ def post_shopping_list():
     # variables for the layout html template.    
     shopping_list = ShoppingList.query.all()
     form = PostShoppingListForm()
-    return render_template("post_shopping_list.html", shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
-
+    if request.method == "POST":
+        gmail_user = "recipeapp909@gmail.com"
+        gmail_password = ""
+        sent_from = gmail_user
+        email_input = form.email.data
+        to = ['corcoran909@gmail.com',email_input]
+        subject = 'Ingredient list for weekly recipes'
+        body =  "Weekly Shopping List\n\n"
+        for ingredient in shopping_list:
+            body += f"{ingredient.ingredient_id} {ingredient.amount} {ingredient.measure_id}\n"
+        email_text= "from:{}\nto:{}\nsubject:{}\n{}".format(sent_from, ",".join(to),subject,body)
+        try:
+            smtp_server = smtplib.SMTP_SSL('smtp.gmail.com',465)
+            smtp_server.ehlo()
+            smtp_server.login(gmail_user,gmail_password)
+            smtp_server.sendmail(sent_from,to,email_text)
+            smtp_server.close()
+            message = "Email sent Successfully"
+        except Exception as ex:
+            message = f"Something went wrong..... +{ex}"
+        return render_template("post_shopping_list.html", shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form, message=message)
+    else:
+        return render_template("post_shopping_list.html", shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
 @app.route('/search_recipes', methods = ['GET', 'POST'])
 def search_recipes():
