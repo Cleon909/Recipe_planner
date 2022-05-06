@@ -1,0 +1,25 @@
+{% extends 'layout.html'%}
+{% block body %}
+<form method="POST">
+    {% if message %}
+    <h1>{{ message }}</h1>
+    {% else %}
+    <h2>
+        Shopping List to be sent via email
+    </h2>
+    <div>
+        {% for ingredient in shopping_list %}
+        <div class="field">
+            {{ ingredient.ingredient_id}} 
+            {{ ingredient.amount }}
+            {{ ingredient.measure_id }}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="'field">
+        {{form.email.label}} {{form.email}}
+    </div>
+    {{ form.submit }}
+    {% endif %}
+</form>
+{% endblock body %}
