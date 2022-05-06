@@ -1,10 +1,12 @@
 from flask import render_template, url_for, redirect, request
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList
-from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm
+from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm
 from datetime import date, datetime
 import calendar
 import random
+from sqlalchemy import func
+import smtplib
 
 
 @app.route('/', methods = ['GET', 'POST'])
@@ -235,7 +237,8 @@ def finalise_schedule():
             db.session.add(shop_item)
             db.session.commit()
             aggregated_ingredient_list.append(shop_item)
-        return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, aggregated_ingredient_list=aggregated_ingredient_list)
+        return redirect(url_for('amend_shopping_list')) 
+        # render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, aggregated_ingredient_list=aggregated_ingredient_list)
     else:
         weekly_schedule = Schedule.query.order_by('day_of_the_week')
         mon = Recipes.query.filter_by(id = weekly_schedule[0].recipe_id).first().recipe_name
@@ -266,10 +269,68 @@ def amend_shopping_list():
     form = AmendAmountForm(ingredients = amount_list)
 
     if request.method == "POST":
-        return render_template('amend_shopping_list.html',shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+        s = db.session.query(func.min(ShoppingList.id)).first()
+        n = s[0]
+        for ingr in form.ingredients.data:
+            print(ingr)
+            sl = ShoppingList.query.filter_by(id = n).first()
+            if ingr["amount"] == None:
+                pass
+            elif ingr["amount"] == 0:
+                db.session.delete(sl)
+                db.session.commit()
+            else:
+                 sl.amount = ingr["amount"]
+                 db.session.commit()
+            n += 1
+        shopping_list = ShoppingList.query.all()
+        amount_list = [{i.ingredient_id : i.amount} for i in shopping_list]
+        form = AmendAmountForm(ingredients = amount_list)   
+        return redirect(url_for("post_shopping_list"))
     else:
         return render_template('amend_shopping_list.html', shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
+@app.route('/post_shopping_list', methods = ['GET', 'POST'])
+def post_shopping_list():
+    # variables for the layout html template.
+    week = []
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
+    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+    day = date.today()
+    day = calendar.day_name[day.weekday()]
+    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
+        recipe_of_the_day = "It's the weekend, do your own thing"
+    else:
+        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
+    # variables for the layout html template.    
+    shopping_list = ShoppingList.query.all()
+    form = PostShoppingListForm()
+    if request.method == "POST":
+        gmail_user = "recipeapp909@gmail.com"
+        gmail_password = ""
+        sent_from = gmail_user
+        email_input = form.email.data
+        to = ['corcoran909@gmail.com',email_input]
+        subject = 'Ingredient list for weekly recipes'
+        body =  "Weekly Shopping List\n\n"
+        for ingredient in shopping_list:
+            body += f"{ingredient.ingredient_id} {ingredient.amount} {ingredient.measure_id}\n"
+        email_text= "from:{}\nto:{}\nsubject:{}\n{}".format(sent_from, ",".join(to),subject,body)
+        try:
+            smtp_server = smtplib.SMTP_SSL('smtp.gmail.com',465)
+            smtp_server.ehlo()
+            smtp_server.login(gmail_user,gmail_password)
+            smtp_server.sendmail(sent_from,to,email_text)
+            smtp_server.close()
+            message = "Email sent Successfully"
+        except Exception as ex:
+            message = f"Something went wrong..... +{ex}"
+        return render_template("post_shopping_list.html", shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form, message=message)
+    else:
+        return render_template("post_shopping_list.html", shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
 @app.route('/search_recipes', methods = ['GET', 'POST'])
 def search_recipes():

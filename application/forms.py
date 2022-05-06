@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm 
-from wtforms import StringField, SelectField, SubmitField, DecimalField, FormField, BooleanField, TextAreaField, FieldList
+from wtforms import StringField, SelectField, SubmitField, DecimalField, FormField, BooleanField, TextAreaField, FieldList, EmailField
 from wtforms.validators import DataRequired, Length, ValidationError
 from application.models import ShoppingList
 
@@ -39,9 +39,13 @@ class AmountForm(FlaskForm):
     amount = DecimalField("enter new amount or enter 0 to delete ingredient from shopping list")
 class AmendAmountForm(FlaskForm):
     ingredients = FieldList(FormField(AmountForm))
-    submit = SubmitField("press to add updated ingredients to basket")
-    shopping_list = ShoppingList.query.all()
+    submit = SubmitField("press to amend shopping list")
    
+class PostShoppingListForm(FlaskForm):
+    email = EmailField("enter additional email address for shopping list")
+    submit = SubmitField("press to email shopping list")
+
+
 
 class AddRecipeForm(FlaskForm):
     name = StringField('Name of Recipe', validators = [DataRequired(), Length(max = 200)])
