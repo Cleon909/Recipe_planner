@@ -5,7 +5,7 @@ class Ingredients(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ingredient_name = db.Column(db.String(50), nullable=False, index=True, unique=True)
     quantity = db.relationship("Quantity", backref="ingredients")
-    shoppinglist = db.relationship("ShoppingList", backref="shopping_list", index=True, unique=True)
+    shoppinglist = db.relationship("ShoppingList", backref="shopping_list")
 
 
     def __init__(self, ingredient_name):
@@ -72,17 +72,17 @@ class Schedule(db.Model):
 class Measure(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     measure = db.Column(db.String(20), nullable=False, index=True, unique=True)
-    quantity = db.relationship("Quantity", backref="measure")
-    shoppinglist = db.relationship("ShoppingList", backref="measure")
+    quantity = db.relationship("Quantity", backref="measurebr")
+    shoppinglist = db.relationship("ShoppingList", backref="measurebr1")
 
     def __init__(self, measure):
         self.measure = measure
 
 class ShoppingList(db.Model):   
     id = db.Column(db.Integer, primary_key=True)
-    ingredient_id = db.Column(db.String(50), db.ForeignKey('ingredients.ingredient_name'), nullable=False, index=True)
+    ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.id'), nullable=False, index=True)
     amount = db.Column(db.Float, nullable=False)
-    measure_id = db.Column(db.String(10), db.ForeignKey('measure.measure'), nullable = False)
+    measure_id = db.Column(db.Integer, db.ForeignKey('measure.id'), nullable = False)
 
     def __init__(self, ingredient_id, amount, measure_id):
         self.ingredient_id = ingredient_id

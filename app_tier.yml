@@ -9,6 +9,8 @@ spec:
   - port: 5000
   selector:
     tier: app
+  type: NodePort
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -31,5 +33,6 @@ spec:
       containers:
       - name: recipe-app
         image: corcoran909/rapp:alt
+        imagePullPolicy: Always
         ports:
           - containerPort: 5000
