@@ -1,19 +1,19 @@
 version: "3.8"
 services:
   webapp:
-    image: corcoran909/rapp
+    image: corcoran909/rapp:alt
     ports:
     - target: 5000
       published: 5000
     deploy:
       replicas: 1
   db:
-    image: corcoran909/dbase
+    image: corcoran909/dbase:alt
     deploy: 
       replicas: 1
     ports:
       - target: 3306
-      - published: 3006
+      - published: 3306
     volumes:
     - type: volume
       source: mysql-database
