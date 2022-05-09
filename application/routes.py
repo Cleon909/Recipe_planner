@@ -9,30 +9,47 @@ from sqlalchemy import func
 import smtplib
 
 
-@app.route('/', methods = ['GET', 'POST'])
-@app.route('/home', methods = ['GET', 'POST'])
-def index():
-        # variables for the layout html template.
+def create_weekly_recipes():
     week = []
     week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
     week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
     week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
     week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
     week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+    return week
 
-    day = date.today()
-    day = calendar.day_name[day.weekday()]
-
+def create_recipe_of_the_day():
     if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
         recipe_of_the_day = "It's the weekend, do your own thing"
     else:
         recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
-    # variables for the layout html template.
+    return recipe_of_the_day
 
+def weekend_or_not():
     if datetime.today().weekday() == 5 or datetime.today().weekday() == 6:
         weekend = True
     else:
         weekend = False
+    return weekend
+
+def what_day_is_it():
+    day = date.today()
+    day = calendar.day_name[day.weekday()]
+
+def create_shopping_list():
+    shopping_list_raw = ShoppingList.query.all()
+    shopping_list = []
+    for shopping_list_raw_item in shopping_list_raw:
+        shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
+    return shopping_list
+
+@app.route('/', methods = ['GET', 'POST'])
+@app.route('/home', methods = ['GET', 'POST'])
+def index():
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    weekend = weekend_or_not()
+    day = what_day_is_it()
 
     total_number = Recipes.query.count()
     if datetime.today().weekday() in [0,1,2,3,4]:
@@ -61,22 +78,10 @@ def index():
 
 @app.route('/create_weekly_schedule', methods = ['GET', 'POST'])
 def create_weekly_schedule():
-    # variables for the layout html template.
-    week = []
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
-
-    day = date.today()
-    day = calendar.day_name[day.weekday()]
-
-    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
-        recipe_of_the_day = "It's the weekend, do your own thing"
-    else:
-        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
-    # variables for the layout html template.
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()
+    
     form = SelectScheduleForm()
     choices = [(cuisine.id, cuisine.cuisine_name) for cuisine in Cuisine.query.order_by('cuisine_name')]
     choices.insert(0, ("", ""))
@@ -87,7 +92,6 @@ def create_weekly_schedule():
     form.fifth_cuisine.choices = choices
 
     if request.method == 'POST': 
-
         first_cuisine_id = form.first_cuisine.data
         second_cuisine_id = form.second_cuisine.data 
         third_cuisine_id = form.third_cuisine.data
@@ -148,22 +152,9 @@ def create_weekly_schedule():
 
 @app.route('/finalise_schedule', methods=['POST','GET'])
 def finalise_schedule():
-    # variables for the layout html template.
-    week = []
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
-
-    day = date.today()
-    day = calendar.day_name[day.weekday()]
-
-    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
-        recipe_of_the_day = "It's the weekend, do your own thing"
-    else:
-        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
-    # variables for the layout html template.
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()
 
     form = FinaliseScheduleForm()
     choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
@@ -250,25 +241,10 @@ def finalise_schedule():
 
 @app.route('/amend_shopping_list', methods = ['GET', 'POST'])
 def amend_shopping_list():
-    # variables for the layout html template.
-    week = []
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
-    day = date.today()
-    day = calendar.day_name[day.weekday()]
-    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
-        recipe_of_the_day = "It's the weekend, do your own thing"
-    else:
-        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
-    # variables for the layout html template.    
-    shopping_list_raw = ShoppingList.query.all()
-    shopping_list = []
-    for shopping_list_raw_item in shopping_list_raw:
-        shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])    
-    print(shopping_list)
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()
+    shopping_list = create_shopping_list()
 
     amount_list = [{i[0] : i[1]} for i in shopping_list]
     form = AmendAmountForm(ingredients = amount_list)
@@ -286,37 +262,18 @@ def amend_shopping_list():
             else:
                  sl.amount = ingr["amount"]
                  db.session.commit()
-            n += 1
-        # shopping_list_raw = ShoppingList.query.all()
-        # shopping_list = []
-        # for shopping_list_raw_item in shopping_list_raw:
-        #     shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])    
-        # amount_list = [{i[0] : i[1]} for i in shopping_list]
-        # form = AmendAmountForm(ingredients = amount_list)   
+            n += 1   
         return redirect(url_for("post_shopping_list"))
     else:
         return render_template('amend_shopping_list.html', shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
 @app.route('/post_shopping_list', methods = ['GET', 'POST'])
 def post_shopping_list():
-    # variables for the layout html template.
-    week = []
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
-    day = date.today()
-    day = calendar.day_name[day.weekday()]
-    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
-        recipe_of_the_day = "It's the weekend, do your own thing"
-    else:
-        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
-    # variables for the layout html template.    
-    shopping_list_raw = ShoppingList.query.all()
-    shopping_list = []
-    for shopping_list_raw_item in shopping_list_raw:
-        shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()    
+    shopping_list = create_shopping_list()
+
     form = PostShoppingListForm()
     if request.method == "POST":
         gmail_user = "recipeapp909@gmail.com"
@@ -344,22 +301,10 @@ def post_shopping_list():
 
 @app.route('/search_recipes', methods = ['GET', 'POST'])
 def search_recipes():
-    # variables for the layout html template.
-    week = []
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()
 
-    day = date.today()
-    day = calendar.day_name[day.weekday()]
-
-    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
-        recipe_of_the_day = "It's the weekend, do your own thing"
-    else:
-        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
-    # variables for the layout html template.    
     form = SearchForm()
     form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
     total_number = Recipes.query.count()
@@ -384,25 +329,14 @@ def search_recipes():
   
 @app.route('/add_meta', methods = ['GET', 'POST'])
 def add_meta():
-    # variables for the layout html template.
-    week = []
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()
 
-    day = date.today()
-    day = calendar.day_name[day.weekday()]
-
-    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
-        recipe_of_the_day = "It's the weekend, do your own thing"
-    else:
-        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
-    # variables for the layout html template.
     form = AddMetaForm()
     if request.method == 'POST':
         ingredient = form.ingredient.data
+
         cuisine = form.cuisine.data
         measure = form.measure.data
         if ingredient != "":
@@ -424,20 +358,9 @@ def add_meta():
 
 @app.route('/add_recipe', methods = ['GET', 'POST'])
 def add_recipe():
-    # variables for the layout html template.
-    week = []
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
-    day = date.today()
-    day = calendar.day_name[day.weekday()]
-    if datetime.today().weekday() == 5 or datetime.today().weekday() == 6: # change this to show a dumy recipe on the weekend
-        recipe_of_the_day = "It's the weekend, do your own thing"
-    else:
-        recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
-    # variables for the layout html template.
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()
 
     duplicate = True
     form = AddRecipeForm()
