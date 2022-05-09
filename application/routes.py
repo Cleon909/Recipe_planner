@@ -207,24 +207,24 @@ def finalise_schedule():
         friday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id)).all()
         ingredient_list = []
         for m in monday_recipe_ingredients:
-            ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
+            ingredient_list.append([m.ingredient_id, m.amount, m.measure])
         for m in tuesday_recipe_ingredients:
-            ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
+            ingredient_list.append([m.ingredient_id, m.amount, m.measure])
         for m in wednesday_recipe_ingredients:
-            ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
+            ingredient_list.append([m.ingredient_id, m.amount, m.measure])
         for m in thursday_recipe_ingredients:
-            ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
+            ingredient_list.append([m.ingredient_id, m.amount, m.measure])
         for m in friday_recipe_ingredients:
-            ingredient_list.append([Ingredients.query.filter_by(id = m.ingredient_id).first().ingredient_name, m.amount, Measure.query.filter_by(id = m.measure).first().measure])
-        # ingredient list should now be a list of all ingredients seperated into a list of three elements (ingredient_name, amount, unit) however some are likely to be duplicates. The below code is iterating over the list to add up any duplciates to pass one value to aggregated_ingredient_list
+            ingredient_list.([m.ingredient_id, m.amount, m.measure])
+        # ingredient list should now be a list of all ingredients seperated into a list of three elements (ingredients.id, amount, unit) however some are likely to be duplicates. The below code is iterating over the list to add up any duplciates to pass one value to aggregated_ingredient_list
         
         #clears shopping list table
         db.session.query(ShoppingList).delete()
         db.session.commit()
 
         # this code looks for unique values and adds them to aggregated_ingredient_list
-        ingredient_names = [ingredient[0] for ingredient in ingredient_list]
-        unique_ingredients = set(ingredient_names)
+        ingredient_ids = [ingredient[0] for ingredient in ingredient_list]
+        unique_ingredients = set(ingredient_ids)
         aggregated_ingredient_list = []
         for ingr in unique_ingredients:
             a = [0,0,0]
@@ -264,7 +264,11 @@ def amend_shopping_list():
     else:
         recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.    
-    shopping_list = ShoppingList.query.all()
+    shopping_list_raw = ShoppingList.query.all()
+    shopping_list = []
+    for shopping_list_raw_item in shopping_list_raw:
+        shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])    
+    
     amount_list = [{i.ingredient_id : i.amount} for i in shopping_list]
     form = AmendAmountForm(ingredients = amount_list)
 
@@ -272,7 +276,6 @@ def amend_shopping_list():
         s = db.session.query(func.min(ShoppingList.id)).first()
         n = s[0]
         for ingr in form.ingredients.data:
-            print(ingr)
             sl = ShoppingList.query.filter_by(id = n).first()
             if ingr["amount"] == None:
                 pass
@@ -288,7 +291,7 @@ def amend_shopping_list():
         form = AmendAmountForm(ingredients = amount_list)   
         return redirect(url_for("post_shopping_list"))
     else:
-        return render_template('amend_shopping_list.html', shopping_list=shop_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+        return render_template('amend_shopping_list.html', shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
 @app.route('/post_shopping_list', methods = ['GET', 'POST'])
 def post_shopping_list():
@@ -306,7 +309,10 @@ def post_shopping_list():
     else:
         recipe_of_the_day = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first().recipe_name
     # variables for the layout html template.    
-    shopping_list = ShoppingList.query.all()
+    shopping_list_raw = ShoppingList.query.all()
+    shopping_list = []
+    for shopping_list_raw_item in shopping_list_raw:
+        shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
     form = PostShoppingListForm()
     if request.method == "POST":
         gmail_user = "recipeapp909@gmail.com"
