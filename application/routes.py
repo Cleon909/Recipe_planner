@@ -215,7 +215,7 @@ def finalise_schedule():
         for m in thursday_recipe_ingredients:
             ingredient_list.append([m.ingredient_id, m.amount, m.measure])
         for m in friday_recipe_ingredients:
-            ingredient_list.([m.ingredient_id, m.amount, m.measure])
+            ingredient_list.append([m.ingredient_id, m.amount, m.measure])
         # ingredient list should now be a list of all ingredients seperated into a list of three elements (ingredients.id, amount, unit) however some are likely to be duplicates. The below code is iterating over the list to add up any duplciates to pass one value to aggregated_ingredient_list
         
         #clears shopping list table
@@ -268,8 +268,9 @@ def amend_shopping_list():
     shopping_list = []
     for shopping_list_raw_item in shopping_list_raw:
         shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])    
-    
-    amount_list = [{i.ingredient_id : i.amount} for i in shopping_list]
+    print(shopping_list)
+
+    amount_list = [{i[0] : i[1]} for i in shopping_list]
     form = AmendAmountForm(ingredients = amount_list)
 
     if request.method == "POST":
@@ -286,9 +287,12 @@ def amend_shopping_list():
                  sl.amount = ingr["amount"]
                  db.session.commit()
             n += 1
-        shopping_list = ShoppingList.query.all()
-        amount_list = [{i.ingredient_id : i.amount} for i in shopping_list]
-        form = AmendAmountForm(ingredients = amount_list)   
+        # shopping_list_raw = ShoppingList.query.all()
+        # shopping_list = []
+        # for shopping_list_raw_item in shopping_list_raw:
+        #     shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])    
+        # amount_list = [{i[0] : i[1]} for i in shopping_list]
+        # form = AmendAmountForm(ingredients = amount_list)   
         return redirect(url_for("post_shopping_list"))
     else:
         return render_template('amend_shopping_list.html', shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
@@ -323,7 +327,7 @@ def post_shopping_list():
         subject = 'Ingredient list for weekly recipes'
         body =  "Weekly Shopping List\n\n"
         for ingredient in shopping_list:
-            body += f"{ingredient.ingredient_id} {ingredient.amount} {ingredient.measure_id}\n"
+            body += f"{ingredient[0]} {ingredient[1]} {ingredient[2]}\n"
         email_text= "from:{}\nto:{}\nsubject:{}\n{}".format(sent_from, ",".join(to),subject,body)
         try:
             smtp_server = smtplib.SMTP_SSL('smtp.gmail.com',465)
