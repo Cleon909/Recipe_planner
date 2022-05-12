@@ -441,7 +441,7 @@ def add_recipe():
             cuisine = form.cuisine.data
         recipe = Recipes(recipe_name, recipe_description, cuisine)
         if Recipes.query.filter(Recipes.recipe_name == recipe_name).first():
-            return render_template('add_recipe.html', duplicate=duplicate)
+            return render_template('add_recipe.html', duplicate=duplicate, day=day, recipe_of_the_day=recipe_of_the_day, week=week, recipe=recipe)
         else:
             db.session.add(recipe)
             db.session.commit()
@@ -449,7 +449,6 @@ def add_recipe():
 
         all_ingredients = []
         ingredient_names = [ingredient.ingredient_name for ingredient in Ingredients.query.all()]
-
         if form.ingredient_alt1.data == "":
             all_ingredients.append([])
             all_ingredients[0].append(recipe.id)
@@ -484,11 +483,11 @@ def add_recipe():
             all_ingredients[1].append(form.measure2.data)
         elif form.ingredient_alt2.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt2.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep2.data)
-            all_ingredients[0].append(form.amount2.data)
-            all_ingredients[0].append(form.measure2.data)
+            all_ingredients[1].append(recipe.id)
+            all_ingredients[1].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt2.data).first().id)
+            all_ingredients[1].append(form.ingredient_prep2.data)
+            all_ingredients[1].append(form.amount2.data)
+            all_ingredients[1].append(form.measure2.data)
         else:
             ing = Ingredients(form.ingredient_alt2.data)
             db.session.add(ing)
@@ -509,11 +508,11 @@ def add_recipe():
             all_ingredients[2].append(form.measure3.data)
         elif form.ingredient_alt3.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt3.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep3.data)
-            all_ingredients[0].append(form.amount3.data)
-            all_ingredients[0].append(form.measure3.data)
+            all_ingredients[2].append(recipe.id)
+            all_ingredients[2].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt3.data).first().id)
+            all_ingredients[2].append(form.ingredient_prep3.data)
+            all_ingredients[2].append(form.amount3.data)
+            all_ingredients[2].append(form.measure3.data)
         else:
             ing = Ingredients(form.ingredient_alt3.data)
             db.session.add(ing)
@@ -534,11 +533,11 @@ def add_recipe():
             all_ingredients[3].append(form.measure4.data)
         elif form.ingredient_alt4.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt4.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep4.data)
-            all_ingredients[0].append(form.amount4.data)
-            all_ingredients[0].append(form.measure4.data)
+            all_ingredients[3].append(recipe.id)
+            all_ingredients[3].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt4.data).first().id)
+            all_ingredients[3].append(form.ingredient_prep4.data)
+            all_ingredients[3].append(form.amount4.data)
+            all_ingredients[3].append(form.measure4.data)
         else:
             ing = Ingredients(form.ingredient_alt4.data)
             db.session.add(ing)
@@ -559,11 +558,11 @@ def add_recipe():
             all_ingredients[4].append(form.measure5.data)
         elif form.ingredient_alt5.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt5.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep5.data)
-            all_ingredients[0].append(form.amount5.data)
-            all_ingredients[0].append(form.measure5.data)
+            all_ingredients[4].append(recipe.id)
+            all_ingredients[4].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt5.data).first().id)
+            all_ingredients[4].append(form.ingredient_prep5.data)
+            all_ingredients[4].append(form.amount5.data)
+            all_ingredients[4].append(form.measure5.data)
         else:
             ing = Ingredients(form.ingredient_alt5.data)
             db.session.add(ing)
@@ -584,11 +583,11 @@ def add_recipe():
             all_ingredients[5].append(form.measure6.data)
         elif form.ingredient_alt6.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt6.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep6.data)
-            all_ingredients[0].append(form.amount6.data)
-            all_ingredients[0].append(form.measure6.data)
+            all_ingredients[5].append(recipe.id)
+            all_ingredients[5].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt6.data).first().id)
+            all_ingredients[5].append(form.ingredient_prep6.data)
+            all_ingredients[5].append(form.amount6.data)
+            all_ingredients[5].append(form.measure6.data)
         else:
             ing = Ingredients(form.ingredient_alt6.data)
             db.session.add(ing)
@@ -609,11 +608,11 @@ def add_recipe():
             all_ingredients[6].append(form.measure7.data)
         elif form.ingredient_alt7.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt7.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep7.data)
-            all_ingredients[0].append(form.amount7.data)
-            all_ingredients[0].append(form.measure7.data)
+            all_ingredients[6].append(recipe.id)
+            all_ingredients[6].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt7.data).first().id)
+            all_ingredients[6].append(form.ingredient_prep7.data)
+            all_ingredients[6].append(form.amount7.data)
+            all_ingredients[6].append(form.measure7.data)
         else:
             ing = Ingredients(form.ingredient_alt7.data)
             db.session.add(ing)
@@ -634,11 +633,11 @@ def add_recipe():
             all_ingredients[7].append(form.measure8.data)
         elif form.ingredient_alt8.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt8.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep8.data)
-            all_ingredients[0].append(form.amount8.data)
-            all_ingredients[0].append(form.measure8.data)
+            all_ingredients[7].append(recipe.id)
+            all_ingredients[7].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt8.data).first().id)
+            all_ingredients[7].append(form.ingredient_prep8.data)
+            all_ingredients[7].append(form.amount8.data)
+            all_ingredients[7].append(form.measure8.data)
         else:
             ing = Ingredients(form.ingredient_alt8.data)
             db.session.add(ing)
@@ -659,11 +658,11 @@ def add_recipe():
             all_ingredients[8].append(form.measure9.data)
         elif form.ingredient_alt9.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt9.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep9.data)
-            all_ingredients[0].append(form.amount9.data)
-            all_ingredients[0].append(form.measure9.data)
+            all_ingredients[8].append(recipe.id)
+            all_ingredients[8].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt9.data).first().id)
+            all_ingredients[8].append(form.ingredient_prep9.data)
+            all_ingredients[8].append(form.amount9.data)
+            all_ingredients[8].append(form.measure9.data)
         else:
             ing = Ingredients(form.ingredient_alt9.data)
             db.session.add(ing)
@@ -684,11 +683,11 @@ def add_recipe():
             all_ingredients[9].append(form.measure10.data)
         elif form.ingredient_alt10.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt10.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep10.data)
-            all_ingredients[0].append(form.amount10.data)
-            all_ingredients[0].append(form.measure10.data)
+            all_ingredients[9].append(recipe.id)
+            all_ingredients[9].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt10.data).first().id)
+            all_ingredients[9].append(form.ingredient_prep10.data)
+            all_ingredients[9].append(form.amount10.data)
+            all_ingredients[9].append(form.measure10.data)
         else:
             ing = Ingredients(form.ingredient_alt10.data)
             db.session.add(ing)
@@ -709,11 +708,11 @@ def add_recipe():
             all_ingredients[10].append(form.measure11.data)
         elif form.ingredient_alt11.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt11.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep11.data)
-            all_ingredients[0].append(form.amount11.data)
-            all_ingredients[0].append(form.measure11.data)
+            all_ingredients[10].append(recipe.id)
+            all_ingredients[10].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt11.data).first().id)
+            all_ingredients[10].append(form.ingredient_prep11.data)
+            all_ingredients[10].append(form.amount11.data)
+            all_ingredients[10].append(form.measure11.data)
         else:
             ing = Ingredients(form.ingredient_alt1.data)
             db.session.add(ing)
@@ -734,11 +733,11 @@ def add_recipe():
             all_ingredients[11].append(form.measure12.data)
         elif form.ingredient_alt12.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt12.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep12.data)
-            all_ingredients[0].append(form.amount12.data)
-            all_ingredients[0].append(form.measure12.data)
+            all_ingredients[11].append(recipe.id)
+            all_ingredients[11].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt12.data).first().id)
+            all_ingredients[11].append(form.ingredient_prep12.data)
+            all_ingredients[11].append(form.amount12.data)
+            all_ingredients[11].append(form.measure12.data)
         else:
             ing = Ingredients(form.ingredient_alt12.data)
             db.session.add(ing)
@@ -759,11 +758,11 @@ def add_recipe():
             all_ingredients[12].append(form.measure13.data)
         elif form.ingredient_alt13.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt13.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep13.data)
-            all_ingredients[0].append(form.amount13.data)
-            all_ingredients[0].append(form.measure13.data)
+            all_ingredients[12].append(recipe.id)
+            all_ingredients[12].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt13.data).first().id)
+            all_ingredients[12].append(form.ingredient_prep13.data)
+            all_ingredients[12].append(form.amount13.data)
+            all_ingredients[12].append(form.measure13.data)
         else:
             ing = Ingredients(form.ingredient_alt13.data)
             db.session.add(ing)
@@ -784,11 +783,11 @@ def add_recipe():
             all_ingredients[13].append(form.measure14.data)
         elif form.ingredient_alt14.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt14.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep14.data)
-            all_ingredients[0].append(form.amount14.data)
-            all_ingredients[0].append(form.measure14.data)
+            all_ingredients[13].append(recipe.id)
+            all_ingredients[13].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt14.data).first().id)
+            all_ingredients[13].append(form.ingredient_prep14.data)
+            all_ingredients[13].append(form.amount14.data)
+            all_ingredients[13].append(form.measure14.data)
         else:
             ing = Ingredients(form.ingredient_alt14.data)
             db.session.add(ing)
@@ -809,11 +808,11 @@ def add_recipe():
             all_ingredients[14].append(form.measure15.data)
         elif form.ingredient_alt15.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt15.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep15.data)
-            all_ingredients[0].append(form.amount15.data)
-            all_ingredients[0].append(form.measure15.data)
+            all_ingredients[14].append(recipe.id)
+            all_ingredients[14].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt15.data).first().id)
+            all_ingredients[14].append(form.ingredient_prep15.data)
+            all_ingredients[14].append(form.amount15.data)
+            all_ingredients[14].append(form.measure15.data)
         else:
             ing = Ingredients(form.ingredient_alt15.data)
             db.session.add(ing)
@@ -834,11 +833,11 @@ def add_recipe():
             all_ingredients[15].append(form.measure16.data)
         elif form.ingredient_alt16.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt16.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep16.data)
-            all_ingredients[0].append(form.amount16.data)
-            all_ingredients[0].append(form.measure16.data)
+            all_ingredients[15].append(recipe.id)
+            all_ingredients[15].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt16.data).first().id)
+            all_ingredients[15].append(form.ingredient_prep16.data)
+            all_ingredients[15].append(form.amount16.data)
+            all_ingredients[15].append(form.measure16.data)
         else:
             ing = Ingredients(form.ingredient_alt16.data)
             db.session.add(ing)
@@ -859,11 +858,11 @@ def add_recipe():
             all_ingredients[16].append(form.measure17.data)
         elif form.ingredient_alt17.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt17.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep17.data)
-            all_ingredients[0].append(form.amount17.data)
-            all_ingredients[0].append(form.measure17.data)
+            all_ingredients[16].append(recipe.id)
+            all_ingredients[16].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt17.data).first().id)
+            all_ingredients[16].append(form.ingredient_prep17.data)
+            all_ingredients[16].append(form.amount17.data)
+            all_ingredients[16].append(form.measure17.data)
         else:
             ing = Ingredients(form.ingredient_alt17.data)
             db.session.add(ing)
@@ -884,11 +883,11 @@ def add_recipe():
             all_ingredients[17].append(form.measure18.data)
         elif form.ingredient_alt18.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt18.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep18.data)
-            all_ingredients[0].append(form.amount18.data)
-            all_ingredients[0].append(form.measure18.data)
+            all_ingredients[17].append(recipe.id)
+            all_ingredients[17].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt18.data).first().id)
+            all_ingredients[17].append(form.ingredient_prep18.data)
+            all_ingredients[17].append(form.amount18.data)
+            all_ingredients[17].append(form.measure18.data)
         else:
             ing = Ingredients(form.ingredient_alt18.data)
             db.session.add(ing)
@@ -909,11 +908,11 @@ def add_recipe():
             all_ingredients[18].append(form.measure19.data)
         elif form.ingredient_alt19.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt19.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep19.data)
-            all_ingredients[0].append(form.amount19.data)
-            all_ingredients[0].append(form.measure19.data)
+            all_ingredients[18].append(recipe.id)
+            all_ingredients[18].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt19.data).first().id)
+            all_ingredients[18].append(form.ingredient_prep19.data)
+            all_ingredients[18].append(form.amount19.data)
+            all_ingredients[18].append(form.measure19.data)
         else:
             ing = Ingredients(form.ingredient_alt19.data)
             db.session.add(ing)
@@ -934,11 +933,11 @@ def add_recipe():
             all_ingredients[19].append(form.measure20.data)
         elif form.ingredient_alt20.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt20.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep20.data)
-            all_ingredients[0].append(form.amount20.data)
-            all_ingredients[0].append(form.measure20.data)
+            all_ingredients[19].append(recipe.id)
+            all_ingredients[19].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt20.data).first().id)
+            all_ingredients[19].append(form.ingredient_prep20.data)
+            all_ingredients[19].append(form.amount20.data)
+            all_ingredients[19].append(form.measure20.data)
         else:
             ing = Ingredients(form.ingredient_alt20.data)
             db.session.add(ing)
@@ -959,11 +958,11 @@ def add_recipe():
             all_ingredients[20].append(form.measure21.data)
         elif form.ingredient_alt21.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt21.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep21.data)
-            all_ingredients[0].append(form.amount21.data)
-            all_ingredients[0].append(form.measure21.data)
+            all_ingredients[20].append(recipe.id)
+            all_ingredients[20].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt21.data).first().id)
+            all_ingredients[20].append(form.ingredient_prep21.data)
+            all_ingredients[20].append(form.amount21.data)
+            all_ingredients[20].append(form.measure21.data)
         else:
             ing = Ingredients(form.ingredient_alt21.data)
             db.session.add(ing)
@@ -985,11 +984,11 @@ def add_recipe():
             all_ingredients[21].append(form.measure22.data)
         elif form.ingredient_alt22.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt22.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep22.data)
-            all_ingredients[0].append(form.amount22.data)
-            all_ingredients[0].append(form.measure22.data)
+            all_ingredients[21].append(recipe.id)
+            all_ingredients[21].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt22.data).first().id)
+            all_ingredients[21].append(form.ingredient_prep22.data)
+            all_ingredients[21].append(form.amount22.data)
+            all_ingredients[21].append(form.measure22.data)
         else:
             ing = Ingredients(form.ingredient_alt22.data)
             db.session.add(ing)
@@ -1010,11 +1009,11 @@ def add_recipe():
             all_ingredients[22].append(form.measure23.data)
         elif form.ingredient_alt23.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt23.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep23.data)
-            all_ingredients[0].append(form.amount23.data)
-            all_ingredients[0].append(form.measure23.data)
+            all_ingredients[22].append(recipe.id)
+            all_ingredients[22].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt23.data).first().id)
+            all_ingredients[22].append(form.ingredient_prep23.data)
+            all_ingredients[22].append(form.amount23.data)
+            all_ingredients[22].append(form.measure23.data)
         else:
             ing = Ingredients(form.ingredient_alt23.data)
             db.session.add(ing)
@@ -1035,11 +1034,11 @@ def add_recipe():
             all_ingredients[23].append(form.measure24.data)
         elif form.ingredient_alt24.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt24.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep24.data)
-            all_ingredients[0].append(form.amount24.data)
-            all_ingredients[0].append(form.measure24.data)
+            all_ingredients[23].append(recipe.id)
+            all_ingredients[23].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt24.data).first().id)
+            all_ingredients[23].append(form.ingredient_prep24.data)
+            all_ingredients[23].append(form.amount24.data)
+            all_ingredients[23].append(form.measure24.data)
         else:
             ing = Ingredients(form.ingredient_alt24.data)
             db.session.add(ing)
@@ -1060,11 +1059,11 @@ def add_recipe():
             all_ingredients[24].append(form.measure25.data)
         elif form.ingredient_alt25.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt25.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep25.data)
-            all_ingredients[0].append(form.amount25.data)
-            all_ingredients[0].append(form.measure25.data)
+            all_ingredients[24].append(recipe.id)
+            all_ingredients[24].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt25.data).first().id)
+            all_ingredients[24].append(form.ingredient_prep25.data)
+            all_ingredients[24].append(form.amount25.data)
+            all_ingredients[24].append(form.measure25.data)
         else:
             ing = Ingredients(form.ingredient_alt25.data)
             db.session.add(ing)
@@ -1085,11 +1084,11 @@ def add_recipe():
             all_ingredients[25].append(form.measure26.data)
         elif form.ingredient_alt26.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt26.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep26.data)
-            all_ingredients[0].append(form.amount26.data)
-            all_ingredients[0].append(form.measure26.data)
+            all_ingredients[25].append(recipe.id)
+            all_ingredients[25].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt26.data).first().id)
+            all_ingredients[25].append(form.ingredient_prep26.data)
+            all_ingredients[25].append(form.amount26.data)
+            all_ingredients[25].append(form.measure26.data)
         else:
             ing = Ingredients(form.ingredient_alt26.data)
             db.session.add(ing)
@@ -1110,11 +1109,11 @@ def add_recipe():
             all_ingredients[26].append(form.measure27.data)
         elif form.ingredient_alt27.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt27.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep27.data)
-            all_ingredients[0].append(form.amount27.data)
-            all_ingredients[0].append(form.measure27.data)
+            all_ingredients[26].append(recipe.id)
+            all_ingredients[26].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt27.data).first().id)
+            all_ingredients[26].append(form.ingredient_prep27.data)
+            all_ingredients[26].append(form.amount27.data)
+            all_ingredients[26].append(form.measure27.data)
         else:
             ing = Ingredients(form.ingredient_alt27.data)
             db.session.add(ing)
@@ -1135,11 +1134,11 @@ def add_recipe():
             all_ingredients[27].append(form.measure28.data)
         elif form.ingredient_alt28.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt28.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep28.data)
-            all_ingredients[0].append(form.amount28.data)
-            all_ingredients[0].append(form.measure28.data)
+            all_ingredients[27].append(recipe.id)
+            all_ingredients[27].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt28.data).first().id)
+            all_ingredients[27].append(form.ingredient_prep28.data)
+            all_ingredients[27].append(form.amount28.data)
+            all_ingredients[27].append(form.measure28.data)
         else:
             ing = Ingredients(form.ingredient_alt28.data)
             db.session.add(ing)
@@ -1160,11 +1159,11 @@ def add_recipe():
             all_ingredients[28].append(form.measure29.data)
         elif form.ingredient_alt29.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt29.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep29.data)
-            all_ingredients[0].append(form.amount29.data)
-            all_ingredients[0].append(form.measure29.data)
+            all_ingredients[28].append(recipe.id)
+            all_ingredients[28].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt29.data).first().id)
+            all_ingredients[28].append(form.ingredient_prep29.data)
+            all_ingredients[28].append(form.amount29.data)
+            all_ingredients[28].append(form.measure29.data)
         else:
             ing = Ingredients(form.ingredient_alt29.data)
             db.session.add(ing)
@@ -1185,11 +1184,11 @@ def add_recipe():
             all_ingredients[29].append(form.measure30.data)
         elif form.ingredient_alt30.data in ingredient_names:
             all_ingredients.append([])
-            all_ingredients[0].append(recipe.id)
-            all_ingredients[0].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt30.data).first().id)
-            all_ingredients[0].append(form.ingredient_prep30.data)
-            all_ingredients[0].append(form.amount30.data)
-            all_ingredients[0].append(form.measure30.data)
+            all_ingredients[29].append(recipe.id)
+            all_ingredients[29].append(Ingredients.query.filter_by(ingredient_name = form.ingredient_alt30.data).first().id)
+            all_ingredients[29].append(form.ingredient_prep30.data)
+            all_ingredients[29].append(form.amount30.data)
+            all_ingredients[29].append(form.measure30.data)
         else:
             ing = Ingredients(form.ingredient_alt30.data)
             db.session.add(ing)
@@ -1209,7 +1208,6 @@ def add_recipe():
                 all_ingredients = []
             else:
                 continue
-
         method_steps = [form.method1.data, form.method2.data, form.method3.data, form.method4.data, form.method5.data, form.method6.data, form.method7.data, form.method8.data, form.method9.data, form.method10.data, form.method11.data, form.method12.data, form.method13.data, form.method14.data, form.method15.data]
 
         for s in method_steps:
@@ -1219,7 +1217,6 @@ def add_recipe():
                 step = Method(recipe.id, method_steps.index(s)+1,s)
                 db.session.add(step)
                 db.session.commit()
-    
-        return render_template('add_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, recipe = recipe)
+        return render_template('add_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, recipe=recipe)
     else:
-        return render_template('add_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week,form=form)
+        return render_template('add_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form)
