@@ -1,3 +1,4 @@
 .gitingore
 venv/
 */__pycache__/
+secrets.yml

@@ -17,7 +17,7 @@ metadata:
   labels:
     app: microservices
     tier: data
-spec:
+spec: 
   replicas: 1
   selector:
     matchLabels:
@@ -28,9 +28,18 @@ spec:
         app: microservices
         tier: data
     spec: # Pod spec
+      volumes:
+        - name: data-tier-storage
+          persistentVolumeClaim:
+            claimName: data-tier-volume-claim
       containers:
-      - name: appdb
-        image: corcoran909/dbase:alt
-        imagePullPolicy: IfNotPresent
-        ports:
-          - containerPort: 3306
+        - name: appdb
+          image: corcoran909/dbase:alt
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: data-tier-storage
+      
+

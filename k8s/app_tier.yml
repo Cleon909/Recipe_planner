@@ -33,6 +33,6 @@ spec:
       containers:
       - name: recipe-app
         image: corcoran909/rapp:alt
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 5000
