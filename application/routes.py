@@ -1,21 +1,24 @@
 from flask import render_template, url_for, redirect, request
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList
-from application.forms import AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm
+from application.forms import DeleteRecipeForm, AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm
 from datetime import date, datetime
 import calendar
 import random
 from sqlalchemy import func
 import smtplib
 
+def get_recipe_for_day(day_number):
+    day_recipe = Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = day_number).first().recipe_id).first()
+    if day_recipe:
+        return day_recipe
+    else:
+        return Recipes.query.filter_by(id = 1).first()
 
 def create_weekly_recipes():
     week = []
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id).first())
-    week.append(Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id).first())
+    for num in range(5):
+         week.append(get_recipe_for_day(num))
     return week
 
 def create_recipe_of_the_day():
@@ -355,6 +358,32 @@ def add_meta():
     else:
         return render_template('add_meta.html', day=day, recipe_of_the_day=recipe_of_the_day, form=form, week=week)
 
+@app.route('/delete_recipe', methods= ['GET', 'POST'])
+def delete_recipe():
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()
+
+    form = DeleteRecipeForm()
+
+    if request.method == 'POST':
+        form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
+        recipe_to_delete = Recipes.query.filter_by(id = form.recipe.data).first()
+        quantities_to_delete = Quantity.query.filter_by(recipe_id = recipe_to_delete.id).all()
+        for q in quantities_to_delete:
+            db.session.delete(q)
+            db.session.commit()
+        methods_to_delete = Method.query.filter_by(recipe_id = recipe_to_delete.id).all()
+        for m in methods_to_delete:
+            db.session.delete(m)
+            db.session.commit()
+        db.session.delete(recipe_to_delete)
+        db.session.commit()
+        deleted = True
+        return render_template('delete_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, deleted=deleted)
+    else:
+        form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
+        return render_template('delete_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, form=form, week=week)
 
 @app.route('/add_recipe', methods = ['GET', 'POST'])
 def add_recipe():

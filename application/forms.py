@@ -21,6 +21,9 @@ class SelectScheduleForm(FlaskForm):
     fifth_cuisine = SelectField('Cuisine to be included', choices = [])
     submit_cuisine = SubmitField('Generate Recipe Schedule')
     
+class DeleteRecipeForm(FlaskForm):
+    recipe = SelectField('Select Recipe to Delete', choices = [])
+    submit = SubmitField('press to Delete')
 class FinaliseScheduleForm(FlaskForm):
     monday_cb = BooleanField('Change Recipe?')
     tuesday_cb = BooleanField('Change Recipe?')

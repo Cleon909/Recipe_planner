@@ -1,0 +1,14 @@
+{% extends 'layout.html'%}
+{% block body %}
+<form method="POST">
+    <h2>
+        Delete Recipe
+    </h2>
+    {% if deleted %}
+    <h3> Recipe Deleted</h3>
+    {% else %}
+    <h3 class = 'field'>{{ form.recipe.label }} {{ form.recipe }}</h3>
+    {{ form.submit }}
+    {% endif %}
+</form>
+{% endblock body %}
