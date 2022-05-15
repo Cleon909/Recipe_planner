@@ -17,192 +17,20 @@
             <p>{{  form.cuisine.label }}</p> <p>{{  form.cuisine }}</p>
         </div>
         <div class = "container">
-            <div id = "ingredient">
-                <p>{{  form.ingredient1.label }}</p> 
-                <p>{{  form.ingredient1 }}</p>
-                <p>{{  form.ingredient2 }}</p>
-                <p>{{  form.ingredient3 }}</p>
-                <p>{{  form.ingredient4 }}</p>
-                <p>{{  form.ingredient5 }}</p>
-                <p>{{  form.ingredient6 }}</p>
-                <p>{{  form.ingredient7 }}</p>
-                <p>{{  form.ingredient8 }}</p>
-                <p>{{  form.ingredient9 }}</p>
-                <p>{{  form.ingredient10 }}</p>
-                <p>{{  form.ingredient11 }}</p>
-                <p>{{  form.ingredient12 }}</p>
-                <p>{{  form.ingredient13 }}</p>
-                <p>{{  form.ingredient14 }}</p>
-                <p>{{  form.ingredient15 }}</p>
-                <p>{{  form.ingredient16 }}</p>
-                <p>{{  form.ingredient17 }}</p>
-                <p>{{  form.ingredient18 }}</p>
-                <p>{{  form.ingredient19 }}</p>
-                <p>{{  form.ingredient20 }}</p>
-                <p>{{  form.ingredient21 }}</p>
-                <p>{{  form.ingredient22 }}</p>
-                <p>{{  form.ingredient23 }}</p>
-                <p>{{  form.ingredient24 }}</p>
-                <p>{{  form.ingredient25 }}</p>
-                <p>{{  form.ingredient26 }}</p>
-                <p>{{  form.ingredient27 }}</p>
-                <p>{{  form.ingredient28 }}</p>
-                <p>{{  form.ingredient29 }}</p>
-                <p>{{  form.ingredient30 }}</p>
+            <div>
+                {% from "_formhelpers.html" import render_field %}
+                {% for ingredient_field in form.ingredients %}
+                {{ ingredient_field.hidden_tag() }}
+                {{ render_field(ingredient_field) }}
+                {% endfor %}
             </div>
-            <div id="ingredient_alt">
-                <p>{{  form.ingredient_alt1.label }}</p>
-                <p>{{  form.ingredient_alt1 (size="25")}}</p>
-                <p>{{  form.ingredient_alt2 (size="25")}}</p>
-                <p>{{  form.ingredient_alt3 (size="25")}}</p>
-                <p>{{  form.ingredient_alt4 (size="25")}}</p>
-                <p>{{  form.ingredient_alt5 (size="25")}}</p>
-                <p>{{  form.ingredient_alt6 (size="25") }}</p>
-                <p>{{  form.ingredient_alt7 (size="25") }}</p>
-                <p>{{  form.ingredient_alt8 (size="25") }}</p>
-                <p>{{  form.ingredient_alt9 (size="25") }}</p>
-                <p>{{  form.ingredient_alt10 (size="25") }}</p>
-                <p>{{  form.ingredient_alt11 (size="25") }}</p>
-                <p>{{  form.ingredient_alt12 (size="25") }}</p>
-                <p>{{  form.ingredient_alt13 (size="25") }}</p>
-                <p>{{  form.ingredient_alt14 (size="25") }}</p>
-                <p>{{  form.ingredient_alt15 (size="25") }}</p>
-                <p>{{  form.ingredient_alt16 (size="25") }}</p>
-                <p>{{  form.ingredient_alt17 (size="25") }}</p>
-                <p>{{  form.ingredient_alt18 (size="25") }}</p>
-                <p>{{  form.ingredient_alt19 (size="25") }}</p>
-                <p>{{  form.ingredient_alt20 (size="25") }}</p>
-                <p>{{  form.ingredient_alt21 (size="25") }}</p>
-                <p>{{  form.ingredient_alt22 (size="25") }}</p>
-                <p>{{  form.ingredient_alt23 (size="25") }}</p>
-                <p>{{  form.ingredient_alt24 (size="25") }}</p>
-                <p>{{  form.ingredient_alt25 (size="25") }}</p>
-                <p>{{  form.ingredient_alt26 (size="25") }}</p>
-                <p>{{  form.ingredient_alt27 (size="25") }}</p>
-                <p>{{  form.ingredient_alt28 (size="25") }}</p>
-                <p>{{  form.ingredient_alt29 (size="25") }}</p>
-                <p>{{  form.ingredient_alt30 (size="25") }}</p>
+            <div>
+                {% from "_formhelpers.html" import render_field %}
+                {% for method_field in form.methods %}
+                {{ method_field.hidden_tag() }}
+                {{ render_field(method_field) }}
+                {% endfor %}
             </div>
-            <div id="amount">
-                <p>{{  form.amount1.label }}</p>
-                <p>{{  form.amount1 }}</p>
-                <p>{{  form.amount2 }}</p>
-                <p>{{  form.amount3 }}</p>
-                <p>{{  form.amount4 }}</p>
-                <p>{{  form.amount5 }}</p>
-                <p>{{  form.amount6 }}</p>
-                <p>{{  form.amount7 }}</p>
-                <p>{{  form.amount8 }}</p>
-                <p>{{  form.amount9 }}</p>
-                <p>{{  form.amount10 }}</p>
-                <p>{{  form.amount11 }}</p>
-                <p>{{  form.amount12 }}</p>
-                <p>{{  form.amount13 }}</p>
-                <p>{{  form.amount14 }}</p>
-                <p>{{  form.amount15 }}</p>
-                <p>{{  form.amount16 }}</p>
-                <p>{{  form.amount17 }}</p>
-                <p>{{  form.amount18 }}</p>
-                <p>{{  form.amount19 }}</p>
-                <p>{{  form.amount20 }}</p>
-                <p>{{  form.amount21 }}</p>
-                <p>{{  form.amount22 }}</p>
-                <p>{{  form.amount23 }}</p>
-                <p>{{  form.amount24 }}</p>
-                <p>{{  form.amount25 }}</p>
-                <p>{{  form.amount26 }}</p>
-                <p>{{  form.amount27 }}</p>
-                <p>{{  form.amount28 }}</p>
-                <p>{{  form.amount29 }}</p>
-                <p>{{  form.amount30 }}</p>
-            </div>
-            <div id="measure">
-                <p>{{  form.measure1.label }}</p>
-                <p>{{  form.measure1 }}</p>
-                <p>{{  form.measure2 }}</p>
-                <p>{{  form.measure3 }}</p>
-                <p>{{  form.measure4 }}</p>
-                <p>{{  form.measure5 }}</p>
-                <p>{{  form.measure6 }}</p>
-                <p>{{  form.measure7 }}</p>
-                <p>{{  form.measure8 }}</p>
-                <p>{{  form.measure9 }}</p>
-                <p>{{  form.measure10 }}</p>
-                <p>{{  form.measure11 }}</p>
-                <p>{{  form.measure12 }}</p>
-                <p>{{  form.measure13 }}</p>
-                <p>{{  form.measure14 }}</p>
-                <p>{{  form.measure15 }}</p>
-                <p>{{  form.measure16 }}</p>
-                <p>{{  form.measure17 }}</p>
-                <p>{{  form.measure18 }}</p>
-                <p>{{  form.measure19 }}</p>
-                <p>{{  form.measure20 }}</p>
-                <p>{{  form.measure21 }}</p>
-                <p>{{  form.measure22 }}</p>
-                <p>{{  form.measure23 }}</p>
-                <p>{{  form.measure24 }}</p>
-                <p>{{  form.measure25 }}</p>
-                <p>{{  form.measure26 }}</p>
-                <p>{{  form.measure27 }}</p>
-                <p>{{  form.measure28 }}</p>
-                <p>{{  form.measure29 }}</p>
-                <p>{{  form.measure30 }}</p>
-            </div>
-            <div id="ingredient_prep">
-                <p>{{  form.ingredient_prep1.label }}</p>
-                <p>{{  form.ingredient_prep1 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep2 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep3 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep4 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep5 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep6 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep7 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep8 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep9 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep10 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep11 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep12 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep13 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep14 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep15 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep16 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep17 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep18 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep19 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep20 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep21 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep22 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep23 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep24 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep25 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep26 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep27 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep28 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep29 (size = "43") }}</p>
-                <p>{{  form.ingredient_prep30 (size = "43") }}</p>
-            </div>
-        </div>
-        <h3>{{  form.method1.label }} </h3>
-        <ol>
-        <li>{{  form.method1(size=150) }}</li>  
-        <li>{{  form.method2(size=150) }}  </li>
-        <li>{{  form.method3(size=150) }}  </li>
-        <li>{{  form.method4(size=150) }}  </li>
-        <li>{{  form.method5(size=150) }}  </li>
-        <li>{{  form.method6(size=150) }}  </li>
-        <li>{{  form.method7(size=150) }}  </li>
-        <li>{{  form.method8(size=150) }}  </li>
-        <li>{{  form.method9(size=150) }}  </li>
-        <li>{{  form.method10(size=150) }}  </li>
-        <li>{{  form.method11(size=150) }}  </li>
-        <li>{{  form.method12(size=150) }}  </li>
-        <li>{{  form.method13(size=150) }}  </li>
-        <li>{{  form.method14(size=150) }}  </li>
-        <li>{{  form.method15(size=150) }}  </li>
-        </ol>
-        <br>
-        <p></p>
         <p>{{  form.submit }} </p>
         </form>
     {% endif %}

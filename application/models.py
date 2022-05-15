@@ -52,7 +52,7 @@ class Method(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
     step_num = db.Column(db.Integer, nullable=False)
-    step = db.Column(db.String(200), nullable=False)
+    step = db.Column(db.String(300), nullable=False)
 
     def __init__(self, recipe_id, step_num, step):
         self.recipe_id = recipe_id
