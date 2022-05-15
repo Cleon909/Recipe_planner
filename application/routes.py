@@ -414,7 +414,7 @@ def add_recipe():
             cuisine = form.cuisine.data
         recipe = Recipes(recipe_name, recipe_description, cuisine)
         if Recipes.query.filter(Recipes.recipe_name == recipe_name).first():
-            return render_template('add_recipe.html', duplicate=duplicate, day=day, recipe_of_the_day=recipe_of_the_day, week=week, recipe=recipe)
+            return render_template('add_recipe.html', duplicate=duplicate, day=day, recipe_of_the_day=recipe_of_the_day, week=week)
         else:
             db.session.add(recipe)
             db.session.commit()
@@ -422,7 +422,6 @@ def add_recipe():
         # this block of code gets the data from the ingredients filed list, which is a list of dictionaries, each dictionary has the key:value pairs as defined by the class in forms.py. It iterates through the dictionaries building a list of lists, which is then in turn iterated through adding each to the database as a quantity object.
         all_ingredients = []
         ingredient_names = [ingredient.ingredient_name for ingredient in Ingredients.query.all()]
-        print(form.ingredients.data)
         n = 0
         for ing in form.ingredients.data:
             if ing["ingredient_alt"] == "" and ing["ingredient"] == "":
@@ -434,13 +433,15 @@ def add_recipe():
                 all_ingredients[n].append(ing["ingredient_prep"])
                 all_ingredients[n].append(ing["amount"])
                 all_ingredients[n].append(ing["measure"])
+                n += 1
             elif ing["ingredient_alt"] != "" and ing["ingredient_alt"] in ingredient_names:
                 all_ingredients.append([])
                 all_ingredients[n].append(recipe.id)
-                all_ingredients[n].append(Ingredients.query.filter_by(ingredient_name == form.ingredients.data[ing]["ingredient_alt"]).first().id)
+                all_ingredients[n].append(Ingredients.query.filter_by(ingredient_name = ing["ingredient_alt"]).first().id)
                 all_ingredients[n].append(ing["ingredient_prep"])
                 all_ingredients[n].append(ing["amount"])
                 all_ingredients[n].append(ing["measure"])
+                n += 1
             elif ing["ingredient_alt"] != "" and ing["ingredient_alt"] not in ingredient_names:
                 new_ing = Ingredients(ing["ingredient_alt"])
                 db.session.add(new_ing)
@@ -451,7 +452,7 @@ def add_recipe():
                 all_ingredients[n].append(ing["ingredient_prep"])
                 all_ingredients[n].append(ing["amount"])
                 all_ingredients[n].append(ing["measure"])
-            n += 1
+                n += 1
         for i in all_ingredients:
             quant = Quantity(i[0], i[1], i[2], i[3], i[4])
             db.session.add(quant)
