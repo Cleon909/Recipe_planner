@@ -3,5 +3,6 @@
         "activityBar.background": "#4B0082",
         "titleBar.activeBackground": "#6100A9",
         "titleBar.activeForeground": "#FCF8FF"
-    }
+    },
+    "python.envFile": "${workspaceFolder}\\Recipe_planner/application.env"
 }

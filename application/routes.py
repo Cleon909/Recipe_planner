@@ -1,12 +1,13 @@
-from flask import render_template, url_for, redirect, request
+from flask import render_template, url_for, redirect, request, session
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList
-from application.forms import DeleteRecipeForm, AddRecipeForm, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm
+from application.forms import DeleteRecipeForm, AddRecipeForm1, AddRecipeForm2, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm
 from datetime import date, datetime
 import calendar
 import random
 from sqlalchemy import func
 import smtplib
+
 
 def get_recipe_for_day(day_number):
     day_recipe = Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = day_number).first().recipe_id).first()
@@ -385,6 +386,8 @@ def delete_recipe():
         form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
         return render_template('delete_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, form=form, week=week)
 
+
+
 @app.route('/add_recipe', methods = ['GET', 'POST'])
 def add_recipe():
     week = create_weekly_recipes()
@@ -392,22 +395,16 @@ def add_recipe():
     day = what_day_is_it()
 
     duplicate = True
-    form = AddRecipeForm(ingredients = range(31), methods = range(16))
+    form = AddRecipeForm1()
     form.cuisine.choices = [(c.id, c.cuisine_name) for c in Cuisine.query.order_by('cuisine_name')]
     form.cuisine.choices.insert(0,("",""))
-    choices1 = [(m.id, m.measure) for m in Measure.query.order_by('measure')]
-    choices1.insert(0,("",""))
-    choices = [(i.id, i.ingredient_name) for i in Ingredients.query.order_by('ingredient_name')]
-    choices.insert(0, ("", ""))
-    for sub_form in form.ingredients:
-        sub_form.ingredient.choices = choices
-    for sub_form in form.ingredients:
-        sub_form.measure.choices = choices1
 
-   
+    
     if request.method == 'POST':
         recipe_name = form.name.data
         recipe_description = form.recipe_description.data
+        session['no_ingredients'] = form.no_ingredients.data
+        session['no_method_steps'] = form.no_method_steps.data
         if form.cuisine.data == "":
             cuisine = 1
         else:
@@ -418,7 +415,36 @@ def add_recipe():
         else:
             db.session.add(recipe)
             db.session.commit()
+            session['recipe_id'] = recipe.id
+            session['recipe_name'] = recipe.recipe_name
+        return redirect(url_for('add_recipe2'))
+    else:
+        return render_template('add_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form) 
         
+
+@app.route('/add_recipe2', methods = ['GET', 'POST'])
+def add_recipe2():
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()
+    no_ingredients = session.get('no_ingredients', None)
+    no_method_steps = session.get('no_method_steps', None)
+    recipe_id = session.get('recipe_id', None)
+    recipe_name = session.get('recipe_name', None)
+    form = AddRecipeForm2(ingredients = range(no_ingredients), methods = (range(no_method_steps)))
+
+    choices1 = [(m.id, m.measure) for m in Measure.query.order_by('measure')]
+    choices1.insert(0,("",""))
+    choices = [(i.id, i.ingredient_name) for i in Ingredients.query.order_by('ingredient_name')]
+    choices.insert(0, ("", ""))
+
+    for sub_form in form.ingredients:
+        sub_form.ingredient.choices = choices
+    for sub_form in form.ingredients:
+        sub_form.measure.choices = choices1
+
+    if request.method == 'POST':
+        done = True
         # this block of code gets the data from the ingredients filed list, which is a list of dictionaries, each dictionary has the key:value pairs as defined by the class in forms.py. It iterates through the dictionaries building a list of lists, which is then in turn iterated through adding each to the database as a quantity object.
         all_ingredients = []
         ingredient_names = [ingredient.ingredient_name for ingredient in Ingredients.query.all()]
@@ -428,7 +454,7 @@ def add_recipe():
                     pass
             elif ing["ingredient_alt"] == "" and ing["ingredient"] != "":
                 all_ingredients.append([])
-                all_ingredients[n].append(recipe.id)
+                all_ingredients[n].append(recipe_id)
                 all_ingredients[n].append(ing["ingredient"])
                 all_ingredients[n].append(ing["ingredient_prep"])
                 all_ingredients[n].append(ing["amount"])
@@ -436,7 +462,7 @@ def add_recipe():
                 n += 1
             elif ing["ingredient_alt"] != "" and ing["ingredient_alt"] in ingredient_names:
                 all_ingredients.append([])
-                all_ingredients[n].append(recipe.id)
+                all_ingredients[n].append(recipe_id)
                 all_ingredients[n].append(Ingredients.query.filter_by(ingredient_name = ing["ingredient_alt"]).first().id)
                 all_ingredients[n].append(ing["ingredient_prep"])
                 all_ingredients[n].append(ing["amount"])
@@ -447,7 +473,7 @@ def add_recipe():
                 db.session.add(new_ing)
                 db.session.commit()
                 all_ingredients.append([])
-                all_ingredients[n].append(recipe.id)
+                all_ingredients[n].append(recipe_id)
                 all_ingredients[n].append(new_ing.id)
                 all_ingredients[n].append(ing["ingredient_prep"])
                 all_ingredients[n].append(ing["amount"])
@@ -457,21 +483,19 @@ def add_recipe():
             quant = Quantity(i[0], i[1], i[2], i[3], i[4])
             db.session.add(quant)
             db.session.commit()
-
-
         #  This code interates over the methods data dictionary pulling out the "method" value and then adding that to the adatabse with the recipe id and a step number which is incremeneted.
         i = 1
         for meth in form.methods.data:
             if meth["method"] == "":
                 pass
             else:
-                method_step = Method(recipe.id,i, meth["method"])
+                method_step = Method(recipe_id,i, meth["method"])
                 i += 1
             db.session.add(method_step)
             db.session.commit()
 
-        return render_template('add_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, recipe=recipe)
+        return render_template('add_recipe2.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, done=done)
     else:
-        return render_template('add_recipe.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form)  
+        return render_template('add_recipe2.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, recipe=recipe_name)  
                 
 

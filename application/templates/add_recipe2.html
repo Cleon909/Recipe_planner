@@ -1,0 +1,31 @@
+{% extends 'layout.html'%}
+
+{% block body %}
+<div style="padding-left:40px">
+    {% if form %}
+        <h1>Add a Ingredients and Method Steps</h1>
+        <form method = 'POST'>
+        <div class = "container">
+            <h3>{{ recipe }}</h3>
+            <div>
+                {% from "_formhelpers.html" import render_field %}
+                {% for ingredient_field in form.ingredients %}
+                {{ ingredient_field.hidden_tag() }}
+                {{ render_field(ingredient_field) }}
+                {% endfor %}
+            </div>
+            <div>
+                {% from "_formhelpers.html" import render_field %}
+                {% for method_field in form.methods %}
+                {{ method_field.hidden_tag() }}
+                {{ render_field(method_field) }}
+                {% endfor %}
+            </div>
+        <p>{{  form.submit }} </p>
+        </form>
+    {% endif %}
+    {% if done %}
+        <h2>Details Added</h2>
+        <p></p>
+    {% endif %}
+{% endblock body %}
