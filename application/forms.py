@@ -71,3 +71,10 @@ class AddRecipeForm2(FlaskForm):
     ingredients = FieldList(FormField(IngredientForm))
     methods = FieldList(FormField(MethodForm))
     submit = SubmitField('Press to add ingredients and method steps')
+
+class LoginForm(FlaskForm):
+    username = StringField('input username', validators = [DataRequired()])
+    password = StringField('input password', validators=[DataRequired()])
+    remember_me = BooleanField('Remember Me')
+    submit = SubmitField('Sign In')
+

@@ -1,7 +1,7 @@
-from flask import render_template, url_for, redirect, request, session
+from flask import render_template, url_for, redirect, request, session, flash
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList
-from application.forms import DeleteRecipeForm, AddRecipeForm1, AddRecipeForm2, AddMetaForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm
+from application.forms import DeleteRecipeForm, AddRecipeForm1, AddRecipeForm2, AddMetaForm, LoginForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm
 from datetime import date, datetime
 import calendar
 import random
@@ -77,7 +77,14 @@ def index():
         quantities = False
         ingredient_list = False
     return render_template('index.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, daily_recipe=daily_recipe, total_number=total_number, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list, weekend=weekend)
-     
+
+@app.route('/login', methods = ['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}, remember_me={}'.format(form.username.data, form.remember_me.data))
+        return redirect(url_for('index'))
+    return render_template('login.html', form = form)
 
 
 @app.route('/create_weekly_schedule', methods = ['GET', 'POST'])
