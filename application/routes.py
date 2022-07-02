@@ -1,12 +1,14 @@
 from flask import render_template, url_for, redirect, request, session, flash
+from flask_login import current_user, login_user, logout_user, login_required
 from application import app, db
-from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList
+from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList, User
 from application.forms import DeleteRecipeForm, AddRecipeForm1, AddRecipeForm2, AddMetaForm, LoginForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm
 from datetime import date, datetime
 import calendar
 import random
 from sqlalchemy import func
 import smtplib
+
 
 
 def get_recipe_for_day(day_number):
@@ -49,6 +51,7 @@ def create_shopping_list():
 
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/home', methods = ['GET', 'POST'])
+@login_required
 def index():
     week = create_weekly_recipes()
     recipe_of_the_day = create_recipe_of_the_day()
@@ -80,14 +83,26 @@ def index():
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        flash('Login requested for user {}, remember_me={}'.format(form.username.data, form.remember_me.data))
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
         return redirect(url_for('index'))
     return render_template('login.html', form = form)
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
 
 @app.route('/create_weekly_schedule', methods = ['GET', 'POST'])
+@login_required
 def create_weekly_schedule():
     week = create_weekly_recipes()
     recipe_of_the_day = create_recipe_of_the_day()
@@ -162,6 +177,7 @@ def create_weekly_schedule():
         return render_template('create_weekly_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
 @app.route('/finalise_schedule', methods=['POST','GET'])
+@login_required
 def finalise_schedule():
     week = create_weekly_recipes()
     recipe_of_the_day = create_recipe_of_the_day()
@@ -250,6 +266,7 @@ def finalise_schedule():
         return render_template('finalise_schedule.html', day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form, mon=mon, tue=tue, wed=wed, thu=thu, fri=fri)
 
 @app.route('/amend_shopping_list', methods = ['GET', 'POST'])
+@login_required
 def amend_shopping_list():
     week = create_weekly_recipes()
     recipe_of_the_day = create_recipe_of_the_day()
@@ -279,6 +296,7 @@ def amend_shopping_list():
         return render_template('amend_shopping_list.html', shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
 @app.route('/post_shopping_list', methods = ['GET', 'POST'])
+@login_required
 def post_shopping_list():
     week = create_weekly_recipes()
     recipe_of_the_day = create_recipe_of_the_day()
@@ -311,6 +329,7 @@ def post_shopping_list():
         return render_template("post_shopping_list.html", shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
 
 @app.route('/search_recipes', methods = ['GET', 'POST'])
+@login_required
 def search_recipes():
     week = create_weekly_recipes()
     recipe_of_the_day = create_recipe_of_the_day()
@@ -339,6 +358,7 @@ def search_recipes():
         return render_template('search.html', day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number)
   
 @app.route('/add_meta', methods = ['GET', 'POST'])
+@login_required
 def add_meta():
     week = create_weekly_recipes()
     recipe_of_the_day = create_recipe_of_the_day()
@@ -367,6 +387,7 @@ def add_meta():
         return render_template('add_meta.html', day=day, recipe_of_the_day=recipe_of_the_day, form=form, week=week)
 
 @app.route('/delete_recipe', methods= ['GET', 'POST'])
+@login_required
 def delete_recipe():
     week = create_weekly_recipes()
     recipe_of_the_day = create_recipe_of_the_day()
@@ -396,6 +417,7 @@ def delete_recipe():
 
 
 @app.route('/add_recipe', methods = ['GET', 'POST'])
+@login_required
 def add_recipe():
     week = create_weekly_recipes()
     recipe_of_the_day = create_recipe_of_the_day()
@@ -430,6 +452,7 @@ def add_recipe():
         
 
 @app.route('/add_recipe2', methods = ['GET', 'POST'])
+@login_required
 def add_recipe2():
     week = create_weekly_recipes()
     recipe_of_the_day = create_recipe_of_the_day()

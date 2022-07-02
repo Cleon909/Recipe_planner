@@ -16,6 +16,11 @@
         <div style="display:flex">
             <h1 style="color:rgb(0, 0, 0); font-size:50px; margin-left: 10px"> Recipe Planner App</h1></div>
         <div id = "links">
+            {% if current_user.is_anonymous %}
+            <a href="{{ url_for('login') }}">Home</a>
+            {% else %}
+            <a href="{{ url_for('logout') }}">Home</a>
+            {% endif %}
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('create_weekly_schedule') }}"> Create Schedule</a> 
             <a href="{{ url_for('add_recipe') }}">Add a Recipe</a>
