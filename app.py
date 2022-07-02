@@ -2,6 +2,7 @@ from application import app
 from application import db
 from application.models import Quantity, Method, Recipes, Cuisine, Ingredients, Schedule, Measure
 
+db.drop_all()
 db.create_all()
 
 if Recipes.query.filter_by(recipe_name = 'Pea and Cauliflower Curry').first():
@@ -46,7 +47,7 @@ else:
         db.session.add(met)
         db.session.commit()
 
-    schedules =[(1,1), (2,1), (3,1), (4,1), (0,1)]
+    schedules =[(1,1,1), (2,1,1), (3,1,1), (4,1,1), (0,1,1)]
     for s in schedules:
         sched = Schedule(*s)
         print(sched)

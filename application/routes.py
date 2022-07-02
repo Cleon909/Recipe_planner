@@ -58,6 +58,7 @@ def index():
     weekend = weekend_or_not()
     day = what_day_is_it()
 
+
     total_number = Recipes.query.count()
     if datetime.today().weekday() in [0,1,2,3,4]:
         daily_recipe = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first()
@@ -187,6 +188,7 @@ def create_weekly_schedule():
         for recipe in weekly_schedule:
             sched = Schedule.query.filter_by(day_of_the_week = schedule_day).first()
             sched.recipe_id = recipe.id
+            sched.user_id = current_user.id
             db.session.add(sched)
             db.session.commit()
             schedule_day += 1 
@@ -270,7 +272,7 @@ def finalise_schedule():
                     a[0] = ing[0]
                     a[1] += ing[1]
                     a[2] = ing[2]
-            shop_item = ShoppingList(a[0], a[1], a[2])
+            shop_item = ShoppingList(a[0], a[1], a[2], current_user.id)
             db.session.add(shop_item)
             db.session.commit()
             aggregated_ingredient_list.append(shop_item)
@@ -328,7 +330,7 @@ def post_shopping_list():
         gmail_password = ""
         sent_from = gmail_user
         email_input = form.email.data
-        to = ['corcoran909@gmail.com',email_input]
+        to = [current_user.email, email_input]
         subject = 'Ingredient list for weekly recipes'
         body =  "Weekly Shopping List\n\n"
         for ingredient in shopping_list:

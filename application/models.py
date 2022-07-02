@@ -81,10 +81,12 @@ class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day_of_the_week = db.Column(db.Integer, nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    def __init__(self, day_of_the_week, recipe_id):
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+    def __init__(self, day_of_the_week, recipe_id, user_id):
         self.recipe_id = recipe_id
         self.day_of_the_week = day_of_the_week
+        self.user_id = user_id
 
 class Measure(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -100,13 +102,14 @@ class ShoppingList(db.Model):
     ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.id'), nullable=False, index=True)
     amount = db.Column(db.Float, nullable=False)
     measure_id = db.Column(db.Integer, db.ForeignKey('measure.id'), nullable = False)
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
-    def __init__(self, ingredient_id, amount, measure_id):
+    def __init__(self, ingredient_id, amount, measure_id, user_id):
         self.ingredient_id = ingredient_id
         self.amount = amount
         self.measure_id = measure_id
+        self.user_id = user_id
 
 
 
