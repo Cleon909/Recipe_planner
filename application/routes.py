@@ -2,7 +2,7 @@ from flask import render_template, url_for, redirect, request, session, flash
 from flask_login import current_user, login_user, logout_user, login_required
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList, User
-from application.forms import DeleteRecipeForm, AddRecipeForm1, AddRecipeForm2, AddMetaForm, LoginForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm
+from application.forms import DeleteRecipeForm, AddRecipeForm1, AddRecipeForm2, AddMetaForm, LoginForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm, RegistrationForm
 from datetime import date, datetime
 import calendar
 import random
@@ -83,6 +83,9 @@ def index():
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -93,13 +96,29 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('index'))
-    return render_template('login.html', form = form)
+    return render_template('login.html', form=form,  day=day, recipe_of_the_day=recipe_of_the_day, week=week)
 
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    week = create_weekly_recipes()
+    recipe_of_the_day = create_recipe_of_the_day()
+    day = what_day_is_it()
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congrats, you are now a registered user')
+        return redirect(url_for('login'))
+    return render_template('registration.html', form=form, day=day, recipe_of_the_day=recipe_of_the_day, week=week)
 
 @app.route('/create_weekly_schedule', methods = ['GET', 'POST'])
 @login_required

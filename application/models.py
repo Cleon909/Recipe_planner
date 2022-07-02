@@ -1,7 +1,7 @@
 from application import db
-from werkzeug import generate_password_hash, check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from app import login
+from application import login
 
 class Ingredients(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -63,14 +63,9 @@ class Method(db.Model):
         self.step = step
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.string(64), index=True, unique=True)
-    email = db.Column(db.string(120), index=True, unique=True)
-    password_hash = db.Column(db.string(128))
-
-    def __init__(self, username, email, password_hash):
-        self.username = username
-        self.email = email
-        self.password_hash = password_hash
+    username = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+    password_hash = db.Column(db.String(128))
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -86,7 +81,7 @@ class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     day_of_the_week = db.Column(db.Integer, nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
-    user_id = db.Colum(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     def __init__(self, day_of_the_week, recipe_id):
         self.recipe_id = recipe_id
         self.day_of_the_week = day_of_the_week
@@ -105,7 +100,7 @@ class ShoppingList(db.Model):
     ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredients.id'), nullable=False, index=True)
     amount = db.Column(db.Float, nullable=False)
     measure_id = db.Column(db.Integer, db.ForeignKey('measure.id'), nullable = False)
-    user_id = db.Colum(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
     def __init__(self, ingredient_id, amount, measure_id):

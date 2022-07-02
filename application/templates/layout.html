@@ -17,9 +17,9 @@
             <h1 style="color:rgb(0, 0, 0); font-size:50px; margin-left: 10px"> Recipe Planner App</h1></div>
         <div id = "links">
             {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Home</a>
+            <a href="{{ url_for('login') }}">Login</a>
             {% else %}
-            <a href="{{ url_for('logout') }}">Home</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
             {% endif %}
             <a href="{{ url_for('index') }}">Home</a>
             <a href="{{ url_for('create_weekly_schedule') }}"> Create Schedule</a> 
@@ -27,7 +27,8 @@
             <a href="{{ url_for('amend_shopping_list') }}">Shopping List</a>
             <a href="{{ url_for('search_recipes') }}">Search for a Recipe</a>
             <a href="{{ url_for('add_meta') }}">Add meta data</a>
-            <a href="{{ url_for('delete_recipe') }}"> Delete a Recipe</a> 
+            <a href="{{ url_for('delete_recipe') }}"> Delete a Recipe</a>
+            <a href="{{url_for('register')}}">Register as a user</a> 
         </div>
     </div>
     <div class="container">
