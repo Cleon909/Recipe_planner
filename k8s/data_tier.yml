@@ -34,7 +34,7 @@ spec:
             claimName: data-tier-volume-claim
       containers:
         - name: appdb
-          image: corcoran909/dbase:alt
+          image: corcoran909/dbase
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3306

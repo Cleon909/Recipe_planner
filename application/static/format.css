@@ -1,6 +1,5 @@
 /* style sheet for recipe-app */
 
-
 html {
     background-color: #e0eff7;
 }
@@ -55,13 +54,20 @@ html {
     max-width: 30%;
     padding: 5px;
 }
+#main {
+    display: flex;
+    justify-content: center;
+}
+
+#login {
+    align-self: center;
+}
 
 #submit_cuisine, #submit_recipes, #submit  {
     padding: 5px;
     font-size: 20px;
     border-radius: 10px;
     border-width: 3px;margin-top: 15px;
-
 
 }
 .field {
@@ -84,7 +90,6 @@ html {
     align-items: flex-end;
     font-weight: bold;
     margin-bottom: 5px;
-
 }
 
 .field4 {

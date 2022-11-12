@@ -56,7 +56,6 @@ def create_shopping_list():
         shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
     return shopping_list
 
-
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/home', methods = ['GET', 'POST'])
 @login_required
@@ -92,9 +91,6 @@ def index():
 
 @app.route('/login', methods = ['GET','POST'])
 def login():
-    week = get_weekly_recipes()
-    recipe_of_the_day = get_recipe_of_the_day()
-    day = what_day_is_it()
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = LoginForm()
@@ -105,7 +101,7 @@ def login():
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for('index'))
-    return render_template('login.html', form=form,  day=day, recipe_of_the_day=recipe_of_the_day, week=week)
+    return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():

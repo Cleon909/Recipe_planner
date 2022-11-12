@@ -7,16 +7,8 @@ recipes to have list of ingredients which can be aggregated to shopping list
 each recipe comes with a list of ingrediants with a seperate list of amounts needed that can be aggegated (so rice 50g rwice can be a rice 100g in shopping list)
 shopping list to be emailed to each user
 
-deployed via k8s and docker
+deployed via k8s and docker or local
 
-need to:
-fix email - I've forgotten the password!
-ideally add ability to have two weeks of schedules (this week and next)
-place user name on layout.html
-tidy up front end
-make sure volume is persistent
-write unit tests
-make CI/CD pipeline
-deploy on aws
+
 
 
