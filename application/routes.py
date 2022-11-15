@@ -31,7 +31,7 @@ def get_weekly_recipes():
 
 # check if current user already has a schedule set
 def check_for_schedule():
-    if Schedule.query.filter_by(user_id = current_user.id) == None:
+    if Schedule.query.filter_by(user_id = current_user.id).first() is None:
         return False
     return True
 
@@ -63,28 +63,20 @@ def create_shopping_list():
         shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
     return shopping_list
 
-# batches function which fetch schedule for side bar
-def fetch_side_bar_data():
-    if check_for_schedule:
-        week = get_weekly_recipes()
-        recipe_of_the_day = get_recipe_of_the_day()
-        weekend = weekend_or_not()
-        day = what_day_is_it()
-        user = current_user.username
-        return(week, recipe_of_the_day, weekend, day, user)
-    else:
-        return
-
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/home', methods = ['GET', 'POST'])
 @login_required
 def index():
-    week = get_weekly_recipes()
-    recipe_of_the_day = get_recipe_of_the_day()
-    weekend = weekend_or_not()
-    day = what_day_is_it()
-    user = current_user.username
-    
+    if check_for_schedule():
+        sidebar = {
+        "week" : get_weekly_recipes(),
+        "recipe_of_the_day" : get_recipe_of_the_day(),
+        "weekend" : weekend_or_not(),
+        "day" : what_day_is_it(),
+        "user" : current_user.username
+        }
+    else:
+        sidebar = False
 
     total_number = Recipes.query.count()
     if datetime.today().weekday() in [0,1,2,3,4]:
@@ -107,7 +99,7 @@ def index():
         method_list = False
         quantities = False
         ingredient_list = False
-    return render_template('index.html', user=user, day=day, recipe_of_the_day=recipe_of_the_day, week=week, daily_recipe=daily_recipe, total_number=total_number, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list, weekend=weekend)
+    return render_template('index.html', daily_recipe=daily_recipe, total_number=total_number, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list, sidebar=sidebar)
     
 @app.route('/login', methods = ['GET','POST'])
 def login():
@@ -218,11 +210,7 @@ def create_weekly_schedule():
 @app.route('/finalise_schedule', methods=['POST','GET'])
 @login_required
 def finalise_schedule():
-    week = get_weekly_recipes()
-    recipe_of_the_day = get_recipe_of_the_day()
-    day = what_day_is_it()
     user = current_user.username
-
     form = FinaliseScheduleForm()
     choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
     choices.insert(0, ("", ""))
@@ -303,18 +291,24 @@ def finalise_schedule():
         wed = Recipes.query.filter_by(id = weekly_schedule[2].recipe_id).first().recipe_name
         thu = Recipes.query.filter_by(id = weekly_schedule[3].recipe_id).first().recipe_name
         fri = Recipes.query.filter_by(id = weekly_schedule[4].recipe_id).first().recipe_name
-        return render_template('finalise_schedule.html', user=user, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form, mon=mon, tue=tue, wed=wed, thu=thu, fri=fri)
+        return render_template('finalise_schedule.html', user=user, form=form, mon=mon, tue=tue, wed=wed, thu=thu, fri=fri)
 
 @app.route('/amend_shopping_list', methods = ['GET', 'POST'])
 @login_required
 def amend_shopping_list():
-    week = get_weekly_recipes()
-    recipe_of_the_day = get_recipe_of_the_day()
-    day = what_day_is_it()
-    shopping_list = create_shopping_list()
-    user = current_user.username
+    if check_for_schedule():
+        sidebar = {
+        "week" : get_weekly_recipes(),
+        "recipe_of_the_day" : get_recipe_of_the_day(),
+        "day" : what_day_is_it(),
+        "user" : current_user.username,
+        "shopping_list" : create_shopping_list(),
+        }
+    else:
+        sidebar = False
 
-    amount_list = [{i[0] : i[1]} for i in shopping_list]
+    print(sidebar["shopping_list"])
+    amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"]]
     form = AmendAmountForm(ingredients = amount_list)
 
     if request.method == "POST":
@@ -333,16 +327,21 @@ def amend_shopping_list():
             n += 1   
         return redirect(url_for("post_shopping_list"))
     else:
-        return render_template('amend_shopping_list.html', user=user, shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+        return render_template('amend_shopping_list.html', sidebar = sidebar, form=form)
 
 @app.route('/post_shopping_list', methods = ['GET', 'POST'])
 @login_required
 def post_shopping_list():
-    week = get_weekly_recipes()
-    recipe_of_the_day = get_recipe_of_the_day()
-    day = what_day_is_it()    
-    shopping_list = create_shopping_list()
-    user = current_user.username
+    if check_for_schedule():
+        sidebar = {
+        "week" : get_weekly_recipes(),
+        "recipe_of_the_day" : get_recipe_of_the_day(),
+        "day" : what_day_is_it(),
+        "user" : current_user.username,
+        "shopping_list" : create_shopping_list(),
+        }
+    else:
+        sidebar = False
 
     form = PostShoppingListForm()
     if request.method == "POST":
@@ -354,7 +353,7 @@ def post_shopping_list():
         to = [current_user.email, email_input]
         subject = 'Ingredient list for weekly recipes'
         body =  "Weekly Shopping List\n\n"
-        for ingredient in shopping_list:
+        for ingredient in sidebar["shopping_list"]:
             body += f"{ingredient[0]} {ingredient[1]} {ingredient[2]}\n"
         email_text= "from:{}\nto:{}\nsubject:{}\n{}".format(sent_from, ",".join(to),subject,body)
         try:
@@ -366,17 +365,22 @@ def post_shopping_list():
             message = "Email sent Successfully"
         except Exception as ex:
             message = f"Something went wrong..... +{ex}"
-        return render_template("post_shopping_list.html", user=user, shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form, message=message)
+        return render_template("post_shopping_list.html", sidebar = sidebar, form=form, message=message)
     else:
-        return render_template("post_shopping_list.html", user=user, shopping_list=shopping_list, day=day, week=week, recipe_of_the_day=recipe_of_the_day, form=form)
+        return render_template("post_shopping_list.html", sidebar = sidebar, form=form)
 
 @app.route('/search_recipes', methods = ['GET', 'POST'])
 @login_required
 def search_recipes():
-    week = get_weekly_recipes()
-    recipe_of_the_day = get_recipe_of_the_day()
-    day = what_day_is_it()
-    user = current_user.username
+    if check_for_schedule():
+        sidebar = {
+        "week" : get_weekly_recipes(),
+        "recipe_of_the_day" : get_recipe_of_the_day(),
+        "day" : what_day_is_it(),
+        "user" : current_user.username,
+        }
+    else:
+        sidebar = False
 
     form = SearchForm()
     form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
@@ -396,17 +400,22 @@ def search_recipes():
             ingredient_list[n].append(Measure.query.filter_by(id = q.measure).first().measure)
             ingredient_list[n].append(q.ingredient_prep)
             n += 1
-        return render_template('search.html', user=user, day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
+        return render_template('search.html', sidebar = sidebar, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
     else:
-        return render_template('search.html', user=user, day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, total_number=total_number)
+        return render_template('search.html', sidebar = sidebar, form=form, total_number=total_number)
   
 @app.route('/add_meta', methods = ['GET', 'POST'])
 @login_required
 def add_meta():
-    week = get_weekly_recipes()
-    recipe_of_the_day = get_recipe_of_the_day()
-    day = what_day_is_it()
-    user = current_user.username
+    if check_for_schedule():
+        sidebar = {
+        "week" : get_weekly_recipes(),
+        "recipe_of_the_day" : get_recipe_of_the_day(),
+        "day" : what_day_is_it(),
+        "user" : current_user.username,
+        }
+    else:
+        sidebar = False
 
     form = AddMetaForm()
     if request.method == 'POST':
@@ -426,19 +435,24 @@ def add_meta():
             meas = Measure(measure)
             db.session.add(meas)
             db.session.commit()
-        return render_template('add_meta.html', user=user, day=day, recipe_of_the_day=recipe_of_the_day, week=week, ingredient = ingredient, cuisine=cuisine, form=form, measure=measure)
+        return render_template('add_meta.html', sidebar = sidebar, ingredient = ingredient, cuisine=cuisine, form=form, measure=measure)
     else:
-        return render_template('add_meta.html', user=user, day=day, recipe_of_the_day=recipe_of_the_day, form=form, week=week)
+        return render_template('add_meta.html', sidebar = sidebar, form=form)
 
 @app.route('/delete_recipe', methods= ['GET', 'POST'])
 @login_required
 def delete_recipe():
-    week = get_weekly_recipes()
-    recipe_of_the_day = get_recipe_of_the_day()
-    day = what_day_is_it()
+    if check_for_schedule():
+        sidebar = {
+        "week" : get_weekly_recipes(),
+        "recipe_of_the_day" : get_recipe_of_the_day(),
+        "day" : what_day_is_it(),
+        "user" : current_user.username,
+        }
+    else:
+        sidebar = False
+    
     form = DeleteRecipeForm()
-    user = current_user.username
-
     if request.method == 'POST':
         form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
         recipe_to_delete = Recipes.query.filter_by(id = form.recipe.data).first()
@@ -453,18 +467,23 @@ def delete_recipe():
         db.session.delete(recipe_to_delete)
         db.session.commit()
         deleted = True
-        return render_template('delete_recipe.html', user=user, day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, deleted=deleted)
+        return render_template('delete_recipe.html', sidebar = sidebar, form=form, deleted=deleted)
     else:
         form.recipe.choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
-        return render_template('delete_recipe.html', user=user, day=day, recipe_of_the_day=recipe_of_the_day, form=form, week=week)
+        return render_template('delete_recipe.html', sidebar = sidebar, form=form)
 
 @app.route('/add_recipe', methods = ['GET', 'POST'])
 @login_required
 def add_recipe():
-    week = get_weekly_recipes()
-    recipe_of_the_day = get_recipe_of_the_day()
-    day = what_day_is_it()
-    user = current_user.username
+    if check_for_schedule():
+        sidebar = {
+        "week" : get_weekly_recipes(),
+        "recipe_of_the_day" : get_recipe_of_the_day(),
+        "day" : what_day_is_it(),
+        "user" : current_user.username,
+        }
+    else:
+        sidebar = False
 
     duplicate = True
     form = AddRecipeForm1()
@@ -482,7 +501,7 @@ def add_recipe():
             cuisine = form.cuisine.data
         recipe = Recipes(recipe_name, recipe_description, cuisine)
         if Recipes.query.filter(Recipes.recipe_name == recipe_name).first():
-            return render_template('add_recipe.html', duplicate=duplicate, day=day, recipe_of_the_day=recipe_of_the_day, week=week)
+            return render_template('add_recipe.html', duplicate=duplicate, sidebar = sidebar)
         else:
             db.session.add(recipe)
             db.session.commit()
@@ -490,20 +509,27 @@ def add_recipe():
             session['recipe_name'] = recipe.recipe_name
         return redirect(url_for('add_recipe2'))
     else:
-        return render_template('add_recipe.html', user=user, day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form) 
+        return render_template('add_recipe.html', sidebar = sidebar, form=form) 
         
 @app.route('/add_recipe2', methods = ['GET', 'POST'])
 @login_required
 def add_recipe2():
-    week = get_weekly_recipes()
-    recipe_of_the_day = get_recipe_of_the_day()
-    day = what_day_is_it()
+    if check_for_schedule():
+        sidebar = {
+        "week" : get_weekly_recipes(),
+        "recipe_of_the_day" : get_recipe_of_the_day(),
+        "day" : what_day_is_it(),
+        "user" : current_user.username,
+        }
+    else:
+        sidebar = False
+
     no_ingredients = session.get('no_ingredients', None)
     no_method_steps = session.get('no_method_steps', None)
     recipe_id = session.get('recipe_id', None)
     recipe_name = session.get('recipe_name', None)
     form = AddRecipeForm2(ingredients = range(no_ingredients), methods = (range(no_method_steps)))
-    user = current_user.username
+
 
     choices1 = [(m.id, m.measure) for m in Measure.query.order_by('measure')]
     choices1.insert(0,("",""))
@@ -566,7 +592,7 @@ def add_recipe2():
             db.session.add(method_step)
             db.session.commit()
 
-        return render_template('add_recipe2.html', user=user, day=day, recipe_of_the_day=recipe_of_the_day, week=week, done=done)
+        return render_template('add_recipe2.html', sidebar = sidebar, done=done)
     else:
-        return render_template('add_recipe2.html', user=user, day=day, recipe_of_the_day=recipe_of_the_day, week=week, form=form, recipe=recipe_name)  
+        return render_template('add_recipe2.html', sidebar = sidebar, form=form, recipe=recipe_name)  
                 

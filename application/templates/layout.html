@@ -15,7 +15,7 @@
     <div class="header" >
         <div style="display:flex; justify-content: space-between;">
             <h1 style="color:rgb(0, 0, 0); font-size:50px; margin-left: 10px"> Recipe Planner App</h1>
-            <p style="align-self:right; margin-right: 10px;">{{ user }}</p>
+            <p style="align-self:right; margin-right: 10px;">{{ current_user.username }}</p>
         </div>
         <div id = "links">
             {% if current_user.is_anonymous %}
@@ -30,23 +30,26 @@
             <a href="{{ url_for('search_recipes') }}">Search for a Recipe</a>
             <a href="{{ url_for('add_meta') }}">Add meta data</a>
             <a href="{{ url_for('delete_recipe') }}"> Delete a Recipe</a>
-            <a href="{{url_for('register')}}">Register as a user</a> 
         </div>
     </div>
     <div class="container">
         <div id="left">
+            {% if sidebar != False %}
             <p><b>Today's Recipe:</b></p>
-            {{ recipe_of_the_day }}
+            {{ sidebar.recipe_of_the_day }}
             <p><b>Monday:</b></p> 
-            {{ week[0].recipe_name }} 
+            {{ sidebar.week[0].recipe_name }} 
             <p><b>Tuesday:</b></p> 
-            {{ week[1].recipe_name }}
+            {{ sidebar.week[1].recipe_name }}
             <p><b>Wednesday:</b></p> 
-            {{ week[2].recipe_name }}
+            {{ sidebar.week[2].recipe_name }}
             <p><b>Thursday:</b></p> 
-            {{ week[3].recipe_name }}
+            {{ sidebar.week[3].recipe_name }}
             <p><b>Friday:</b></p> 
-            {{ week[4].recipe_name }}
+            {{ sidebar.week[4].recipe_name }}
+            {% else %}
+            <p>No Schedule Set</p>
+            {% endif %}
         </div>
         <div id="center">
         {% with messages = get_flashed_messages() %}

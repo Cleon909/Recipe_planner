@@ -1,22 +1,28 @@
 {% extends 'layout.html'%}
 
 {% block body %}
-    <div id="hdr">    
-        <h1>Today's Recipe</h1> <p<b>Total Number of Recipes:</b> {{ total_number }}<p> 
+    <div id="hdr">
+        {% if sidebar != False %}    
+        <h1>Today's Recipe</h1> 
+        {% else %}
+        <h1>No Schedule Created, you can create a schedule <a href="{{ url_for('create_weekly_schedule') }}" style="color:black">here</a></h1> 
+        {% endif %}
     </div>
-    {% if weekend == False and daily_recipe: %}
+    {% if sidebar.weekend == False and daily_recipe: %}
     <div id="innercntr">
     <div id="main">
         <div class='field2'>
             <h1>{{ daily_recipe.recipe_name }}</h1> <p>({{ cuisine }})</p>
+            <b>{{ daily_recipe.recipe_description }}</b> 
         </div>
-        <b>{{ daily_recipe.recipe_description }}</b> 
-        <h2>How To make</h2>
-        <ul>
-            {% for m in method_list %}
-            <li>{{ m }}</li><br>
-            {% endfor %}
-        </ul>
+        <div>
+            <h2>How To make</h2>
+            <ul>
+                {% for m in method_list %}
+                <li>{{ m }}</li><br>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
     <div id="right">
             <h2>Ingredients</h2>
@@ -30,10 +36,7 @@
             {% endfor %}
     </div>
     {% endif %}
-    {% if weekend == False: %}
-        <h1>No Schedule defined</h1>
-    {% endif %}
-    {% if weekend == True %}
+    {% if sidebar.weekend == True: %}
         <h1> It's the weekend, drink and be merry. (or pick a recipe from the <a href="{{ url_for('search_recipes') }}" style="color:black">search page)</a></h1>
     {% endif %}
 </div>

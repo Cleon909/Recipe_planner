@@ -1,6 +1,38 @@
-{% extends 'layout.html'%}
-
-{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Planner App</title>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
+    <link href="../static/format.css" rel="stylesheet">
+</head>
+<style>
+    a {color:rgb(0, 0, 0)}
+</style>
+<body style="font-family: Source Sans Pro, sans-serif">
+    <div class="header" >
+        <div style="display:flex; justify-content: space-between;">
+            <h1 style="color:rgb(0, 0, 0); font-size:50px; margin-left: 10px"> Recipe Planner App</h1>
+            <p style="align-self:right; margin-right: 10px;">{{ user }}</p>
+        </div>
+        <div id = "links">
+            {% if current_user.is_anonymous %}
+            <a href="{{ url_for('login') }}">Login</a>
+            {% else %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+            {% endif %}
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('create_weekly_schedule') }}"> Create Schedule</a> 
+            <a href="{{ url_for('add_recipe') }}">Add a Recipe</a>
+            <a href="{{ url_for('amend_shopping_list') }}">Shopping List</a>
+            <a href="{{ url_for('search_recipes') }}">Search for a Recipe</a>
+            <a href="{{ url_for('add_meta') }}">Add meta data</a>
+            <a href="{{ url_for('delete_recipe') }}"> Delete a Recipe</a>
+            <a href="{{url_for('register')}}">Register as a user</a> 
+        </div>
+    </div>
 <form method="POST">
 {% if mon %}
 <div class = 'field4'>
@@ -32,4 +64,3 @@
     {% endfor %}
 {% endif %}
 </form>
-{% endblock body %}

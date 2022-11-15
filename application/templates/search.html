@@ -12,13 +12,12 @@
                     {{ form.recipe }}
                     <br>
                     <p></p>
-                    <div align="right">{{ form.submit }}</div>
+                    <div align-self="right">{{ form.submit }}</div>
                 </form>
             </div>
         </div>
             <div style='margin-left:300px'>
                 <p></p>
-                <p><b>Total Number of Recipes:</b> {{ total_number }}<p> 
             </div>
     </div>
     <div>
@@ -27,14 +26,16 @@
             <div id="main">
                 <div class='field2'>
                     <h1>{{ recipe_result.recipe_name }}</h1> <p>({{ cuisine }})</p>
+                    <b>{{ recipe_result.recipe_description }}</b> 
                 </div>
-                <b>{{ recipe_result.recipe_description }}</b> 
-                <h2>How To make</h2>
-                <ul>
-                    {% for m in method_list %}
-                    <li>{{ m }}</li><br>
-                    {% endfor %}
-                </ul>
+                <div>
+                    <h2>How To make</h2>
+                    <ul>
+                        {% for m in method_list %}
+                        <li>{{ m }}</li><br>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
             <div id="right">
                     <h2>Ingredients</h2>
