@@ -1,5 +1,5 @@
 from application import db
-from application.models import Quantity, Method, Recipes, Cuisine, Ingredients, Schedule, Measure
+from application.models import Quantity, Method, Recipes, Cuisine, Ingredients, Schedule, Measure, User
 
 db.drop_all()
 db.create_all()

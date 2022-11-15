@@ -4,7 +4,7 @@
     <div id="hdr">    
         <h1>Today's Recipe</h1> <p<b>Total Number of Recipes:</b> {{ total_number }}<p> 
     </div>
-    {% if weekend == False: %}
+    {% if weekend == False and daily_recipe: %}
     <div id="innercntr">
     <div id="main">
         <div class='field2'>
@@ -30,8 +30,11 @@
             {% endfor %}
     </div>
     {% endif %}
+    {% if weekend == False: %}
+        <h1>No Schedule defined</h1>
+    {% endif %}
     {% if weekend == True %}
-    <h1> It's the weekend, drink and be merry. (or pick a recipe from the <a href="{{ url_for('search_recipes') }}" style="color:black">search page)</a></h1>
+        <h1> It's the weekend, drink and be merry. (or pick a recipe from the <a href="{{ url_for('search_recipes') }}" style="color:black">search page)</a></h1>
     {% endif %}
 </div>
 {% endblock body %}
