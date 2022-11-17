@@ -13,7 +13,7 @@ import os
 # this function gets the recipe for each day, filters by day and logged in user id
 def get_recipe_for_day(day_number):
     if current_user.is_authenticated:
-        id = Schedule.query.filter_by(day_of_the_week = day_number, user_id = current_user.id).first()
+        id = Schedule.query.filter_by(day_of_the_week = day_number, user_id = current_user.id, week_no = 1).first()
         if id is not None:
             day_recipe = Recipes.query.filter_by(id = id.recipe_id).first()
             return day_recipe
@@ -31,7 +31,7 @@ def get_weekly_recipes():
 
 # check if current user already has a schedule set
 def check_for_schedule():
-    if Schedule.query.filter_by(user_id = current_user.id).first() is None:
+    if Schedule.query.filter_by(user_id = current_user.id, week_no = 1).first() is None:
         return False
     return True
 
@@ -40,7 +40,7 @@ def get_recipe_of_the_day():
     if datetime.today().weekday() == 5 or datetime.today().weekday() == 6:
         recipe_of_the_day = "It's the weekend, do your own thing"
     else:
-        recipe_of_the_day = Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = datetime.today().weekday(), user_id = current_user.id).first().recipe_id).first().recipe_name
+        recipe_of_the_day = Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = datetime.today().weekday(), user_id = current_user.id, week_no = 1).first().recipe_id).first().recipe_name
     return recipe_of_the_day
 
 # check if it's a weekend
@@ -57,11 +57,15 @@ def what_day_is_it():
 
 # this cycles through the shopping list picks out the relevant items (filtered by user id), grabbing the data from other tables and puts it into a list of lists with relevant details. 
 def create_shopping_list():
-    shopping_list_raw = ShoppingList.query.filter_by(user_id = current_user.id).all()
-    shopping_list = []
-    for shopping_list_raw_item in shopping_list_raw:
-        shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
-    return shopping_list
+    shopping_list_raw1 = ShoppingList.query.filter_by(user_id = current_user.id, week_no = 1).all()
+    shopping_list1 = []
+    for shopping_list_raw_item in shopping_list_raw1:
+        shopping_list1.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
+    shopping_list_raw2 = ShoppingList.query.filter_by(user_id = current_user.id, week_no = 1).all()
+    shopping_list2 = []
+    for shopping_list_raw_item in shopping_list_raw2:
+        shopping_list2.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
+    return shopping_list1, shopping_list2
 
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/home', methods = ['GET', 'POST'])
@@ -134,6 +138,8 @@ def register():
         return redirect(url_for('login'))
     return render_template('registration.html', form=form)
 
+
+# This function assembles the recipes into a schedule based on cuisines selected
 @app.route('/create_weekly_schedule', methods = ['GET', 'POST'])
 @login_required
 def create_weekly_schedule():
@@ -197,13 +203,16 @@ def create_weekly_schedule():
         schedule_day = 0
         if Schedule.query.filter_by(day_of_the_week = schedule_day).first():
             sched_no = 1
+            session['sched_no'] = 1
         else:
             sched_no = 2
+            session['sched_no'] = 2
+
         for recipe in weekly_schedule:
             sched = Schedule.query.filter_by(day_of_the_week = schedule_day).first()
             sched.recipe_id = recipe.id
             sched.user_id = current_user.id
-            sched.week = sched_no
+            sched.week_no = sched_no
             db.session.add(sched)
             db.session.commit()
             schedule_day += 1 
@@ -212,9 +221,11 @@ def create_weekly_schedule():
     else:
         return render_template('create_weekly_schedule.html', user=user, form=form)
 
+# this function 
 @app.route('/finalise_schedule', methods=['POST','GET'])
 @login_required
 def finalise_schedule():
+    sched_no = session.get('sched_no', None)
     user = current_user.username
     form = FinaliseScheduleForm()
     choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
@@ -226,36 +237,36 @@ def finalise_schedule():
     form.friday_recipe.choices = choices
     if request.method == 'POST':
         if form.monday_cb.data == True:
-            sched = Schedule.query.filter_by(day_of_the_week = 0).first()
+            sched = Schedule.query.filter_by(day_of_the_week = 0, user_id = current_user.id, week_no = sched_no).first()
             sched.recipe_id = form.monday_recipe.data
             db.session.add(sched)
             db.session.commit()
         if form.tuesday_cb.data == True:
-            sched = Schedule.query.filter_by(day_of_the_week = 1).first()
+            sched = Schedule.query.filter_by(day_of_the_week = 1, user_id = current_user.id, week_no = sched_no).first()
             sched.recipe_id = form.tuesday_recipe.data
             db.session.add(sched)
             db.session.commit()
         if form.wednesday_cb.data == True:
-            sched = Schedule.query.filter_by(day_of_the_week = 2).first()
+            sched = Schedule.query.filter_by(day_of_the_week = 2, user_id = current_user.id, week_no = sched_no).first()
             sched.recipe_id = form.wednesday_recipe.data
             db.session.add(sched)
             db.session.commit()
         if form.thursday_cb.data == True:
-            sched = Schedule.query.filter_by(day_of_the_week = 3).first()
+            sched = Schedule.query.filter_by(day_of_the_week = 3, user_id = current_user.id, week_no = sched_no).first()
             sched.recipe_id = form.thursday_recipe.data
             db.session.add(sched)
             db.session.commit()
         if form.friday_cb.data == True:
-            sched = Schedule.query.filter_by(day_of_the_week = 4).first()
+            sched = Schedule.query.filter_by(day_of_the_week = 4, user_id = current_user.id, week_no = sched_no).first()
             sched.recipe_id = form.friday_recipe.data
             db.session.add(sched)
             db.session.commit()
         
-        monday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 0).first().recipe_id)).all()
-        tuesday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 1).first().recipe_id)).all()
-        wednesday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 2).first().recipe_id)).all()
-        thursday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 3).first().recipe_id)).all()
-        friday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 4).first().recipe_id)).all()
+        monday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 0, user_id = current_user.id, week_no = sched_no).first().recipe_id)).all()
+        tuesday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 1, user_id = current_user.id, week_no = sched_no).first().recipe_id)).all()
+        wednesday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 2, user_id = current_user.id, week_no = sched_no).first().recipe_id)).all()
+        thursday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 3, user_id = current_user.id, week_no = sched_no).first().recipe_id)).all()
+        friday_recipe_ingredients = Quantity.query.filter_by(recipe_id = (Schedule.query.filter_by(day_of_the_week = 4, user_id = current_user.id, week_no = sched_no).first().recipe_id)).all()
         ingredient_list = []
         for m in monday_recipe_ingredients:
             ingredient_list.append([m.ingredient_id, m.amount, m.measure])
@@ -270,7 +281,7 @@ def finalise_schedule():
         # ingredient list should now be a list of all ingredients seperated into a list of three elements (ingredients.id, amount, unit) however some are likely to be duplicates. The below code is iterating over the list to add up any duplciates to pass one value to aggregated_ingredient_list
         
         #clears shopping list table
-        db.session.query(ShoppingList).delete()
+        db.session.query(ShoppingList).filter_by(user_id = current_user.id, week_no = sched_no).delete()
         db.session.commit()
 
         # this code looks for unique values and adds them to aggregated_ingredient_list
@@ -284,7 +295,7 @@ def finalise_schedule():
                     a[0] = ing[0]
                     a[1] += ing[1]
                     a[2] = ing[2]
-            shop_item = ShoppingList(a[0], a[1], a[2], current_user.id)
+            shop_item = ShoppingList(a[0], a[1], a[2], current_user.id, sched_no)
             db.session.add(shop_item)
             db.session.commit()
             aggregated_ingredient_list.append(shop_item)
@@ -312,7 +323,6 @@ def amend_shopping_list():
     else:
         sidebar = False
 
-    print(sidebar["shopping_list"])
     amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"]]
     form = AmendAmountForm(ingredients = amount_list)
 
