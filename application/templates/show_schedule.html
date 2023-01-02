@@ -1,0 +1,15 @@
+{% extends 'layout.html'%}
+
+{% block javascript %}
+    <script>
+        const week1 = {{ sidebar.week[0] | tojson }}
+        const week2 = {{ sidebar.week[1] | tojson }}
+        const shopping_list1 = {{ sidebar.shopping_list[0] | tojson }}
+        const shopping_list2 = {{ sidebar.shopping_list[1] | tojson }}
+    </script>
+{% endblock %}
+
+{% block body %}
+<button id="switch">Switch schedule </button>
+{% endblock %}
+

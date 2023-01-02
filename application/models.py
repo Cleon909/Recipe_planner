@@ -82,13 +82,13 @@ class Schedule(db.Model):
     day_of_the_week = db.Column(db.Integer, nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    week = db.Column(db.integer, nullable=False)
+    week_no = db.Column(db.Integer, nullable=False)
     
     def __init__(self, day_of_the_week, recipe_id, user_id, week_no):
         self.recipe_id = recipe_id
         self.day_of_the_week = day_of_the_week
         self.user_id = user_id
-        self.week = week
+        self.week_no = week_no
 
 class Measure(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -105,15 +105,15 @@ class ShoppingList(db.Model):
     amount = db.Column(db.Float, nullable=False)
     measure_id = db.Column(db.Integer, db.ForeignKey('measure.id'), nullable = False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    week_no = db.Column(db.integer, nullable=False)
+    week_no = db.Column(db.Integer, nullable=False)
 
 
-    def __init__(self, ingredient_id, amount, measure_id, user_id, week):
+    def __init__(self, ingredient_id, amount, measure_id, user_id, week_no):
         self.ingredient_id = ingredient_id
         self.amount = amount
         self.measure_id = measure_id
         self.user_id = user_id
-        self.week = week
+        self.week_no = week_no
 
 
 

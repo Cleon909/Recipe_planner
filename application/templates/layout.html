@@ -29,6 +29,7 @@
             <a href="{{ url_for('amend_shopping_list') }}">Shopping List</a>
             <a href="{{ url_for('search_recipes') }}">Search for a Recipe</a>
             <a href="{{ url_for('add_meta') }}">Add meta data</a>
+            <a href="{{ url_for('show_schedule') }}">Show schedules</a>
             {% if current_user.username == "admin" %}
             <a href="{{ url_for('delete_recipe') }}"> Delete a Recipe</a>
             {% endif %}
@@ -40,15 +41,15 @@
             <p><b>Today's Recipe:</b></p>
             {{ sidebar.recipe_of_the_day }}
             <p><b>Monday:</b></p> 
-            {{ sidebar.week[0].recipe_name }} 
+            {{ sidebar.week[0][0].recipe_name }} 
             <p><b>Tuesday:</b></p> 
-            {{ sidebar.week[1].recipe_name }}
+            {{ sidebar.week[0][1].recipe_name }}
             <p><b>Wednesday:</b></p> 
-            {{ sidebar.week[2].recipe_name }}
+            {{ sidebar.week[0][2].recipe_name }}
             <p><b>Thursday:</b></p> 
-            {{ sidebar.week[3].recipe_name }}
+            {{ sidebar.week[0][3].recipe_name }}
             <p><b>Friday:</b></p> 
-            {{ sidebar.week[4].recipe_name }}
+            {{ sidebar.week[0][4].recipe_name }}
             {% else %}
             <p>No Schedule Set</p>
             {% endif %}

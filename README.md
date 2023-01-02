@@ -26,21 +26,16 @@ Tasks to deploy to AWS
 
 pages
 
-home page
-recipe of the day has to show recipe from week 1
-
 Amend shopping list
 both shopping lists are now posted to front end, change to handle
 needs ability to switch between weeks to amend? 
+currently defaults to sched_no set in finalise_schedule and placed into session
 
 
 post shopping list
 both shopping lists are now posted to front end, change to handle
-
 ability to choose which week list to post. 
 
-layout 
-make sidebar recipes show week 1, 
 
 General
 write database schema

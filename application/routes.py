@@ -1,4 +1,4 @@
-from flask import render_template, url_for, redirect, request, session, flash
+from flask import render_template, url_for, redirect, request, session, flash, json
 from flask_login import current_user, login_user, logout_user, login_required
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList, User
@@ -11,23 +11,24 @@ import smtplib
 import os
 
 # this function gets the recipe for each day, filters by day and logged in user id
-def get_recipe_for_day(day_number):
+def get_recipe_for_day(day_number, week_n):
     if current_user.is_authenticated:
-        id = Schedule.query.filter_by(day_of_the_week = day_number, user_id = current_user.id, week_no = 1).first()
+        id = Schedule.query.filter_by(day_of_the_week = day_number, user_id = current_user.id, week_no = week_n).first()
         if id is not None:
             day_recipe = Recipes.query.filter_by(id = id.recipe_id).first()
             return day_recipe
         else:
             return Recipes.query.filter_by(id = 1).first()
-    else:
-        return Recipes.query.filter_by(id = 1).first()
+
 
 # this function assembles the recipe for each day adding it to a list in order of the days to be used in the layout template
 def get_weekly_recipes():
-    week = []
+    week, week2 = [], []
     for num in range(5):
-         week.append(get_recipe_for_day(num))
-    return week
+         week.append(get_recipe_for_day(num, 1))
+    for num in range(5):
+         week2.append(get_recipe_for_day(num, 2))
+    return week, week2
 
 # check if current user already has a schedule set
 def check_for_schedule():
@@ -299,6 +300,7 @@ def finalise_schedule():
             db.session.add(shop_item)
             db.session.commit()
             aggregated_ingredient_list.append(shop_item)
+            session['sched_no'] = sched_no
         return redirect(url_for('amend_shopping_list')) 
     else:
         weekly_schedule = Schedule.query.order_by('day_of_the_week')
@@ -323,7 +325,7 @@ def amend_shopping_list():
     else:
         sidebar = False
 
-    amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"]]
+    amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"][session.get('sched_no', None)]]
     form = AmendAmountForm(ingredients = amount_list)
 
     if request.method == "POST":
@@ -610,4 +612,19 @@ def add_recipe2():
         return render_template('add_recipe2.html', sidebar = sidebar, done=done)
     else:
         return render_template('add_recipe2.html', sidebar = sidebar, form=form, recipe=recipe_name)  
+
+@app.route('/show_schedule', methods = ['GET', 'POST'])
+@login_required
+def show_schedule():
+    if check_for_schedule():
+        sidebar = {
+        "week" : get_weekly_recipes(),
+        "recipe_of_the_day" : get_recipe_of_the_day(),
+        "day" : what_day_is_it(),
+        "shopping_list" : create_shopping_list(),
+        "user" : current_user.username,
+        }
+    else:
+        sidebar = False
+    return render_template('show_schedule.html', sidebar = sidebar)
                 
