@@ -299,11 +299,11 @@ def finalise_schedule():
         return redirect(url_for('amend_shopping_list')) 
     else:
         weekly_schedule = Schedule.query.order_by('day_of_the_week')
-        mon = Recipes.query.filter_by(id = weekly_schedule[0].recipe_id).first().recipe_name
-        tue = Recipes.query.filter_by(id = weekly_schedule[1].recipe_id).first().recipe_name
-        wed = Recipes.query.filter_by(id = weekly_schedule[2].recipe_id).first().recipe_name
-        thu = Recipes.query.filter_by(id = weekly_schedule[3].recipe_id).first().recipe_name
-        fri = Recipes.query.filter_by(id = weekly_schedule[4].recipe_id).first().recipe_name
+        mon = Recipes.query.filter_by(id = weekly_schedule[0].recipe_id, sched_no = sched_no).first().recipe_name
+        tue = Recipes.query.filter_by(id = weekly_schedule[1].recipe_id, sched_no = sched_no).first().recipe_name
+        wed = Recipes.query.filter_by(id = weekly_schedule[2].recipe_id, sched_no = sched_no).first().recipe_name
+        thu = Recipes.query.filter_by(id = weekly_schedule[3].recipe_id, sched_no = sched_no).first().recipe_name
+        fri = Recipes.query.filter_by(id = weekly_schedule[4].recipe_id, sched_no = sched_no).first().recipe_name
         return render_template('finalise_schedule.html', user=user, form=form, mon=mon, tue=tue, wed=wed, thu=thu, fri=fri)
 
 @app.route('/amend_shopping_list', methods = ['GET', 'POST'])
