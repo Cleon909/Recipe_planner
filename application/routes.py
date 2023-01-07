@@ -159,7 +159,8 @@ def create_weekly_schedule():
         second_cuisine_id = form.second_cuisine.data 
         third_cuisine_id = form.third_cuisine.data
         fourth_cuisine_id = form.fourth_cuisine.data
-        fifth_cuisine_id = form.fifth_cuisine.data 
+        fifth_cuisine_id = form.fifth_cuisine.data
+        sched_no = form.sched_no.data 
 
     # code below create a list of all recipes in the cuisine selected
         if first_cuisine_id == "":
@@ -201,19 +202,13 @@ def create_weekly_schedule():
         weekly_schedule.append(fourth_recipe_list[0])
         weekly_schedule.append(fifth_recipe_list[0])
         random.shuffle(weekly_schedule)
-        schedule_day = 0
-        if Schedule.query.filter_by(day_of_the_week = schedule_day).first():
-            sched_no = 1
-            session['sched_no'] = 1
-        else:
-            sched_no = 2
-            session['sched_no'] = 2
 
+        schedule_day = 0
         for recipe in weekly_schedule:
             sched = Schedule.query.filter_by(day_of_the_week = schedule_day).first()
             sched.recipe_id = recipe.id
             sched.user_id = current_user.id
-            sched.week_no = sched_no
+            sched.sched_no = sched_no
             db.session.add(sched)
             db.session.commit()
             schedule_day += 1 

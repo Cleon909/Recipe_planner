@@ -82,7 +82,7 @@ class Schedule(db.Model):
     day_of_the_week = db.Column(db.Integer, nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    week_no = db.Column(db.Integer, nullable=False)
+    sched_nox = db.Column(db.Integer, nullable=False)
     
     def __init__(self, day_of_the_week, recipe_id, user_id, week_no):
         self.recipe_id = recipe_id
