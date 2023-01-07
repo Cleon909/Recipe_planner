@@ -28,12 +28,14 @@ class Recipes(db.Model):
     cuisine_id = db.Column(db.Integer, db.ForeignKey('cuisine.id'))
     quantity = db.relationship('Quantity', backref="recipes")
     method = db.relationship('Method', backref='mrecipes')
+    sched_no = db.Column(db.Integer)
 
 
-    def __init__(self, recipe_name, recipe_description, cuisine_id):
+    def __init__(self, recipe_name, recipe_description, cuisine_id, sched_no):
         self.recipe_name = recipe_name
         self.recipe_description = recipe_description
         self.cuisine_id = cuisine_id
+        self.sched_no = sched_no
 
 class Quantity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -82,13 +84,13 @@ class Schedule(db.Model):
     day_of_the_week = db.Column(db.Integer, nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    sched_nox = db.Column(db.Integer, nullable=False)
+    sched_no = db.Column(db.Integer, nullable=False)
     
-    def __init__(self, day_of_the_week, recipe_id, user_id, week_no):
+    def __init__(self, day_of_the_week, recipe_id, user_id, sched_no):
         self.recipe_id = recipe_id
         self.day_of_the_week = day_of_the_week
         self.user_id = user_id
-        self.week_no = week_no
+        self.sched_no = sched_no
 
 class Measure(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -105,15 +107,15 @@ class ShoppingList(db.Model):
     amount = db.Column(db.Float, nullable=False)
     measure_id = db.Column(db.Integer, db.ForeignKey('measure.id'), nullable = False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    week_no = db.Column(db.Integer, nullable=False)
+    sched_no = db.Column(db.Integer, nullable=False)
 
 
-    def __init__(self, ingredient_id, amount, measure_id, user_id, week_no):
+    def __init__(self, ingredient_id, amount, measure_id, user_id, sched_no):
         self.ingredient_id = ingredient_id
         self.amount = amount
         self.measure_id = measure_id
         self.user_id = user_id
-        self.week_no = week_no
+        self.sched_no = sched_no
 
 
 

@@ -1,6 +1,10 @@
 {% extends 'layout.html'%}
 {% block body %}
+
+</script>
 <form method="POST">
+    <button>Week 1</button><button>Week 2</button>
+
     <h2>
         Amend shopping list if needed
     </h2>
@@ -8,7 +12,7 @@
         <div>
             {% for ingredient in sidebar.shopping_list %}
             <div class="field">
-                {{ ingredient[0]}} 
+                {{ ingredient[0]}}
                 {{ ingredient[1]}}
                 {{ ingredient[2]}}
             </div>

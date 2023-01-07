@@ -1,7 +1,8 @@
 from application import app
 from application import db
 from application.models import Quantity, Method, Recipes, Cuisine, Ingredients, Schedule, Measure
-from flask_sqlalchemy import inspect
+from sqlalchemy import inspect
+
 
 inspector = inspect(db.engine)
 if inspector.has_table == True:
@@ -32,7 +33,7 @@ else:
         db.session.add(measure)
         db.session.commit()
 
-    rec = Recipes('Pea and Cauliflower Curry', 'quick and easy curry, no calorie details', 1)
+    rec = Recipes('Pea and Cauliflower Curry', 'quick and easy curry, no calorie details', 1, 1)
     db.session.add(rec)
     db.session.commit()
 
