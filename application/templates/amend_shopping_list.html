@@ -3,29 +3,31 @@
 
 </script>
 <form method="POST">
-    <button>Week 1</button><button>Week 2</button>
-
     <h2>
         Amend shopping list if needed
     </h2>
+    <h3>
+        enter new amount or enter 0 to delete ingredient from shopping list
+    </h3>
     <div id="innercntr">
         <div>
-            {% for ingredient in sidebar.shopping_list %}
+            {% from "_formhelpers.html" import render_field %}
+            {% set count = namespace(value=0) %}
+            {% for amount_form in form.ingredients %}
             <div class="field">
-                {{ ingredient[0]}}
-                {{ ingredient[1]}}
-                {{ ingredient[2]}}
+                {{ sidebar.shopping_list[count.value][0]}}
+                {{ sidebar.shopping_list[count.value][1]}}
+                {{ sidebar.shopping_list[count.value][2]}}
+                {{ amount_form.hidden_tag() }}
+                {{ render_field(amount_form) }}
+                {% set count.value = count.value + 1 %}
             </div>
         {% endfor %}
-        </div>
-        <div>
-            {% from "_formhelpers.html" import render_field %}
-            {% for amount_form in form.ingredients %}
-            {{ amount_form.hidden_tag() }}
-            {{ render_field(amount_form) }}
-            {% endfor %}
         </div>
     </div>
     {{ form.submit }}
 </form>
 {% endblock body %}
+
+
+

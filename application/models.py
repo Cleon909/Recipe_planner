@@ -28,14 +28,12 @@ class Recipes(db.Model):
     cuisine_id = db.Column(db.Integer, db.ForeignKey('cuisine.id'))
     quantity = db.relationship('Quantity', backref="recipes")
     method = db.relationship('Method', backref='mrecipes')
-    sched_no = db.Column(db.Integer)
 
 
-    def __init__(self, recipe_name, recipe_description, cuisine_id, sched_no):
+    def __init__(self, recipe_name, recipe_description, cuisine_id):
         self.recipe_name = recipe_name
         self.recipe_description = recipe_description
         self.cuisine_id = cuisine_id
-        self.sched_no = sched_no
 
 class Quantity(db.Model):
     id = db.Column(db.Integer, primary_key=True)

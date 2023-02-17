@@ -72,8 +72,14 @@ html {
 }
 .field {
     display: flex;
-    width: 500px;
+    width: 400px;
     justify-content: space-between;
+    align-items: center;
+    background-color: lightgray;
+    margin: 3pt;
+    padding: 1pt;
+    padding-left: 5pt;
+    border-radius: 10px;
 }
 
 .field2 {
@@ -98,6 +104,12 @@ html {
     width: 1000px;
     justify-content: space-between;
     margin-top: 5px;
+    align-items: center;
+    background-color: lightgray;
+    margin: 3pt;
+    padding: 1pt;
+    padding-left: 5pt;
+    border-radius: 10px;
 }
 
 

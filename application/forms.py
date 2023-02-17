@@ -41,7 +41,7 @@ class FinaliseScheduleForm(FlaskForm):
     submit_recipes = SubmitField('Add recipes to schedule')
 
 class AmountForm(FlaskForm):
-    amount = DecimalField("enter new amount or enter 0 to delete ingredient from shopping list")
+    amount = DecimalField("  ")
 class AmendAmountForm(FlaskForm):
     ingredients = FieldList(FormField(AmountForm))
     submit = SubmitField("press to amend shopping list")
