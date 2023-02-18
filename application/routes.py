@@ -57,8 +57,8 @@ def what_day_is_it():
     day = calendar.day_name[day.weekday()]
 
 # this cycles through the shopping list picks out the relevant items (filtered by user id), grabbing the data from other tables and puts it into a list of lists with relevant details. 
-def create_shopping_list():
-    if session['sched_no']:
+def create_shopping_list(sched_no = 1):
+    if 'sched_no' in request.cookies:
         shopping_list_raw = ShoppingList.query.filter_by(user_id = current_user.id, sched_no = session['sched_no']).all()
         shopping_list = []
         for shopping_list_raw_item in shopping_list_raw:
@@ -74,6 +74,18 @@ def create_shopping_list():
         for shopping_list_raw_item in shopping_list_raw2:
             shopping_list2.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
         return (shopping_list1, shopping_list2)
+
+def create_shopping_list_for_show_schedules():
+    shopping_list_raw1 = ShoppingList.query.filter_by(user_id = current_user.id, sched_no = 1).all()
+    shopping_list1 = []
+    for shopping_list_raw_item in shopping_list_raw1:
+        shopping_list1.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
+    shopping_list_raw2 = ShoppingList.query.filter_by(user_id = current_user.id, sched_no = 2).all()
+    shopping_list2 = []
+    for shopping_list_raw_item in shopping_list_raw2:
+        shopping_list2.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
+    return (shopping_list1, shopping_list2)
+
 
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/home', methods = ['GET', 'POST'])

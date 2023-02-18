@@ -1,15 +1,33 @@
 {% extends 'layout.html'%}
-
-{% block javascript %}
-    <script>
-        const week1 = {{ sidebar.week[0] | tojson }}
-        const week2 = {{ sidebar.week[1] | tojson }}
-        const shopping_list1 = {{ sidebar.shopping_list[0] | tojson }}
-        const shopping_list2 = {{ sidebar.shopping_list[1] | tojson }}
-    </script>
-{% endblock %}
-
 {% block body %}
-<button id="switch">Switch schedule </button>
+<h2>
+    This week's Schedule
+</h2>
+{% for recipe in sidebar.week[0] %}
+<h3>
+    {{ recipe.recipe_name }}
+</h3>
+{% endfor %}
+<h2>
+    This week's shopping list
+</h2>
+{% for item in sidebar.shopping_list[0] %}
+<h3>
+    {{ item[0] }}{{ item[1] }}{{ item[2]}}
+</h3>
+{% endfor %}
+<h2>
+    Next Weeks's schedule
+</h2>
+{% for recipe in sidebar.week[1] %}
+<h3>
+    {{ recipe.recipe_name }}
+</h3>
+{% endfor %}
+{% for item in sidebar.shopping_list[1] %}
+<h3>
+    {{ item[0] }}{{ item[1] }}{{ item[2]}}
+</h3>
+{% endfor %}
 {% endblock %}
 

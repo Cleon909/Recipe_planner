@@ -10,5 +10,12 @@ shopping list to be emailed to each user
 deployed via k8s and docker or local
 
 
+create schedule needs to be able to set week 1 or 2 (week 1 default) on create weekly schedule and pass that onto:
+finalise schedule (display which schedule you are working on) pass that onto:
+amend shopping list (show which schedule)
+show schedule to allow to view both schedules
+create show shopping list page, allow amending ingredients and emailing
+
+do a lot of this in js once I work out how to use react.
 
 
