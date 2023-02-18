@@ -15,9 +15,9 @@
             {% set count = namespace(value=0) %}
             {% for amount_form in form.ingredients %}
             <div class="field">
-                {{ sidebar.shopping_list[count.value][0]}}
-                {{ sidebar.shopping_list[count.value][1]}}
-                {{ sidebar.shopping_list[count.value][2]}}
+                {{ sidebar.shopping_list[0][count.value][0]}}
+                {{ sidebar.shopping_list[0][count.value][1]}}
+                {{ sidebar.shopping_list[0][count.value][2]}}
                 {{ amount_form.hidden_tag() }}
                 {{ render_field(amount_form) }}
                 {% set count.value = count.value + 1 %}

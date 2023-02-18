@@ -16,6 +16,8 @@ amend shopping list (show which schedule)
 show schedule to allow to view both schedules
 create show shopping list page, allow amending ingredients and emailing
 
+redefine objects as using @dataclass decorator to make everything more explicit.
+
 do a lot of this in js once I work out how to use react.
 
 

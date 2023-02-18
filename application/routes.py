@@ -58,7 +58,7 @@ def what_day_is_it():
 
 # this cycles through the shopping list picks out the relevant items (filtered by user id), grabbing the data from other tables and puts it into a list of lists with relevant details. 
 def create_shopping_list(sched_no = 1):
-    if 'sched_no' in request.cookies:
+    if session.get('sched_no') == True:
         shopping_list_raw = ShoppingList.query.filter_by(user_id = current_user.id, sched_no = session['sched_no']).all()
         shopping_list = []
         for shopping_list_raw_item in shopping_list_raw:
@@ -314,7 +314,7 @@ def finalise_schedule():
             db.session.add(shop_item)
             db.session.commit()
             aggregated_ingredient_list.append(shop_item)
-        return redirect(url_for('amend_shopping_list')) 
+        return redirect(url_for('amend_shopping_list'), sched_no = sched_no) 
     else:
         weekly_schedule = Schedule.query.order_by('day_of_the_week')
         mon = Recipes.query.filter_by(id = weekly_schedule[0].recipe_id).first().recipe_name
@@ -335,11 +335,14 @@ def amend_shopping_list():
         "user" : current_user.username,
         "shopping_list" : create_shopping_list(),
         }
+        print(type(sidebar))
+        amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"][0]]
+        form = AmendAmountForm(ingredients = amount_list)
     else:
         sidebar = False
 
-    amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"]]
-    form = AmendAmountForm(ingredients = amount_list)
+    sched_no = session['sched_no']
+    print(sched_no)
 
     if request.method == "POST":
         s = db.session.query(func.min(ShoppingList.id)).first()
