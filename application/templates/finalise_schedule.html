@@ -64,3 +64,14 @@
     {% endfor %}
 {% endif %}
 </form>
+<div>
+    {% if sched_no == '0' %}
+    <h4>
+        Schedule for week 1
+    </h4>
+    {% elif sched_no == '1' %}
+    <h4>
+        Schedule for week 2
+    </h4>
+    {% endif %}
+</div>

@@ -164,6 +164,7 @@ def register():
 @login_required
 def create_weekly_schedule():
     user = current_user.username
+    user_id = current_user.id
     form = SelectScheduleForm()
     choices = [(cuisine.id, cuisine.cuisine_name) for cuisine in Cuisine.query.order_by('cuisine_name')]
     choices.insert(0, ("", ""))
@@ -225,13 +226,19 @@ def create_weekly_schedule():
 
         schedule_day = 0
         for recipe in weekly_schedule:
-            sched = Schedule.query.filter_by(day_of_the_week = schedule_day).first()
-            sched.recipe_id = recipe.id
-            sched.user_id = current_user.id
-            sched.sched_no = sched_no
-            db.session.add(sched)
-            db.session.commit()
-            schedule_day += 1 
+            if Schedule.query.filter_by(day_of_the_week = schedule_day, user_id = user_id, sched_no = sched_no).first() is None:
+                sched = Schedule(schedule_day, recipe.id, user_id, sched_no)
+                db.session.add(sched)
+                db.session.commit()
+                schedule_day += 1 
+            else:
+                sched = Schedule.query.filter_by(day_of_the_week = schedule_day, user_id = user_id, sched_no = sched_no).first()
+                sched.recipe_id = recipe.id
+                sched.user_id = current_user.id
+                sched.sched_no = sched_no
+                db.session.add(sched)
+                db.session.commit()
+                schedule_day += 1 
         # get a list of all the ingredient, quantities and units in the weekly schedule
         return redirect(url_for('finalise_schedule'))
     else:
@@ -241,6 +248,7 @@ def create_weekly_schedule():
 @login_required
 def finalise_schedule():
     user = current_user.username
+    user_id = current_user.id
     form = FinaliseScheduleForm()
     choices = [(r.id, r.recipe_name) for r in Recipes.query.order_by('recipe_name')]
     choices.insert(0, ("", ""))
@@ -314,15 +322,15 @@ def finalise_schedule():
             db.session.add(shop_item)
             db.session.commit()
             aggregated_ingredient_list.append(shop_item)
-        return redirect(url_for('amend_shopping_list'), sched_no = sched_no) 
+        return redirect(url_for('amend_shopping_list')) 
     else:
-        weekly_schedule = Schedule.query.order_by('day_of_the_week')
+        weekly_schedule = Schedule.query.filter_by(user_id = user_id, sched_no = sched_no).order_by('day_of_the_week')
         mon = Recipes.query.filter_by(id = weekly_schedule[0].recipe_id).first().recipe_name
         tue = Recipes.query.filter_by(id = weekly_schedule[1].recipe_id).first().recipe_name
         wed = Recipes.query.filter_by(id = weekly_schedule[2].recipe_id).first().recipe_name
         thu = Recipes.query.filter_by(id = weekly_schedule[3].recipe_id).first().recipe_name
         fri = Recipes.query.filter_by(id = weekly_schedule[4].recipe_id).first().recipe_name
-        return render_template('finalise_schedule.html', user=user, form=form, mon=mon, tue=tue, wed=wed, thu=thu, fri=fri)
+        return render_template('finalise_schedule.html', user=user, form=form, mon=mon, tue=tue, wed=wed, thu=thu, fri=fri, sched_no=sched_no)
 
 @app.route('/amend_shopping_list', methods = ['GET', 'POST'])
 @login_required
@@ -335,20 +343,22 @@ def amend_shopping_list():
         "user" : current_user.username,
         "shopping_list" : create_shopping_list(),
         }
-        print(type(sidebar))
         amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"][0]]
         form = AmendAmountForm(ingredients = amount_list)
     else:
         sidebar = False
 
     sched_no = session['sched_no']
-    print(sched_no)
+    user_id = current_user.id
 
     if request.method == "POST":
-        s = db.session.query(func.min(ShoppingList.id)).first()
-        n = s[0]
+        # I don't know what this line does. 
+        # sess = db.session.query(func.min(ShoppingList.id)).first()
+        # n = sess[0]
+        print(user_id)
+        print(sched_no)
         for ingr in form.ingredients.data:
-            sl = ShoppingList.query.filter_by(id = n).first()
+            sl = ShoppingList.query.filter_by(user_id=user_id, sched_no=sched_no).first()
             if ingr["amount"] == None:
                 pass
             elif ingr["amount"] == 0:
@@ -357,10 +367,10 @@ def amend_shopping_list():
             else:
                  sl.amount = ingr["amount"]
                  db.session.commit()
-            n += 1   
+            # n += 1   
         return redirect(url_for("post_shopping_list"))
     else:
-        return render_template('amend_shopping_list.html', sidebar = sidebar, form=form)
+        return render_template('amend_shopping_list.html', sidebar=sidebar, form=form, sched_no=sched_no)
 
 @app.route('/post_shopping_list', methods = ['GET', 'POST'])
 @login_required

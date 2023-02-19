@@ -20,7 +20,7 @@ class SelectScheduleForm(FlaskForm):
     third_cuisine = SelectField('Cuisine to be included', choices = [])
     fourth_cuisine = SelectField('Cuisine to be included', choices = [])
     fifth_cuisine = SelectField('Cuisine to be included', choices = [])
-    sched_no = SelectField('Schedule for this week or next', choices = [(1, 'Next week'), (0, 'This week')])
+    sched_no = SelectField('Schedule for this week or next', choices = [(2, 'Next week'), (1, 'This week')])
     submit_cuisine = SubmitField('Generate Recipe Schedule')
     
 class DeleteRecipeForm(FlaskForm):
