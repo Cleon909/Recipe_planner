@@ -80,6 +80,10 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
+class ShowSchedule(FlaskForm):
+    week1 = SubmitField('Press to Amend Shopping List')
+    week2 = SubmitField('Press to Amend Shopping List')
+
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])

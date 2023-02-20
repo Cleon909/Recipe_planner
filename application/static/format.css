@@ -28,7 +28,6 @@ html {
 #innercntr {
     display: flex;
     justify-content: space-between;
-
 }
 
 #hdr {
@@ -45,7 +44,6 @@ html {
 
 #center {
     padding-left: 20px;
-
 }
 
 .list1 {
@@ -54,6 +52,7 @@ html {
     max-width: 30%;
     padding: 5px;
 }
+
 #main {
     display: flex;
     justify-content: center;
@@ -68,8 +67,8 @@ html {
     font-size: 20px;
     border-radius: 10px;
     border-width: 3px;margin-top: 15px;
-
 }
+
 .field {
     display: flex;
     width: 400px;
@@ -112,7 +111,6 @@ html {
     border-radius: 10px;
 }
 
-
 #meta_measure {
     margin-right: -30px;
 }
@@ -124,7 +122,6 @@ html {
 .container {
     display: flex;
     width : 100%;
-
 }
 
 #left {
@@ -160,3 +157,14 @@ html {
 #measure1, #measure2, #measure3, #measure4, #measure5, #measure6, #measure7, #measure8, #measure9, #measure10, #measure11, #measure12, #measure13, #measure14, #measure15, #measure16, #measure17, #measure18, #measure19, #measure20, #measure21, #measure22, #measure23, #measure24, #measure25, #measure26, #measure27, #measure28, #measure29, #measure30 {
     padding: 1px;
 } 
+
+.tile {
+    width: 400px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: lightgray;
+    margin: 3pt;
+    padding: 1pt;
+    padding-left: 25pt;
+    border-radius: 10px;
+}

@@ -2,7 +2,7 @@ from flask import render_template, url_for, redirect, request, session, flash, j
 from flask_login import current_user, login_user, logout_user, login_required
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList, User
-from application.forms import DeleteRecipeForm, AddRecipeForm1, AddRecipeForm2, AddMetaForm, LoginForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm, RegistrationForm
+from application.forms import DeleteRecipeForm, AddRecipeForm1, AddRecipeForm2, AddMetaForm, LoginForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm, RegistrationForm, ShowSchedule
 from datetime import date, datetime
 import calendar
 import random
@@ -352,11 +352,9 @@ def amend_shopping_list():
     user_id = current_user.id
 
     if request.method == "POST":
-        # I don't know what this line does. 
+        # I've forgotten what this line does. leaving it in commented just in case
         # sess = db.session.query(func.min(ShoppingList.id)).first()
         # n = sess[0]
-        print(user_id)
-        print(sched_no)
         for ingr in form.ingredients.data:
             sl = ShoppingList.query.filter_by(user_id=user_id, sched_no=sched_no).first()
             if ingr["amount"] == None:
@@ -652,5 +650,13 @@ def show_schedule():
         }
     else:
         sidebar = False
-    return render_template('show_schedule.html', sidebar = sidebar, sched_no = 1)
+    form = ShowSchedule()
+    print(request)
+    if request.form.get('week1') == 'week1':
+        session['sched_no'] = 1
+        return redirect(url_for("amend_shopping_list"))
+    elif request.form.get('week2') == 'week2':
+        session['sched_no'] = 2
+        return redirect(url_for("amend_shopping_list"))
+    return render_template('show_schedule.html', sidebar = sidebar, sched_no = 1, form=form)
                 

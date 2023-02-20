@@ -1,42 +1,74 @@
 {% extends 'layout.html'%}
 {% block body %}
+</form>
 <div id="main" style="justify-content:space-around;">
     <div>
-        <h2>
-            This week's Schedule
-        </h2>
-        {% for recipe in sidebar.week[0] %}
-            <h3>
-                {{ recipe.recipe_name }}
-            </h3>
-        {% endfor %}
-        <h2>
-            This week's shopping list
-        </h2>
-        {% for item in sidebar.shopping_list[0] %}
-            <h3>
-                {{ item[0] }}{{ item[1] }}{{ item[2]}}
-            </h3>
-        {% endfor %}
+        <div class = "tile">
+            <h2>
+                This week's Schedule
+            </h2>
+                <h3>
+                    Monday:  {{ sidebar.week[0][0].recipe_name }}
+                </h3>
+                <h3>
+                    Tuesday:  {{ sidebar.week[0][1].recipe_name }}
+                </h3>
+                <h3>
+                    Wednesday:  {{ sidebar.week[0][2].recipe_name }}
+                </h3>
+                <h3>
+                    Thursday:  {{ sidebar.week[0][3].recipe_name }}
+                </h3>
+                <h3>
+                    Friday:  {{ sidebar.week[0][4].recipe_name }}
+                </h3>
+        </div>
+        <div class = "tile">
+            <h2>
+                This Week's shopping list
+            </h2>
+            {{ form.week1 }}
+            {% for item in sidebar.shopping_list[0] %}
+                <h3>
+                    {{ item[0] }},          {{ item[1] }} {{ item[2]}}
+                </h3>
+            {% endfor %}
+        </div>
     </div>
     <div>
-        <h2>
-            Next Weeks's schedule
-        </h2>
-        {% for recipe in sidebar.week[1] %}
+        <div class = "tile">
+            <h2>
+                Next Weeks's schedule
+            </h2>
             <h3>
-                {{ recipe.recipe_name }}
+                Monday:  {{ sidebar.week[1][0].recipe_name }}
             </h3>
-        {% endfor %}
-        <h2>
-            Next Weeks's Shopping List
-        </h2>
-        {% for item in sidebar.shopping_list[1] %}
             <h3>
-                {{ item[0] }}{{ item[1] }}{{ item[2]}}
+                Tuesday:  {{ sidebar.week[1][1].recipe_name }}
             </h3>
-        {% endfor %}
+            <h3>
+                Wednesday:  {{ sidebar.week[1][2].recipe_name }}
+            </h3>
+            <h3>
+                Thursday:  {{ sidebar.week[1][3].recipe_name }}
+            </h3>
+            <h3>
+                Friday:  {{ sidebar.week[1][4].recipe_name }}
+            </h3>
+        </div>
+            <div class="tile">
+                <h2>
+                    Next Weeks's Shopping List
+                </h2>
+               {{ form.week2 }}
+                {% for item in sidebar.shopping_list[1] %}
+                    <h3>
+                        {{ item[0] }},          {{ item[1] }} {{ item[2]}}
+                    </h3>
+                {% endfor %}
+        </div>
     </div>
 </div>
+</form>
 {% endblock %}
 
