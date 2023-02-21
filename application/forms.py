@@ -81,8 +81,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 class ShowSchedule(FlaskForm):
-    week1 = SubmitField('Press to Amend Shopping List')
-    week2 = SubmitField('Press to Amend Shopping List')
+    first_week = SubmitField('Press to Amend Shopping List')
+    second_week = SubmitField(label = 'Press to Amend Shopping List')
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

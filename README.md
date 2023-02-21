@@ -30,11 +30,10 @@ Amend shopping list
 both shopping lists are now posted to front end, change to handle
 needs ability to switch between weeks to amend? 
 currently defaults to sched_no set in finalise_schedule and placed into session
+add error handling for checking session, if not there then display message. Or remove page altogether so have to go through show schedule.
+only shows ingedient list from schedule1
 
-
-post shopping list
-both shopping lists are now posted to front end, change to handle
-ability to choose which week list to post. 
+ingredient list doesnt look right when creating schedule, but is OK on show schedule. i thinnk the problem is on the template line 30ish
 
 
 General

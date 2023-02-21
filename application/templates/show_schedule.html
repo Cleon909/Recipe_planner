@@ -1,6 +1,6 @@
 {% extends 'layout.html'%}
 {% block body %}
-</form>
+
 <div id="main" style="justify-content:space-around;">
     <div>
         <div class = "tile">
@@ -27,7 +27,9 @@
             <h2>
                 This Week's shopping list
             </h2>
-            {{ form.week1 }}
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.first_week }}
             {% for item in sidebar.shopping_list[0] %}
                 <h3>
                     {{ item[0] }},          {{ item[1] }} {{ item[2]}}
@@ -60,7 +62,8 @@
                 <h2>
                     Next Weeks's Shopping List
                 </h2>
-               {{ form.week2 }}
+                {{ form.second_week }}
+            </form>
                 {% for item in sidebar.shopping_list[1] %}
                     <h3>
                         {{ item[0] }},          {{ item[1] }} {{ item[2]}}

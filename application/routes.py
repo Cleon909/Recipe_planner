@@ -57,25 +57,7 @@ def what_day_is_it():
     day = calendar.day_name[day.weekday()]
 
 # this cycles through the shopping list picks out the relevant items (filtered by user id), grabbing the data from other tables and puts it into a list of lists with relevant details. 
-def create_shopping_list(sched_no = 1):
-    if session.get('sched_no') == True:
-        shopping_list_raw = ShoppingList.query.filter_by(user_id = current_user.id, sched_no = session['sched_no']).all()
-        shopping_list = []
-        for shopping_list_raw_item in shopping_list_raw:
-            shopping_list.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
-        return shopping_list
-    else:
-        shopping_list_raw1 = ShoppingList.query.filter_by(user_id = current_user.id, sched_no = 1).all()
-        shopping_list1 = []
-        for shopping_list_raw_item in shopping_list_raw1:
-            shopping_list1.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
-        shopping_list_raw2 = ShoppingList.query.filter_by(user_id = current_user.id, sched_no = 2).all()
-        shopping_list2 = []
-        for shopping_list_raw_item in shopping_list_raw2:
-            shopping_list2.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
-        return (shopping_list1, shopping_list2)
-
-def create_shopping_list_for_show_schedules():
+def create_shopping_list():
     shopping_list_raw1 = ShoppingList.query.filter_by(user_id = current_user.id, sched_no = 1).all()
     shopping_list1 = []
     for shopping_list_raw_item in shopping_list_raw1:
@@ -335,6 +317,8 @@ def finalise_schedule():
 @app.route('/amend_shopping_list', methods = ['GET', 'POST'])
 @login_required
 def amend_shopping_list():
+    sched_no = session['sched_no']
+    user_id = current_user.id
     if check_for_schedule():
         sidebar = {
         "week" : get_weekly_recipes(),
@@ -343,13 +327,10 @@ def amend_shopping_list():
         "user" : current_user.username,
         "shopping_list" : create_shopping_list(),
         }
-        amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"][0]]
+        amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"][int(sched_no) -1]]
         form = AmendAmountForm(ingredients = amount_list)
     else:
         sidebar = False
-
-    sched_no = session['sched_no']
-    user_id = current_user.id
 
     if request.method == "POST":
         # I've forgotten what this line does. leaving it in commented just in case
@@ -651,12 +632,15 @@ def show_schedule():
     else:
         sidebar = False
     form = ShowSchedule()
-    print(request)
-    if request.form.get('week1') == 'week1':
-        session['sched_no'] = 1
-        return redirect(url_for("amend_shopping_list"))
-    elif request.form.get('week2') == 'week2':
-        session['sched_no'] = 2
-        return redirect(url_for("amend_shopping_list"))
-    return render_template('show_schedule.html', sidebar = sidebar, sched_no = 1, form=form)
+    if request.method == "POST": 
+        if form.first_week.data:
+            session['sched_no'] = 1
+            print("week 1 button hit")
+            return redirect(url_for("amend_shopping_list"))
+        elif form.second_week.data:
+            session['sched_no'] = 2
+            print("week2 button hit")
+            return redirect(url_for("amend_shopping_list"))
+    else:
+        return render_template('show_schedule.html', sidebar = sidebar, form=form)
                 
