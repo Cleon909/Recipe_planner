@@ -55,6 +55,7 @@ def weekend_or_not():
 def what_day_is_it():
     day = date.today()
     day = calendar.day_name[day.weekday()]
+    return day
 
 # this cycles through the shopping list picks out the relevant items (filtered by user id), grabbing the data from other tables and puts it into a list of lists with relevant details. 
 def create_shopping_list():
@@ -328,6 +329,7 @@ def amend_shopping_list():
         "shopping_list" : create_shopping_list(),
         }
         amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"][int(sched_no) -1]]
+        print(amount_list)
         form = AmendAmountForm(ingredients = amount_list)
     else:
         sidebar = False

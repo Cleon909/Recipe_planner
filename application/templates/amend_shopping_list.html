@@ -22,18 +22,33 @@
     </h3>
     <div id="innercntr">
         <div>
+            {% if sched_no == 1 %}
+                {% from "_formhelpers.html" import render_field %}
+                {% set count = namespace(value=0) %}
+                {% for amount_form in form.ingredients %}
+                <div class="field">
+                    {{ sidebar.shopping_list[0][count.value][0]}}
+                    {{ sidebar.shopping_list[0][count.value][1]}}
+                    {{ sidebar.shopping_list[0][count.value][2]}}
+                    {{ amount_form.hidden_tag() }}
+                    {{ render_field(amount_form) }}
+                    {% set count.value = count.value + 1 %}
+                </div>
+                {% endfor %}
+            {% elif sched_no == 2 %}
             {% from "_formhelpers.html" import render_field %}
             {% set count = namespace(value=0) %}
             {% for amount_form in form.ingredients %}
             <div class="field">
-                {{ sidebar.shopping_list[0][count.value][0]}}
-                {{ sidebar.shopping_list[0][count.value][1]}}
-                {{ sidebar.shopping_list[0][count.value][2]}}
+                {{ sidebar.shopping_list[1][count.value][0]}}
+                {{ sidebar.shopping_list[1][count.value][1]}}
+                {{ sidebar.shopping_list[1][count.value][2]}}
                 {{ amount_form.hidden_tag() }}
                 {{ render_field(amount_form) }}
                 {% set count.value = count.value + 1 %}
             </div>
-        {% endfor %}
+            {% endfor %}
+            {% endif %}
         </div>
     </div>
     {{ form.submit }}
