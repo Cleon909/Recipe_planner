@@ -24,13 +24,14 @@
             <a href="{{ url_for('logout') }}">Logout</a>
             {% endif %}
             <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('show_schedule') }}">Show schedules</a>
             <a href="{{ url_for('create_weekly_schedule') }}"> Create Schedule</a> 
             <a href="{{ url_for('add_recipe') }}">Add a Recipe</a>
-            <a href="{{ url_for('amend_shopping_list') }}">Shopping List</a>
             <a href="{{ url_for('search_recipes') }}">Search for a Recipe</a>
             <a href="{{ url_for('add_meta') }}">Add meta data</a>
+            {% if current_user.username == "admin" %}
             <a href="{{ url_for('delete_recipe') }}"> Delete a Recipe</a>
-            <a href="{{url_for('register')}}">Register as a user</a> 
+            {% endif %}
         </div>
     </div>
 <form method="POST">
@@ -65,11 +66,11 @@
 {% endif %}
 </form>
 <div>
-    {% if sched_no == '0' %}
+    {% if sched_no == 1 %}
     <h4>
         Schedule for week 1
     </h4>
-    {% elif sched_no == '1' %}
+    {% elif sched_no == 2 %}
     <h4>
         Schedule for week 2
     </h4>

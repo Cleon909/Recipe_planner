@@ -26,22 +26,24 @@ Tasks to deploy to AWS
 
 pages
 
-Amend shopping list
-both shopping lists are now posted to front end, change to handle
-needs ability to switch between weeks to amend? 
-currently defaults to sched_no set in finalise_schedule and placed into session
-add error handling for checking session, if not there then display message. Or remove page altogether so have to go through show schedule.
-only shows ingedient list from schedule1
 
-ingredient list doesnt look right when creating schedule, but is OK on show schedule. i thinnk the problem is on the template line 30ish
 
+is what day is it used?
 
 General
-write database schema
-write website schema path
-function to move week 2 schedule to week1 and delete week 2.
-    - will function move on a particular date, if date is missed?
-    - maybe it switches if it's after the first friday from setting the schedule
 
-add sheet to show schedule and shopping list for each week, switch between weeks through JS.
-Will need to send both weeks to page. 
+whe schedule is set, create timestamp, also store distance from timestamp to friday midnight. 
+When login, or index is hit, calculate if timestamp & distance is in the past if so then 
+make schedule1 = schedule2 and delete schedule 2. 
+create prompt to create schedule 2.
+
+Objects
+
+sidebar = {
+    week : (['list of recipe names from week'1]['list of recipe names from week2']),
+    recipe_of_the_day : recipe_name(string)
+    weekend : bolean
+    day : ???
+    user : username(string)
+    shopping_list : ([list of ing tuples () for week1],[list of ing tuples() for week 2])
+}

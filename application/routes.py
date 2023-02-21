@@ -240,7 +240,7 @@ def finalise_schedule():
     form.wednesday_recipe.choices = choices
     form.thursday_recipe.choices = choices
     form.friday_recipe.choices = choices
-    sched_no = session['sched_no']
+    sched_no = int(session['sched_no'])
     if request.method == 'POST':
         if form.monday_cb.data == True:
             sched = Schedule.query.filter_by(day_of_the_week = 0, user_id = current_user.id, sched_no = sched_no).first()
@@ -318,7 +318,7 @@ def finalise_schedule():
 @app.route('/amend_shopping_list', methods = ['GET', 'POST'])
 @login_required
 def amend_shopping_list():
-    sched_no = session['sched_no']
+    sched_no = int(session['sched_no'])
     user_id = current_user.id
     if check_for_schedule():
         sidebar = {
@@ -328,8 +328,9 @@ def amend_shopping_list():
         "user" : current_user.username,
         "shopping_list" : create_shopping_list(),
         }
-        amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"][int(sched_no) -1]]
+        amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"][sched_no -1]]
         print(amount_list)
+        print(sched_no)
         form = AmendAmountForm(ingredients = amount_list)
     else:
         sidebar = False
