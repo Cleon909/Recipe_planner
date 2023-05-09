@@ -47,3 +47,7 @@ sidebar = {
     user : username(string)
     shopping_list : ([list of ing tuples () for week1],[list of ing tuples() for week 2])
 }
+
+to deploy
+
+docker run -d --name recipe-app --mount type=bind,source=/Users/michaelcorcoran/Documents/docker-mounts,target=/db/data -p 5050:5050 recipe-app:v1.0.5
