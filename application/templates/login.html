@@ -9,7 +9,7 @@
   </head>
   <body>
     <div id="left">
-      <p id="logo">RECIPE PICKER</p>
+      <p id="logo">RECIPE PLANNER</p>
     </div>
    <div id="right">
     <div class="inst">
@@ -19,12 +19,12 @@
       <form method="POST">
         {{ form.hidden_tag() }}
         {{ form.username.label }}
-        {{ form.username }}
+        {{ form.username(size=32) }}
         {% for error in form.username.errors %}
         <span style="color: red;">[{{ error }}]</span>
         {% endfor %}
         {{ form.password.label }}
-        {{ form.password }}
+        {{ form.password(size=32) }}
         {% for error in form.password.errors %}
         <span style="color: red;">[{{ error }}]</span>
         {% endfor %}

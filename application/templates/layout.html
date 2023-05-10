@@ -8,34 +8,31 @@
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
     <link href="../static/format.css" rel="stylesheet">
 </head>
-<style>
-    a {color:rgb(0, 0, 0)}
-</style>
 <body style="font-family: Source Sans Pro, sans-serif">
     <div class="header" >
         <div style="display:flex; justify-content: space-between;">
-            <h1 style="color:rgb(0, 0, 0); font-size:50px; margin-left: 10px"> Recipe Planner App</h1>
+            <h1 style="font-size:50px; margin-left: 10px"> Recipe Planner</h1>
             <p style="align-self:right; margin-right: 10px;">{{ current_user.username }}</p>
         </div>
         <div id = "links">
             {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Login</a>
+            <a href="{{ url_for('login') }}" class="link">Login</a>
             {% else %}
-            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('logout') }}" class="link">Logout</a>
             {% endif %}
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('show_schedule') }}">Show schedules</a>
-            <a href="{{ url_for('create_weekly_schedule') }}"> Create Schedule</a> 
-            <a href="{{ url_for('add_recipe') }}">Add a Recipe</a>
-            <a href="{{ url_for('search_recipes') }}">Search for a Recipe</a>
-            <a href="{{ url_for('add_meta') }}">Add meta data</a>
+            <a href="{{ url_for('index') }}" class="link">Home</a>
+            <a href="{{ url_for('show_schedule') }}" class="link">Show schedules</a>
+            <a href="{{ url_for('create_weekly_schedule') }}" class="link"> Create Schedule</a> 
+            <a href="{{ url_for('add_recipe') }}" class="link">Add a Recipe</a>
+            <a href="{{ url_for('search_recipes') }}" class="link">Search for a Recipe</a>
+            <a href="{{ url_for('add_meta') }}" class="link">Add meta data</a>
             {% if current_user.username == "admin" %}
-            <a href="{{ url_for('delete_recipe') }}"> Delete a Recipe</a>
+            <a href="{{ url_for('delete_recipe') }}" class="link"> Delete a Recipe</a>
             {% endif %}
         </div>
     </div>
     <div class="container">
-        <div id="left">
+        <!-- <div id="left">
             {% if sidebar != False %}
             <p><b>Today's Recipe:</b></p>
             {{ sidebar.recipe_of_the_day }}
@@ -52,7 +49,7 @@
             {% else %}
             <p>No Schedule Set</p>
             {% endif %}
-        </div>
+        </div> -->
         <div id="center">
         {% with messages = get_flashed_messages() %}
         {% if messages %}

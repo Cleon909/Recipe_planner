@@ -6,69 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe Planner App</title>
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
-    <link href="../static/format.css" rel="stylesheet">
+    <link href="../static/login.css" rel="stylesheet">
 </head>
-<style>
-    a {color:rgb(0, 0, 0)}
-</style>
-<body style="font-family: Source Sans Pro, sans-serif">
-    <div class="header" >
-        <div style="display:flex; justify-content: space-between;">
-            <h1 style="color:rgb(0, 0, 0); font-size:50px; margin-left: 10px"> Recipe Planner App</h1>
-            <p style="align-self:right; margin-right: 10px;">{{ user }}</p>
-        </div>
-        <div id = "links">
-            {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Login</a>
-            {% else %}
-            <a href="{{ url_for('logout') }}">Logout</a>
-            {% endif %}
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('show_schedule') }}">Show schedules</a>
-            <a href="{{ url_for('create_weekly_schedule') }}"> Create Schedule</a> 
-            <a href="{{ url_for('add_recipe') }}">Add a Recipe</a>
-            <a href="{{ url_for('search_recipes') }}">Search for a Recipe</a>
-            <a href="{{ url_for('add_meta') }}">Add meta data</a>
-            {% if current_user.username == "admin" %}
-            <a href="{{ url_for('delete_recipe') }}"> Delete a Recipe</a>
-            {% endif %}
-        </div>
+<body>
+    <div id="left">
+      <p id="logo">RECIPE PLANNER</p>
     </div>
-<div id="main">
-    <div id="login">
+    <div id="right">
+        <div class="inst">
+            <p id="log">Register</p>
+        </div>
+    <div id="input_form_reg">
         <form method = "POST">
-        {{ form.hidden_tag() }}
-        <h1>Sign In</h1>
-
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}
+            {{ form.hidden_tag() }}
+            {{ form.username.label }}
+            {{ form.username }}
             {% for error in form.username.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.email.label }}<br>
-            {{ form.email(size=64) }}<br>
+            {{ form.email.label }}
+            {{ form.email }}
             {% for error in form.email.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32) }}
+            {{ form.password.label }}
+            {{ form.password }}
             {% for error in form.password.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password2.label }}<br>
-            {{ form.password2(size=32) }}
+            {{ form.password2.label }}
+            {{ form.password2 }}
             {% for error in form.password2.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p> {{ form.submit() }}</p>
+            <p> {{ form.submit() }}</p>
         </form>
     </div>
-</div>
+        <h1><a href="{{ url_for('login') }}">LOGIN</a></h1>
+   </div> 
+  </body>
+</html>
