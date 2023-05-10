@@ -1,19 +1,11 @@
 need to:
 -   ideally add ability to have two weeks of schedules (this week and next)
-    - schedule1/schedule2
-    - when a schedule is created it gets an id 1 if no id 1, it gets id 2 if id 2 no schedule created.
-    - shopping list also needs an id field. 
-    - schedule needs to be either manual switch between the two (via js), or time limited with schedule 1 disappearing on the weekend, schedule 2 becoming schedule 1, and the same with shopping list.
+    - switch schedules at midnight Friday (delete this week and change id for next weeks)
     -  email schedule and shopping list. schedule emails url of each recipe 
 
-write database schema
-write website schema path
-
-
 -   tidy up front end
--   make sure volume is persistent
+-   change method to text area.
 -   write unit tests
--   make CI/CD pipeline
 -   deploy on aws
 
 Tasks to deploy to AWS
@@ -50,4 +42,4 @@ sidebar = {
 
 to deploy
 
-docker run -d --name recipe-app --mount type=bind,source=/Users/michaelcorcoran/Documents/docker-mounts,target=/db/data -p 5050:5050 recipe-app:v1.0.5
+docker run -d --name recipe-app --mount type=bind,source=/Users/michaelcorcoran/Documents/docker-mounts,target=/db -p 5050:5050 recipe-app:v1.0.5
