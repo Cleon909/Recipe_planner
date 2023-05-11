@@ -2,10 +2,10 @@
 
 {% block body %}
 <div style="padding-left:20px">
-    <h1>Search Page</h1>
-    <div style="display:flex; justify-content: start;">
+    {% if not recipe_result %}
+    <div style="display:flex; justify-content: start">
         <div>
-            <h2>Pick a Recipe</h2>
+            <h2 style="font-size:35px">Pick a Recipe</h2>
             <div>
                 <form method="POST">
                     {{ form.hidden_tag() }}
@@ -21,17 +21,32 @@
             </div>
     </div>
     <div>
+        {% endif %}
         {% if recipe_result %}
+        <div>
+            <div style="display:flex; justify-content: center; padding-top: 5vh;">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        {{ form.recipe }}
+                        <br>
+                        <p></p>
+                        <div align-self="right">{{ form.submit }}</div>
+                    </form>
+            </div>
+                <div style='margin-left:300px'>
+                    <p></p>
+                </div>
+        </div>
         <div id="innercntr">
             <div id="main">
                 <div class='field2'>
-                    <h1>{{ recipe_result.recipe_name }}</h1> <p>({{ cuisine }})</p>
-                    <b>{{ recipe_result.recipe_description }}</b> 
+                    <h1>{{ recipe_result.recipe_name }}</h1>
+                    <b id="description">{{ recipe_result.recipe_description }}</b> 
                 </div>
                 <div>
                     <h2>How To make</h2>
                     <ul>
-                        {% for m in method_list %}
+                        {% for m in method %}
                         <li>{{ m }}</li><br>
                         {% endfor %}
                     </ul>
@@ -40,7 +55,7 @@
             <div id="right">
                     <h2>Ingredients</h2>
                     {% for q in ingredient_list %}
-                    <div class = "field">
+                    <div class = "field_search">
                         {{ q[0] }}
                         {{ q[1] }}
                         {{ q[2] }}

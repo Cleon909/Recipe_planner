@@ -54,12 +54,10 @@ class Quantity(db.Model):
 class Method(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
-    step_num = db.Column(db.Integer, nullable=False)
-    step = db.Column(db.String(300), nullable=False)
+    step = db.Column(db.String(1000), nullable=False)
 
-    def __init__(self, recipe_id, step_num, step):
+    def __init__(self, recipe_id, step):
         self.recipe_id = recipe_id
-        self.step_num = step_num
         self.step = step
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)

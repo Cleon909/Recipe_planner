@@ -58,21 +58,17 @@ class IngredientForm(FlaskForm):
     measure = SelectField('Unit', choices = [])
     ingredient_prep = StringField('chopped, sliced etc. Leave blank if no prep needed', validators = [Length(max=100)])
     
-class MethodForm(FlaskForm):
-    method = StringField('Input method of making the recipe in steps', validators = [Length(max=300)], default = "")
-
 class AddRecipeForm1(FlaskForm):
     name = StringField('Name of Recipe', validators = [DataRequired(), Length(max = 200)])
     recipe_description = TextAreaField('Details of recipe(i.e. cooking time, calories, macros etc', render_kw={'rows':4}, validators = [(Length(max = 500))])
     cuisine = SelectField('Type of Cuisine', choices = [])
     no_ingredients = IntegerField('Add number of ingredients (ingredient details added on next page)')
-    no_method_steps = IntegerField('Add number of method steps')
     submit = SubmitField('Press to add recipe')
     
 class AddRecipeForm2(FlaskForm):    
     ingredients = FieldList(FormField(IngredientForm))
-    methods = FieldList(FormField(MethodForm))
-    submit = SubmitField('Press to add ingredients and method steps')
+    method = TextAreaField('Input method of making the recipe. Press enter to seperate the steps', validators = [Length(max=1000)], default = "")
+    submit = SubmitField('Press to add ingredients and method')
 
 class LoginForm(FlaskForm):
     username = StringField('USERNAME', validators = [DataRequired()])

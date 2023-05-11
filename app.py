@@ -44,7 +44,7 @@ else:
         db.session.add(quant)
         db.session.commit()
 
-    methods = [(1, 1, 'Crush the chillies and ginger together with a pinch of salt to make a fine masala paste'), (1, 2, 'Heat the oil in non-stick pan over a medium heat for 30s, then add the cumin and mustard seeds. When the mustard seeds start to pop reduce the heat and stir in teh asafetida '), (1, 3, 'Add the cauliflower and return the heat to medium. Stir in the masala paste, turmeric, ground coriander, salt, and sugar. Cover the pan and leave to cook for 8-10 minutes, stirring every few minutes.'), (1,4, 'stir in the peas and tomato and cook for a further 3-5 minutes'), (1,5, 'Remove from the heat and sprinkle with the chopped coriander. Leave for 5 minutes to let flavours develop')]
+    methods = [(1, 'Crush the chillies and ginger together with a pinch of salt to make a fine masala paste.\n Heat the oil in non-stick pan over a medium heat for 30s, then add the cumin and mustard seeds.\n When the mustard seeds start to pop reduce the heat and stir in the asafetida.\n Add the cauliflower and return the heat to medium.\n Stir in the masala paste, turmeric, ground coriander, salt, and sugar.\n Cover the pan and leave to cook for 8-10 minutes, stirring every few minutes.\n Stir in the peas and tomato and cook for a further 3-5 minutes.\n Remove from the heat and sprinkle with the chopped coriander.\n Leave for 5 minutes to let flavours develop')]
     for m in methods:
         met = Method(*m)
         db.session.add(met)

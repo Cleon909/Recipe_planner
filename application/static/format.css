@@ -5,7 +5,7 @@
 }
 
 html {
-    background-color: #e0e6e9;
+    background-image: url(../static/Cork-Grey.jpeg);
 }
 
 .header {
@@ -55,6 +55,7 @@ a.link:hover {
     align-items: center;
     justify-content: center;
     margin-right: 5px;
+    font-size: 30px;
 }
 
 .list {
@@ -89,6 +90,32 @@ a.link:hover {
     border-width: 3px;margin-top: 15px;
 }
 
+.field_search {
+    display: flex;
+    width: 400px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(151, 180, 204, 0.333);
+    margin: 3pt;
+    padding: 1pt;
+    padding-left: 5pt;
+    border-radius: 10px;
+    font-size: 1.1em;
+}
+
+.field_add_recipe {
+    display: flex;
+    width: 50vw;
+    justify-content: space-between;
+    align-items: center;
+    background-color: lightgray;
+    margin: 3pt;
+    padding: 1pt;
+    padding-left: 5pt;
+    border-radius: 10px;
+    font-size: 1.5em;
+}
+
 .field {
     display: flex;
     width: 400px;
@@ -99,6 +126,7 @@ a.link:hover {
     padding: 1pt;
     padding-left: 5pt;
     border-radius: 10px;
+    font-size: 1.5em;
 }
 
 .field2 {
@@ -107,6 +135,7 @@ a.link:hover {
     width: auto;
     justify-content: flex-start;
     align-items: flex-start;
+    padding-right: 3vw;;
 }
 
 .field3 {
@@ -129,6 +158,9 @@ a.link:hover {
     padding: 1pt;
     padding-left: 5pt;
     border-radius: 10px;
+}
+input {
+    font-size: 1.1em;
 }
 
 #meta_measure {
@@ -251,3 +283,56 @@ a.link:hover {
   #submit:not(:disabled):active, .button:not(:disabled):active {
     transform: translateY(.125rem);
   }
+
+  #description {
+    width: 15vw;
+  }
+
+  #recipe_name {
+    width: 15vw;
+    font-size: 40px;
+  }
+
+  select {
+    border-radius: 3px;
+    font-size: large;
+  }
+
+  #cuisine {
+    font-size: 1.1em;
+  }
+
+  #recipe_description {
+    font-size: 1.1em;
+  }
+
+  table {
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-indent: initial;
+    border-spacing: 2px;
+    border-color: black;
+    padding-bottom: 50px;
+}
+
+#method-input {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2em;
+    align-self: flex-start;
+    padding-left: 5vw;
+}
+
+#method {
+    font-size: 1.3em;    
+}
+
+#ing-input {
+    align-self:flex-start;
+}
+
+ul {
+    font-size: 1.5em;
+    min-width: 30vw;
+}

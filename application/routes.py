@@ -89,7 +89,8 @@ def index():
     if datetime.today().weekday() in [0,1,2,3,4]:
         daily_recipe = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first()
         cuisine = Cuisine.query.filter_by(id=daily_recipe.cuisine_id).first().cuisine_name
-        method_list = [m.step for m in Method.query.filter_by(recipe_id = daily_recipe.id)]
+        method_block = Method.query.filter_by(recipe_id = daily_recipe.id).first().step
+        method = method_block.split('\n')
         quantities = Quantity.query.filter_by(recipe_id = daily_recipe.id).all()
         ingredient_list = []
         n = 0
@@ -106,7 +107,7 @@ def index():
         method_list = False
         quantities = False
         ingredient_list = False
-    return render_template('index.html', daily_recipe=daily_recipe, total_number=total_number, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list, sidebar=sidebar)
+    return render_template('index.html', daily_recipe=daily_recipe, total_number=total_number, cuisine=cuisine, method=method, ingredient_list=ingredient_list, sidebar=sidebar)
     
 @app.route('/login', methods = ['GET','POST'])
 def login():
@@ -414,7 +415,8 @@ def search_recipes():
     if request.method == 'POST':
         recipe_result = Recipes.query.filter_by(id=form.recipe.data).first()
         cuisine = Cuisine.query.filter_by(id=recipe_result.cuisine_id).first().cuisine_name
-        method_list = [m.step for m in Method.query.filter_by(recipe_id = recipe_result.id)]
+        method_block = Method.query.filter_by(recipe_id = recipe_result.id).first().step
+        method = method_block.split('\n')
         quantities = Quantity.query.filter_by(recipe_id = recipe_result.id).all()
         ingredient_list = []
         n = 0
@@ -425,7 +427,7 @@ def search_recipes():
             ingredient_list[n].append(Measure.query.filter_by(id = q.measure).first().measure)
             ingredient_list[n].append(q.ingredient_prep)
             n += 1
-        return render_template('search.html', sidebar = sidebar, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method_list=method_list, ingredient_list=ingredient_list)
+        return render_template('search.html', sidebar = sidebar, form=form, total_number=total_number, recipe_result=recipe_result, cuisine=cuisine, method=method, ingredient_list=ingredient_list)
     else:
         return render_template('search.html', sidebar = sidebar, form=form, total_number=total_number)
   
@@ -485,10 +487,9 @@ def delete_recipe():
         for q in quantities_to_delete:
             db.session.delete(q)
             db.session.commit()
-        methods_to_delete = Method.query.filter_by(recipe_id = recipe_to_delete.id).all()
-        for m in methods_to_delete:
-            db.session.delete(m)
-            db.session.commit()
+        method_to_delete = Method.query.filter_by(recipe_id = recipe_to_delete.id).first()
+        db.session.delete(method_to_delete)
+        db.session.commit()
         db.session.delete(recipe_to_delete)
         db.session.commit()
         deleted = True
@@ -519,7 +520,6 @@ def add_recipe():
         recipe_name = form.name.data
         recipe_description = form.recipe_description.data
         session['no_ingredients'] = form.no_ingredients.data
-        session['no_method_steps'] = form.no_method_steps.data
         if form.cuisine.data == "":
             cuisine = 1
         else:
@@ -550,10 +550,9 @@ def add_recipe2():
         sidebar = False
 
     no_ingredients = session.get('no_ingredients', None)
-    no_method_steps = session.get('no_method_steps', None)
     recipe_id = session.get('recipe_id', None)
     recipe_name = session.get('recipe_name', None)
-    form = AddRecipeForm2(ingredients = range(no_ingredients), methods = (range(no_method_steps)))
+    form = AddRecipeForm2(ingredients = range(no_ingredients))
 
 
     choices1 = [(m.id, m.measure) for m in Measure.query.order_by('measure')]
@@ -606,15 +605,9 @@ def add_recipe2():
             quant = Quantity(i[0], i[1], i[2], i[3], i[4])
             db.session.add(quant)
             db.session.commit()
-        #  This code interates over the methods data dictionary pulling out the "method" value and then adding that to the adatabse with the recipe id and a step number which is incremeneted.
-        i = 1
-        for meth in form.methods.data:
-            if meth["method"] == "":
-                pass
-            else:
-                method_step = Method(recipe_id,i, meth["method"])
-                i += 1
-            db.session.add(method_step)
+    
+            method = Method(recipe_id, form.method.data)
+            db.session.add(method)
             db.session.commit()
 
         return render_template('add_recipe2.html', sidebar = sidebar, done=done)

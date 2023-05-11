@@ -3,7 +3,7 @@
 {% block body %}
     <div id="hdr">
         {% if sidebar != False %}    
-        <h1>Today's Recipe</h1> 
+        <h1>{{ daily_recipe.recipe_name }}</h1> 
         {% else %}
         <h1>No Schedule Created, you can create a schedule <a href="{{ url_for('create_weekly_schedule') }}" style="color:black">here</a></h1> 
         {% endif %}
@@ -12,13 +12,13 @@
     <div id="innercntr">
     <div id="main">
         <div class='field2'>
-            <h1>{{ daily_recipe.recipe_name }}</h1> <p>({{ cuisine }})</p>
-            <b>{{ daily_recipe.recipe_description }}</b> 
+            <h2>Description</h2>
+            <b id="description">{{ daily_recipe.recipe_description }}</b> 
         </div>
         <div>
-            <h2>How To make</h2>
+            <h1>How To make</h1>
             <ul>
-                {% for m in method_list %}
+                {% for m in method %}
                 <li>{{ m }}</li><br>
                 {% endfor %}
             </ul>

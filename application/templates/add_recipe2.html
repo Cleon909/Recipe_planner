@@ -3,25 +3,22 @@
 {% block body %}
 <div style="padding-left:40px">
     {% if form %}
-        <h1>Add a Ingredients and Method Steps</h1>
+        <h1 style="position:relative; left:20vw">Add a Ingredients and Method Steps</h1>
         <form method = 'POST'>
         <div class = "container">
-            <h3>{{ recipe }}</h3>
-            <div>
+            <h1 style="position: fixed; top:150px; left:30px">{{ recipe }}</h1>
+            <div id="ing-input">
                 {% from "_formhelpers.html" import render_field %}
                 {% for ingredient_field in form.ingredients %}
                 {{ ingredient_field.hidden_tag() }}
                 {{ render_field(ingredient_field) }}
                 {% endfor %}
             </div>
-            <div>
-                {% from "_formhelpers.html" import render_field %}
-                {% for method_field in form.methods %}
-                {{ method_field.hidden_tag() }}
-                {{ render_field(method_field) }}
-                {% endfor %}
+            <div id="method-input">
+                {{ form.method.label }}
+                {{ form.method (cols="40", rows="40") }}
             </div>
-        <p>{{  form.submit }} </p>
+        <p style="position: fixed; bottom: 15px; right:30px;">{{ form.submit }} </p>
         </form>
     {% endif %}
     {% if done %}

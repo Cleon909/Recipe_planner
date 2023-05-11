@@ -7,22 +7,19 @@
         <form method = 'POST'>
         <p>{{  form.hidden_tag() }}
         <br>
-        <div class="field">
+        <div class="field_add_recipe">
             <p>{{  form.name.label }}</p> <p>{{  form.name }}</p>
         </div>
-        <div class="field">
-            <p>{{  form.recipe_description.label }}</p> <p>{{  form.recipe_description }}</p>
+        <div class="field_add_recipe">
+            {{  form.cuisine.label }} {{  form.cuisine }}
         </div>
-        <div class="field">
-            <p>{{  form.cuisine.label }}</p> <p>{{  form.cuisine }}</p>
-        </div>
-        <div class="field">
+        <div class="field_add_recipe">
             <p>{{  form.no_ingredients.label }}</p> <p>{{  form.no_ingredients }}</p>
         </div>
-        <div class="field">
-            <p>{{  form.no_method_steps.label }}</p> <p>{{  form.no_method_steps }}</p>
+        <div class="field_add_recipe">
+            <p>{{  form.recipe_description.label }}</p> <p>{{  form.recipe_description }}</p>
         </div>
-        <!-- <div class = "container">
+        <div class = "container">
             <div>
                 {% from "_formhelpers.html" import render_field %}
                 {% for ingredient_field in form.ingredients %}
@@ -30,13 +27,6 @@
                 {{ render_field(ingredient_field) }}
                 {% endfor %}
             </div>
-            <div>
-                {% from "_formhelpers.html" import render_field %}
-                {% for method_field in form.methods %}
-                {{ method_field.hidden_tag() }}
-                {{ render_field(method_field) }}
-                {% endfor %}
-            </div> -->
         <p>{{  form.submit }} </p>
         </form>
     {% endif %}
