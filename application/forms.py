@@ -48,7 +48,7 @@ class AmendAmountForm(FlaskForm):
    
 class PostShoppingListForm(FlaskForm):
     email = EmailField("enter additional email address for shopping list")
-    submit = SubmitField("press to email shopping list")
+    submit_post = SubmitField("press to email shopping list")
 
 
 class IngredientForm(FlaskForm):
