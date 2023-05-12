@@ -7,7 +7,7 @@
     <h2>
         Shopping List to be sent via email
     </h2>
-    <div>
+    <!-- <div>
         {% for ingredient in shopping_list %}
         <div class="field">
             {{ ingredient.ingredient_id}} 
@@ -15,9 +15,9 @@
             {{ ingredient.measure_id }}
         </div>
         {% endfor %}
-    </div>
+    </div> -->
     <div class="'field">
-        {{form.email.label}} {{form.email}}
+        {{form.email.label (style="font-size:1.5em") }} {{form.email}}
     </div>
     {{ form.submit }}
     {% endif %}

@@ -3,10 +3,7 @@
 
 </script>
 <form method="POST">
-    <h2>
-        Amend shopping list if needed
-    </h2>
-    <div>
+    <div id="which_week2">
         {% if sched_no == 1 %}
         <h4>
             Schedule for week 1
@@ -17,6 +14,9 @@
         </h4>
         {% endif %}
     </div>
+    <h2>
+        Amend shopping list if needed
+    </h2>
     <h3>
         enter new amount or enter 0 to delete ingredient from shopping list
     </h3>
@@ -26,7 +26,7 @@
                 {% from "_formhelpers.html" import render_field %}
                 {% set count = namespace(value=0) %}
                 {% for amount_form in form.ingredients %}
-                <div class="field">
+                <div class="field5">
                     {{ sidebar.shopping_list[0][count.value][0]}}
                     {{ sidebar.shopping_list[0][count.value][1]}}
                     {{ sidebar.shopping_list[0][count.value][2]}}
@@ -39,7 +39,7 @@
             {% from "_formhelpers.html" import render_field %}
             {% set count = namespace(value=0) %}
             {% for amount_form in form.ingredients %}
-            <div class="field">
+            <div class="field5">
                 {{ sidebar.shopping_list[1][count.value][0]}}
                 {{ sidebar.shopping_list[1][count.value][1]}}
                 {{ sidebar.shopping_list[1][count.value][2]}}
@@ -51,7 +51,7 @@
             {% endif %}
         </div>
     </div>
-    {{ form.submit }}
+    {{ form.submit_amount }}
 </form>
 {% endblock body %}
 

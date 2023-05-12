@@ -44,7 +44,7 @@ class AmountForm(FlaskForm):
     amount = DecimalField("  ")
 class AmendAmountForm(FlaskForm):
     ingredients = FieldList(FormField(AmountForm))
-    submit = SubmitField("press to amend shopping list")
+    submit_amount = SubmitField("press to amend shopping list")
    
 class PostShoppingListForm(FlaskForm):
     email = EmailField("enter additional email address for shopping list")

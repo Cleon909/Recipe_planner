@@ -97,6 +97,10 @@ form {
     left: 15vh;
 }
 
+.list1 {
+  width: 30vw;
+}
+
 #submit {
       background: #fff;
       backface-visibility: hidden;

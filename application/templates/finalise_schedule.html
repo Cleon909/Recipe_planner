@@ -31,22 +31,33 @@
             {% endif %}
         </div>
     </div>
+    <div id="which_week">
+        {% if sched_no == 1 %}
+        <h4>
+            Schedule for week 1
+        </h4>
+        {% elif sched_no == 2 %}
+        <h4>
+            Schedule for week 2
+        </h4>
+        {% endif %}
+    </div>
 <form method="POST">
 {% if mon %}
 <div class = 'field4'>
-    {{ mon }} {{ form.monday_cb.label }} {{ form.monday_cb }} {{ form.monday_recipe.label }} {{ form.monday_recipe }}
+   <div class="day"> {{ mon }}</div> {{ form.monday_cb.label }} {{ form.monday_cb }} {{ form.monday_recipe.label }} {{ form.monday_recipe }}
 </div>
 <div class='field4'>
-    {{ tue }} {{ form.tuesday_cb.label }} {{ form.tuesday_cb }} {{ form.tuesday_recipe.label }} {{ form.tuesday_recipe }}
+    <div class="day"> {{ tue }}</div> {{ form.tuesday_cb.label }} {{ form.tuesday_cb }} {{ form.tuesday_recipe.label }} {{ form.tuesday_recipe }}
 </div>
 <div class='field4'>
-    {{ wed }} {{ form.wednesday_cb.label }} {{ form.wednesday_cb }} {{ form.wednesday_recipe.label }} {{ form.wednesday_recipe }}
+    <div class="day"> {{ wed }}</div> {{ form.wednesday_cb.label }} {{ form.wednesday_cb }} {{ form.wednesday_recipe.label }} {{ form.wednesday_recipe }}
 </div>
 <div class='field4'>
-    {{ thu }} {{ form.thursday_cb.label }} {{ form.thursday_cb }} {{ form.thursday_recipe.label }} {{ form.thursday_recipe }}
+    <div class="day"> {{ thu }}</div> {{ form.thursday_cb.label }} {{ form.thursday_cb }} {{ form.thursday_recipe.label }} {{ form.thursday_recipe }}
 </div>
 <div class='field4'>
-    {{ fri }} {{ form.friday_cb.label }} {{ form.friday_cb }} {{ form.friday_recipe.label }} {{ form.friday_recipe }}
+    <div class="day"> {{ fri }}</div> {{ form.friday_cb.label }} {{ form.friday_cb }} {{ form.friday_recipe.label }} {{ form.friday_recipe }}
 </div>
 {{form.submit_recipes (class_="button") }}
 {% endif %}
@@ -62,14 +73,3 @@
     {% endfor %}
 {% endif %}
 </form>
-<div>
-    {% if sched_no == 1 %}
-    <h4>
-        Schedule for week 1
-    </h4>
-    {% elif sched_no == 2 %}
-    <h4>
-        Schedule for week 2
-    </h4>
-    {% endif %}
-</div>

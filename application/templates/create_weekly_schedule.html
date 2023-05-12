@@ -10,7 +10,7 @@
 <body style="font-family: Source Sans Pro, sans-serif">
     <div class="header" >
         <div style="display:flex; justify-content: space-between;">
-            <h1 style="color:rgb(0, 0, 0); font-size:50px; margin-left: 10px"> Recipe Planner</h1>
+            <h1 style="font-size:50px; margin-left: 10px"> Recipe Planner</h1>
             <p style="align-self:right; margin-right: 10px;">{{ user }}</p>
         </div>
         <div id = "links">
@@ -34,16 +34,16 @@
 <form method = 'POST'>
     <div id="main">
         <div id="login">
-            <h3>There are two schedules if no schedules are set, it will fill in the first schedule. If the first schedule is set, it will fill in the 2nd schedule.</h3>
-            <h3>The schedule will rest at the weekend.</h3>
+            <h3>Schedules can be set for either this week, or next week. The schedules are set for Monday to Friday</h3>
+            <h3>The intention is that at the weekend the schedule for next week, will be be brought a week forward.</h3>
             <h3>Select the cuisines that you would like to include in the schedule. If any of the options are left blank it will choose from the full list of recipes.</h3>
             <h3>You will have the option of changing the recipes on the next page</h3>
-            <div class="list1"><b>{{ form.first_cuisine.label }}</b> {{ form.first_cuisine }}</div>
-            <div class="list1"><b>{{ form.first_cuisine.label }}</b> {{ form.second_cuisine }}</div>
-            <div class="list1"><b>{{ form.first_cuisine.label }}</b> {{ form.third_cuisine }}</div>
-            <div class="list1"><b>{{ form.first_cuisine.label }}</b> {{ form.fourth_cuisine }}</div>
-            <div class="list1"><b>{{ form.first_cuisine.label }}</b> {{ form.fifth_cuisine }}</div>
-            <div class="list1"><b>{{ form.sched_no.label }}</b> {{ form.sched_no }}</div>
+            <div class="list1"><b>{{ form.first_cuisine.label (style="font-size: 1.5em") }}</b> {{ form.first_cuisine }}</div>
+            <div class="list1"><b>{{ form.first_cuisine.label (style="font-size: 1.5em") }}</b> {{ form.second_cuisine }}</div>
+            <div class="list1"><b>{{ form.first_cuisine.label (style="font-size: 1.5em") }}</b> {{ form.third_cuisine }}</div>
+            <div class="list1"><b>{{ form.first_cuisine.label (style="font-size: 1.5em") }}</b> {{ form.fourth_cuisine }}</div>
+            <div class="list1"><b>{{ form.first_cuisine.label (style="font-size: 1.5em") }}</b> {{ form.fifth_cuisine }}</div>
+            <div class="list1"><b>{{ form.sched_no.label (style="font-size: 1.5em") }}</b> {{ form.sched_no }}</div>
             <div>{{ form.submit_cuisine (class_="button") }}</div>    
         </div>
     </div>

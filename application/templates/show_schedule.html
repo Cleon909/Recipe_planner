@@ -29,7 +29,7 @@
             </h2>
         <form method="POST">
             {{ form.hidden_tag() }}
-            {{ form.first_week (class_="button") }}
+            {{ form.first_week (class_="button1") }}
             {% for item in sidebar.shopping_list[0] %}
                 <h3>
                     {{ item[0] }},          {{ item[1] }} {{ item[2]}}
@@ -62,7 +62,7 @@
                 <h2>
                     Next Weeks's Shopping List
                 </h2>
-                {{ form.second_week (class_="button") }}
+                {{ form.second_week (class_="button1") }}
             </form>
                 {% for item in sidebar.shopping_list[1] %}
                     <h3>
