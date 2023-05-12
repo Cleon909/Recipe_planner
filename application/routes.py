@@ -9,6 +9,9 @@ import random
 from sqlalchemy import func
 import smtplib
 import os
+import time
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler 
 
 # this function gets the recipe for each day, filters by day and logged in user id
 def get_recipe_for_day(day_number, week_n):
@@ -17,8 +20,8 @@ def get_recipe_for_day(day_number, week_n):
         if id is not None:
             day_recipe = Recipes.query.filter_by(id = id.recipe_id).first()
             return day_recipe
-        else:
-            return Recipes.query.filter_by(id = 1).first()
+        # else:
+        #     return Recipes.query.filter_by(id = 1).first()
 
 
 # this function assembles the recipe for each day adding it to a list in order of the days to be used in the layout template
@@ -69,6 +72,38 @@ def create_shopping_list():
         shopping_list2.append([Ingredients.query.filter_by(id=shopping_list_raw_item.ingredient_id).first().ingredient_name, shopping_list_raw_item.amount, Measure.query.filter_by(id = shopping_list_raw_item.measure_id).first().measure])
     return (shopping_list1, shopping_list2)
 
+# function to delete this weeks's schedule and change next week to this week
+def switch_schedules():
+    all_users = User.query.all()
+    for user in all_users:
+        schedules_to_delete = Schedule.query.filter_by(user_id = user.id, sched_no = 1).all()
+        for schedule in schedules_to_delete:
+            db.session.delete(schedule)
+            db.session.commit()
+        schedules_to_switch = Schedule.query.filter_by(user_id = user.id, sched_no = 2).all()
+        for schedule in schedules_to_switch:
+            schedule.sched_no = 1
+            db.session.add(schedule)
+            db.session.commit()
+        ing_to_delete = ShoppingList.query.filter_by(user_id = user.id, sched_no = 1).all()
+        for ing in ing_to_delete:
+            db.session.delete(ing)
+            db.session.commit()
+        ing_to_switch = ShoppingList.query.filter_by(user_id = user.id, sched_no = 2).all()
+        for ing in ing_to_switch:
+            ing.sched_no = 1
+            db.session.add(ing)
+            db.session.commit() 
+
+# scheduler to switch schedules
+
+sched = BackgroundScheduler()
+sched.add_job(switch_schedules,'cron',hour=19, minute=51, day_of_week="fri"   )
+sched.start()
+
+
+
+# ROUTES
 
 @app.route('/', methods = ['GET', 'POST'])
 @app.route('/home', methods = ['GET', 'POST'])
