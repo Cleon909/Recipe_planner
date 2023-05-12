@@ -59,6 +59,7 @@ class Method(db.Model):
     def __init__(self, recipe_id, step):
         self.recipe_id = recipe_id
         self.step = step
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)

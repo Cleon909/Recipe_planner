@@ -9,8 +9,6 @@ import random
 from sqlalchemy import func
 import smtplib
 import os
-import time
-import atexit
 from apscheduler.schedulers.background import BackgroundScheduler 
 
 # this function gets the recipe for each day, filters by day and logged in user id
@@ -22,7 +20,6 @@ def get_recipe_for_day(day_number, week_n):
             return day_recipe
         # else:
         #     return Recipes.query.filter_by(id = 1).first()
-
 
 # this function assembles the recipe for each day adding it to a list in order of the days to be used in the layout template
 def get_weekly_recipes():
@@ -95,10 +92,38 @@ def switch_schedules():
             db.session.add(ing)
             db.session.commit() 
 
+def post_recipe():
+    gmail_user = "recipeapp909@gmail.com"
+    gmail_password = os.environ['GMAIL']
+    sent_from = gmail_user
+    all_users = User.query.all() 
+    for user in all_users:
+        recipe_of_the_day = Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = datetime.today().weekday(), user_id = user.id, sched_no = 1).first().recipe_id).first()
+        to = [user.email]
+        print(f"{recipe_of_the_day.method}")
+        subject = 'Recipe of the Day'
+        body =  "Today's Recipe is\n\n"
+        body += f"{recipe_of_the_day.recipe_name}\n"
+        body += f"Description\n"
+        body += f"{recipe_of_the_day.recipe_description}\n"
+        body += f"Method\n"
+        body += f"{Method.query.filter_by(recipe_id=recipe_of_the_day.id).first().step}\n"
+
+    email_text= "from:{}\nto:{}\nsubject:{}\n{}".format(sent_from, ",".join(to),subject,body)
+    try:
+        smtp_server = smtplib.SMTP_SSL("smtp.gmail.com",465)
+        smtp_server.ehlo()
+        smtp_server.login(gmail_user,gmail_password)
+        smtp_server.sendmail(sent_from,to,email_text)
+        smtp_server.close()
+    except Exception as ex:
+       print(ex)
+
 # scheduler to switch schedules
 
 sched = BackgroundScheduler()
-sched.add_job(switch_schedules,'cron',hour=19, minute=51, day_of_week="fri"   )
+sched.add_job(switch_schedules,'cron',hour=23, minute=59, day_of_week="fri"   )
+sched.add_job(post_recipe,'cron',hour=23, minute=4, day_of_week='mon-fri')
 sched.start()
 
 
@@ -139,7 +164,7 @@ def index():
     else:
         daily_recipe = False
         cuisine = False
-        method_list = False
+        method = False
         quantities = False
         ingredient_list = False
     return render_template('index.html', daily_recipe=daily_recipe, total_number=total_number, cuisine=cuisine, method=method, ingredient_list=ingredient_list, sidebar=sidebar)
@@ -404,17 +429,18 @@ def post_shopping_list():
     else:
         sidebar = False
 
+    sched_no = int(session['sched_no'])
     form = PostShoppingListForm()
     if request.method == "POST":
         gmail_user = "recipeapp909@gmail.com"
         gmail_password = os.environ['GMAIL']
-        print(os.environ['GMAIL'])
         sent_from = gmail_user
         email_input = form.email.data
         to = [current_user.email, email_input]
         subject = 'Ingredient list for weekly recipes'
         body =  "Weekly Shopping List\n\n"
-        for ingredient in sidebar["shopping_list"]:
+        for ingredient in sidebar["shopping_list"][sched_no-1]:
+            print(ingredient)
             body += f"{ingredient[0]} {ingredient[1]} {ingredient[2]}\n"
         email_text= "from:{}\nto:{}\nsubject:{}\n{}".format(sent_from, ",".join(to),subject,body)
         try:
