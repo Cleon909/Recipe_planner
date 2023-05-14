@@ -1,25 +1,14 @@
 version: "3.8"
 services:
   webapp:
-    image: corcoran909/rapp:alt
+    image: corcoran909/recipe-app:<tag>
+    name: recipe-app
     ports:
-    - target: 5000
-      published: 5000
+    - target: 5050
+      published: 5050
     deploy:
       replicas: 1
-  db:
-    image: corcoran909/dbase:alt
-    deploy: 
-      replicas: 1
-    ports:
-      - target: 3306
-      - published: 3306
     volumes:
-    - type: volume
-      source: mysql-database
-      target: /var/lib/mysql
-      
-
-volumes:
-  mysql-database:
-      
+      - type: bind
+      - source: /Users/michaelcorcoran/Documents/docker-mounts
+      - target: /db

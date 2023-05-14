@@ -6,7 +6,7 @@
         <h1 style="position:relative; left:20vw">Add a Ingredients and Method Steps</h1>
         <form method = 'POST'>
         <div class = "container">
-            <h1 style="position: fixed; top:150px; left:30px">{{ recipe }}</h1>
+            <h1 style="position: fixed; top:150px; left:30px; max-width:20vw">{{ recipe }}</h1>
             <div id="ing-input">
                 {% from "_formhelpers.html" import render_field %}
                 {% for ingredient_field in form.ingredients %}
