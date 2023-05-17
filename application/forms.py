@@ -67,7 +67,7 @@ class AddRecipeForm1(FlaskForm):
     
 class AddRecipeForm2(FlaskForm):    
     ingredients = FieldList(FormField(IngredientForm))
-    method = TextAreaField('Input method of making the recipe. Press enter to seperate the steps', validators = [Length(max=1000)], default = "")
+    method = TextAreaField('Input method of making the recipe. Press enter to seperate the steps', default = "")
     submit = SubmitField('Press to add ingredients and method')
 
 class LoginForm(FlaskForm):

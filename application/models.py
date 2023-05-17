@@ -54,7 +54,7 @@ class Quantity(db.Model):
 class Method(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
-    step = db.Column(db.String(3000), nullable=False)
+    step = db.Column(db.Text, nullable=False)
 
     def __init__(self, recipe_id, step):
         self.recipe_id = recipe_id
