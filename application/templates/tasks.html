@@ -1,0 +1,10 @@
+{% extends 'layout.html'%}
+{% block body %}
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.clean_database (class_="button") }}
+    </form>
+    {% if message %}
+    <H1>aaa{{ message }}</H1>
+    {% endif %}
+{% endblock body %}

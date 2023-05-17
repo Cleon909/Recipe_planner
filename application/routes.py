@@ -2,8 +2,8 @@ from flask import render_template, url_for, redirect, request, session, flash, j
 from flask_login import current_user, login_user, logout_user, login_required
 from application import app, db
 from application.models import Ingredients, Cuisine, Recipes, Quantity, Method, Schedule, Measure, ShoppingList, User
-from application.forms import DeleteRecipeForm, AddRecipeForm1, AddRecipeForm2, AddMetaForm, LoginForm, SearchForm, SelectScheduleForm, FinaliseScheduleForm, AmendAmountForm, PostShoppingListForm, RegistrationForm, ShowSchedule
-from datetime import date, datetime
+from application.forms import *
+from datetime import datetime
 import random
 from sqlalchemy import func
 import smtplib
@@ -593,4 +593,16 @@ def show_schedule():
             return redirect(url_for("amend_shopping_list"))
     else:
         return render_template('show_schedule.html', sidebar = sidebar, form=form)
-                
+
+
+@app.route('/tasks', methods = ['POST'])
+@login_required
+def tasks():
+    form = Tasks()
+    if request.method == "POST":
+        if "clean_database" in request.form:
+            clean_database()
+            message = "Database has been cleaned up"
+        return render_template('tasks.html', form=form, messsage=message)
+    else:
+        return render_template('tasks.html', form=form)

@@ -235,7 +235,7 @@ input {
     border-radius: 10px;
 }
 
-#submit, #submit_amount, #submit_post, #first_week, #second_week, #submit_cuisine, #submit_recipes {
+#submit, #submit_amount, #submit_post, #first_week, #second_week, #submit_cuisine, #submit_recipes, #clean_database  {
     background: #fff;
     backface-visibility: hidden;
     border-radius: .375rem;

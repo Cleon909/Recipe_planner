@@ -97,3 +97,5 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different email address.')
 
+class Tasks(FlaskForm):
+    clean_database = SubmitField('clean_database')

@@ -28,38 +28,12 @@
             <a href="{{ url_for('add_meta') }}" class="link">Add meta data</a>
             {% if current_user.username == "admin" %}
             <a href="{{ url_for('delete_recipe') }}" class="link"> Delete a Recipe</a>
+            <a href="{{ url_for('tasks') }} " class="link"> Tasks </a>
             {% endif %}
         </div>
     </div>
     <div class="container">
-        <!-- <div id="left">
-            {% if sidebar != False %}
-            <p><b>Today's Recipe:</b></p>
-            {{ sidebar.recipe_of_the_day }}
-            <p><b>Monday:</b></p> 
-            {{ sidebar.week[0][0].recipe_name }} 
-            <p><b>Tuesday:</b></p> 
-            {{ sidebar.week[0][1].recipe_name }}
-            <p><b>Wednesday:</b></p> 
-            {{ sidebar.week[0][2].recipe_name }}
-            <p><b>Thursday:</b></p> 
-            {{ sidebar.week[0][3].recipe_name }}
-            <p><b>Friday:</b></p> 
-            {{ sidebar.week[0][4].recipe_name }}
-            {% else %}
-            <p>No Schedule Set</p>
-            {% endif %}
-        </div> -->
         <div id="center">
-        <!-- {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}         -->
             {% block body %}
             {% endblock body %}
         </div>
