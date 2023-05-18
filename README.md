@@ -1,9 +1,13 @@
 
-- error handling for incomplete recipes added
 - display greeting message if no schedule set
 - put dates on schedule?
 - ability to select blank days
 - make it mobile friendly
+- tasks
+    - list users
+    - delete user
+    
+#
 
 could it be deployed serverless?
 

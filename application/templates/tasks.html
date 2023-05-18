@@ -3,8 +3,15 @@
     <form method="POST">
         {{ form.hidden_tag() }}
         {{ form.clean_database (class_="button") }}
+        {{ form.show_users (class_="button")}}
     </form>
     {% if message %}
     <H1>aaa{{ message }}</H1>
     {% endif %}
+    {% if users %}
+    {% for user in users %}
+    <div class="tile">{{ user }}</div>
+    {% endfor %}
+    {% endif %}
+
 {% endblock body %}

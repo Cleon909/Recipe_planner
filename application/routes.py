@@ -595,14 +595,19 @@ def show_schedule():
         return render_template('show_schedule.html', sidebar = sidebar, form=form)
 
 
-@app.route('/tasks', methods = ['POST'])
+@app.route('/tasks', methods = ['GET', 'POST'])
 @login_required
 def tasks():
     form = Tasks()
     if request.method == "POST":
+        message = ""
+        users = ""
         if "clean_database" in request.form:
             clean_database()
             message = "Database has been cleaned up"
-        return render_template('tasks.html', form=form, messsage=message)
+        if "show_users" in request.form:
+            users = show_users()
+            
+        return render_template('tasks.html', form=form, messsage=message, users=users)
     else:
         return render_template('tasks.html', form=form)

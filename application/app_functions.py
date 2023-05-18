@@ -121,3 +121,9 @@ def clean_database():
         db.session.delete(recipe)
         db.session.commit()
 
+def show_users():
+    users = User.query.all()
+    usernames = []
+    for user in users:
+        usernames.append(user.username)
+    return(usernames)

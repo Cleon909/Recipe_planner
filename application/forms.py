@@ -99,3 +99,4 @@ class RegistrationForm(FlaskForm):
 
 class Tasks(FlaskForm):
     clean_database = SubmitField('clean_database')
+    show_users = SubmitField('show_users')
