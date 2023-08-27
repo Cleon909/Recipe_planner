@@ -1,4 +1,4 @@
-.gitingore
+.gitignore
 venv/
 */__pycache__/
 secrets.yml

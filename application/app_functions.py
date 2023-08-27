@@ -10,12 +10,13 @@ import smtplib
 # this function gets the recipe for each day, filters by day and logged in user id
 def get_recipe_for_day(day_number, week_n):
     if current_user.is_authenticated:
-        id = Schedule.query.filter_by(day_of_the_week = day_number, user_id = current_user.id, sched_no = week_n).first()
-        if id is not None:
-            day_recipe = Recipes.query.filter_by(id = id.recipe_id).first()
-            return day_recipe
-        # else:
-        #     return Recipes.query.filter_by(id = 1).first()
+        try:
+            id = Schedule.query.filter_by(day_of_the_week = day_number, user_id = current_user.id, sched_no = week_n).first()
+            if id is not None:
+                day_recipe = Recipes.query.filter_by(id = id.recipe_id).first()
+                return day_recipe
+        except:
+            day_recipe = Recipes.query.first()
 
 # this function assembles the recipe for each day adding it to a list in order of the days to be used in the layout template
 def get_weekly_recipes():
@@ -32,12 +33,16 @@ def check_for_schedule():
         return False
     return True
 
-#this function grabs the recipe for the individual day (filtering by day and user id) to be used in the layour template 
+#this function grabs the recipe for the individual day (filtering by day and user id) to be used in the layout template 
 def get_recipe_of_the_day():
     if datetime.today().weekday() == 5 or datetime.today().weekday() == 6:
         recipe_of_the_day = "It's the weekend, do your own thing"
     else:
-        recipe_of_the_day = Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = datetime.today().weekday(), user_id = current_user.id, sched_no = 1).first().recipe_id).first().recipe_name
+        try:
+            recipe_of_the_day = Recipes.query.filter_by(id = Schedule.query.filter_by(day_of_the_week = datetime.today().weekday(), user_id = current_user.id, sched_no = 1).first().recipe_id).first().recipe_name
+        except:
+            print ("Nothing returned for recipe_of_the_day")
+            recipe_of_the_day = "No recipe found for today, Have you tried creating schedule?"
     return recipe_of_the_day
 
 # check if it's a weekend
