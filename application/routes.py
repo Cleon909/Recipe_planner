@@ -39,9 +39,9 @@ def index():
         sidebar = False
 
     total_number = Recipes.query.count()
-    if datetime.today().weekday() in [0,1,2,3,4]:
-        daily_recipe = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first() or False
-        cuisine = Cuisine.query.filter_by(id=daily_recipe.cuisine_id).first().cuisine_name
+    day_num = datetime.today().weekday()
+    if day_num in [0,1,2,3,4]:
+        daily_recipe = sidebar.week[day_num]
         method_block = Method.query.filter_by(recipe_id = daily_recipe.id).first().step
         method = method_block.split('\n')
         quantities = Quantity.query.filter_by(recipe_id = daily_recipe.id).all()
