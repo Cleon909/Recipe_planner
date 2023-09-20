@@ -41,7 +41,8 @@ def index():
     total_number = Recipes.query.count()
     day_num = datetime.today().weekday()
     if day_num in [0,1,2,3,4]:
-        daily_recipe = sidebar.week[day_num]
+        daily_recipe = sidebar["week"][0][day_num]
+        cuisine = Cuisine.query.filter_by(id=daily_recipe.cuisine_id).first().cuisine_name
         method_block = Method.query.filter_by(recipe_id = daily_recipe.id).first().step
         method = method_block.split('\n')
         quantities = Quantity.query.filter_by(recipe_id = daily_recipe.id).all()
