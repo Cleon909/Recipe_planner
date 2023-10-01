@@ -284,8 +284,6 @@ def amend_shopping_list():
         "shopping_list" : create_shopping_list(),
         }
         amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"][sched_no -1]]
-        print(amount_list)
-        print(sched_no)
         form = AmendAmountForm(ingredients = amount_list)
     else:
         sidebar = False
