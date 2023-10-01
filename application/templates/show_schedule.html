@@ -1,6 +1,6 @@
 {% extends 'layout.html'%}
 {% block body %}
-
+{% if sidebar != False %}    
 <div id="main" style="justify-content:space-around;">
     <div>
         <div class = "tile">
@@ -72,6 +72,9 @@
         </div>
     </div>
 </div>
-</form>
+</form> 
+{% else %}
+    <h1>No Schedule Created, you can create a schedule <a href="{{ url_for('create_weekly_schedule') }}" style="color:black">here</a></h1> 
+{% endif %}
 {% endblock %}
 
