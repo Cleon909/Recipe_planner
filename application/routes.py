@@ -289,7 +289,7 @@ def amend_shopping_list():
         form = AmendAmountForm(ingredients = amount_list)
     else:
         sidebar = False
-
+        form = AmendAmountForm()
     if request.method == "POST":
         # I've forgotten what this line does. leaving it in commented just in case
         # sess = db.session.query(func.min(ShoppingList.id)).first()
