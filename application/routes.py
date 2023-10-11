@@ -39,8 +39,9 @@ def index():
         sidebar = False
 
     total_number = Recipes.query.count()
-    if datetime.today().weekday() in [0,1,2,3,4]:
-        daily_recipe = Recipes.query.filter_by(id = (Schedule.query.filter_by(day_of_the_week = datetime.today().weekday()).first().recipe_id)).first() or False
+    day_num = datetime.today().weekday()
+    if day_num in [0,1,2,3,4]:
+        daily_recipe = sidebar["week"][0][day_num]
         cuisine = Cuisine.query.filter_by(id=daily_recipe.cuisine_id).first().cuisine_name
         method_block = Method.query.filter_by(recipe_id = daily_recipe.id).first().step
         method = method_block.split('\n')
@@ -283,12 +284,10 @@ def amend_shopping_list():
         "shopping_list" : create_shopping_list(),
         }
         amount_list = [{i[0] : i[1]} for i in sidebar["shopping_list"][sched_no -1]]
-        print(amount_list)
-        print(sched_no)
         form = AmendAmountForm(ingredients = amount_list)
     else:
         sidebar = False
-
+        form = AmendAmountForm()
     if request.method == "POST":
         # I've forgotten what this line does. leaving it in commented just in case
         # sess = db.session.query(func.min(ShoppingList.id)).first()
