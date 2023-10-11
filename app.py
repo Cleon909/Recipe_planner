@@ -49,12 +49,6 @@ else:
         met = Method(*m)
         db.session.add(met)
         db.session.commit()
-
-    schedules =[(1,1,1,1), (2,1,1,1), (3,1,1,1), (4,1,1,1), (0,1,1,1)]
-    for s in schedules:
-        sched = Schedule(*s)
-        db.session.add(sched)
-        db.session.commit()
     
 if __name__ == "__main__":
     from waitress import serve
