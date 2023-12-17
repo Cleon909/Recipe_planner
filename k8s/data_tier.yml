@@ -1,45 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: db
+  name: recipe-app-db
   labels:
-    app: microservices
+    app: recipe-app
+  namespace: recipe-app
 spec:
+  type: ExternalName
+  ExternalName: recipe-app-db.c9c6yyvyhcc2.eu-west-1.rds.amazonaws.com
   ports:
-  - port: 3306
-  selector:
-    tier: data 
----
-apiVersion: apps/v1 # apps API group
-kind: Deployment
-metadata:
-  name: data-tier
-  labels:
-    app: microservices
-    tier: data
-spec: 
-  replicas: 1
-  selector:
-    matchLabels:
-      tier: data
-  template:
-    metadata:
-      labels:
-        app: microservices
-        tier: data
-    spec: # Pod spec
-      volumes:
-        - name: data-tier-storage
-          persistentVolumeClaim:
-            claimName: data-tier-volume-claim
-      containers:
-        - name: appdb
-          image: corcoran909/dbase
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 3306
-          volumeMounts:
-          - mountPath: /var/lib/mysql
-            name: data-tier-storage
-      
-
+    - port: 3306

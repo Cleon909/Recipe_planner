@@ -4,11 +4,12 @@ metadata:
   name: app
   labels:
     app: microservices
+  namespace: recipe-app
 spec:
   ports:
   - port: 5050
   selector:
-    tier: app
+    tier: front-end
   type: NodePort
 
 ---
@@ -17,8 +18,9 @@ kind: Deployment
 metadata:
   name: app-tier
   labels:
-    app: microservices
-    tier: app
+    app: recipe-app
+    tier: front-end
+  namespace: recipe-app
 spec:
   replicas: 1
   selector:
@@ -36,3 +38,7 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 5050
+        resources:
+          limits:
+            memory: 500Mi
+            cpu: 500m
